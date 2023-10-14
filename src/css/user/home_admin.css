@@ -1,0 +1,24 @@
+.card-body-order-number {
+    flex: 1 1 auto;
+    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    color: white;
+    min-height: 150px;
+    background-color: #3ea4ed;
+    font-size: 35px;
+}
+.card-body-revenue {
+    flex: 1 1 auto;
+    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    color: white;
+    min-height: 150px;
+    background-color: #f3d652;
+    font-size: 35px;
+}
+.card-body-targets {
+    flex: 1 1 auto;
+    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    color: white;
+    min-height: 150px;
+    background-color: #ff7a81;
+    font-size: 35px;
+}
