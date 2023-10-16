@@ -10,6 +10,7 @@ import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
 import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
 
+
 function App() {
     axiosClient();
     return (
@@ -20,6 +21,7 @@ function App() {
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/403" element={<Error403/>}/>
+
                 <Route
                     element={
                         <Authentication
