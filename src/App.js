@@ -10,6 +10,8 @@ import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
 import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
+import EmployeeList from './components/user/EmployeeList';
+import EditEmployee from './components/user/EditEmployee';
 
 
 function App() {
@@ -18,13 +20,15 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
-//                 
+//              
+                <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
+                <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
                 <Route path="/admin/order" element={<Order/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/403" element={<Error403/>}/>
-
+    
                 <Route
                     element={
                         <Authentication

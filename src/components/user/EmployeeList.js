@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getEmployeeList } from "../../service/user/EmployeeService";
 import { Prev } from "react-bootstrap/esm/PageItem";
+import { Link } from "react-router-dom";
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -271,24 +272,16 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <a
-              className="me-1  "
-              href="CaoNV_EmployeeCreate.html"
-              style={{ textDecoration: "none" }}
-            >
+            <Link to={"/employee/add"}>
               <button type="button" className="btn btn-outline-primary">
                 Thêm mới
               </button>
-            </a>
-            <a
-              className="me-1"
-              href="CaoNV_EmployeeEdit.html"
-              style={{ textDecoration: "none" }}
-            >
+            </Link>
+            <Link to={"/employee/edit"}>
               <button type="button" className="btn btn-outline-success">
                 Cập nhật
               </button>
-            </a>
+            </Link>
             {/* Button to trigger the modal */}
             <button
               type="button"
