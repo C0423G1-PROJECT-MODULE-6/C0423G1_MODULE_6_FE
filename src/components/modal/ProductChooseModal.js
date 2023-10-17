@@ -85,10 +85,10 @@ const ProductChooseModal = () => {
                                     Hủy
                                 </button>
                             </div>
-                            <div className="mx-auto p-3 " style={{ width: "93%" }}>
+                            <div className="mx-auto p-3 " style={{ width: "93%" }} id="TinDT">
                                 <table className=" shadow w-100">
 
-                                    <tr style={{ fontSize: "larger", backgroundColor: "darkgrey" }} className="border-dark">
+                                    <tr style={{ fontSize: "larger", backgroundColor: "darkgrey" }}>
                                         <th style={{ width: "5%", paddingLeft: "1%"}}>STT</th>
                                         <th style={{ width: "40%" }}>Tên</th>
                                         <th style={{ width: "25%" }}>Giá</th>
@@ -102,8 +102,8 @@ const ProductChooseModal = () => {
                                         <td style={{ width: "5%" , paddingLeft: "1%"}}>{(index + 1) + page * 5}</td>
                                         <td style={{ width: "40%" }}>{product?.name}</td>
                                         <td style={{ width: "25%" }}>{product?.price}</td>
-                                        <td style={{ width: "19%" }}>{product?.cpu.name}</td>
-                                        <td style={{ width: "15%" }}>{product?.capacity.name}</td>
+                                        <td style={{ width: "19%" }}>{product?.cpu}</td>
+                                        <td style={{ width: "15%" }}>{product?.capacity}</td>
                                     </tr>))}
                                         </tbody> :
                                         <tbody>
