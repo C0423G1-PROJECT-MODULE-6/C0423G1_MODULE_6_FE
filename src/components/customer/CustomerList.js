@@ -1,0 +1,157 @@
+import React, {useEffect, useState} from "react";
+import * as customerService from "../../service/customer/CustomerService"
+import {Link} from "react-router-dom";
+
+export function CustomerList() {
+    const [customers, setCustomers] = useState([]);
+    const [limit, setLimit] = useState(5);
+    const [page, setPage] = useState(0);
+    const [records, setRecords] = useState();
+    const [totalPage, setTotalPage] = useState();
+    const [searchName, setSearchName] = useState("");
+    const [searchAge, setSearchAge] = useState("");
+    const [searchGender, setSearchGender] = useState("3");
+    const [sort, setSort] = useState("");
+    const [refresh, setRefresh] = useState(true);
+
+    const getCustomerList = async () => {
+        try {
+            const array = await customerService.getAllPage(limit, page, searchName, searchAge, searchGender, sort, sort);
+            console.log(array)
+            setCustomers(array.data.content);
+            setRecords(array.data.totalElements);
+            setTotalPage(array.data.totalPages);
+        } catch (e) {
+            setCustomers([]);
+            setRecords(0);
+            setTotalPage(0);
+        }
+    }
+
+    useEffect(() => {
+        getCustomerList();
+    }, [page, refresh, sort]);
+
+    const handleSearch = () => {
+        setPage(0);
+        setRefresh(!refresh)
+    }
+
+    const previousPage = () => {
+        setPage(page - 1);
+    }
+
+    const nextPage = () => {
+        setPage(page + 1);
+    }
+
+    return (
+        <>
+            <div className="container mt-5 pt-5">
+                <div className="col-12 d-flex justify-content-center">
+                    <h1>Quản lý báo cáo khách hàng</h1>
+                </div>
+                <div className="col-12 d-flex justify-content-end my-3">
+                    <div className="col-auto mx-1">
+                        <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
+                            <option value="0">--Sắp xếp--</option>
+                            <option value="1">Họ Tên</option>
+                            <option value="2">Số lần mua</option>
+                        </select>
+                    </div>
+                    <div className="col-auto mx-1">
+                        <select className="form-select" onChange={(gender) => setSearchGender(gender.target.value)}>
+                            <option selected value="3">--Tìm theo giới tính--</option>
+                            <option value="1">Nam</option>
+                            <option value="0">Nữ</option>
+                        </select>
+                    </div>
+                    <div className="col-auto mx-1">
+                        <input className="form-control" type="number" placeholder="Tìm theo tuổi" aria-label="Search"
+                               onChange={(age) => (setSearchAge(age.target.value))}/>
+                    </div>
+                    <div className="col-auto mx-1">
+                        <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
+                               onChange={(name) => (setSearchName(name.target.value))}/>
+                    </div>
+                    <div className="col-auto mx-1">
+                        <button className="btn btn-outline-primary text-center" type="button"
+                                onClick={handleSearch}>Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                <table className="border border-dark table table-hover table-layout">
+                    <thead style={{background: "red"}}>
+                    <tr>
+                        <th>#</th>
+                        <th>Họ và tên</th>
+                        <th>Giới tính</th>
+                        <th>Email</th>
+                        <th>Tuổi</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Số lần mua</th>
+                        <th>Lịch sử mua hàng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {customers.length !== 0 ? (
+                        customers.map((customer, index) => {
+                            // Tính toán số tuổi từ ngày sinh
+                            const birthDate = new Date(customer.dateOfBirthCustomer);
+                            const currentDate = new Date();
+                            const age = currentDate.getFullYear() - birthDate.getFullYear();
+                            return (
+                                <tr key={customer.idCustomer}>
+                                    <td>{index + 1}</td>
+                                    <td>{customer.nameCustomer}</td>
+                                    <td>{customer.genderCustomer ? 'Nam' : 'Nữ'}</td>
+                                    <td>{customer.emailCustomer}</td>
+                                    <td>{age}</td>
+                                    <td>{customer.phoneNumberCustomer}</td>
+                                    <td>{customer.addressCustomer}</td>
+                                    <td>{customer.totalPurchases}</td>
+                                    <td>
+                                        <Link className="btn btn-outline-primary"
+                                              to={`/history/${customer.idCustomer}`}>Xem</Link>
+                                    </td>
+                                </tr>
+                            )
+                        })) : (<tr>
+
+                        <td colSpan={9} style={{textAlign: "center"}}>Không tìm thấy!</td>
+
+                    </tr>)
+                    }
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="container mt-3">
+                <div className="row">
+                    <div className="col-auto ms-auto">
+                        <nav className="bottom" aria-label="Page navigation">
+                            <ul className="pagination mb-0 ">
+                                <li className="page-item ">
+                                    <a onClick={() => previousPage()}
+                                       className={`page-link ${page <= 0 ? "disabled" : ""}`} href="#" tabIndex="-1"
+                                       aria-disabled="true">Trước</a>
+                                </li>
+                                <li className="page-item" aria-current="page">
+                                    <a className="page-link" href="#">{page + 1}/{totalPage}</a>
+                                </li>
+                                <li className="page-item">
+                                    <a onClick={() => nextPage()}
+                                       className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`}
+                                       href="#">Sau</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
