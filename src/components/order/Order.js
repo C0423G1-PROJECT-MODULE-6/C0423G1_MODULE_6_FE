@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Field, Form, Formik} from "formik";
 import * as orderService from "../../service/order/OrderService"
 import BillNotPayConfirm from "./BillNotPayConfirm";
+import CustomerChooseModal from "../modal/CustomerChooseModal";
+import CustomerCreateModal from "../modal/CustomerCreateModal";
+import ProductChooseModal from "../modal/ProductChooseModal";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -12,7 +15,9 @@ function Order() {
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const [modalStatus, setModalStatus] = useState(false);
 
-    
+    const handleData=(data)=>{
+        console.log(data)
+    }
 
     const getAllCart = async () => {
         const res = await orderService.getAllCart(1);
@@ -81,10 +86,10 @@ function Order() {
                                 <fieldset className="form-input shadow mx-auto" style={{ borderRadius: '20px', border: '1px solid black', height: 'auto', width: '80%', padding: '20px' }}>
                                     <legend className="float-none w-auto px-1">Thông tin khách hàng</legend>
                                     <div className="d-flex justify-content-center">
-                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>
+                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }} data-bs-toggle="modal" data-bs-target="#exampleModalCustomer" >
                                             Chọn khách hàng cũ
                                         </button>
-                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>
+                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }} data-bs-toggle="modal" data-bs-target="#exampleModalCreateCustomer">
                                             Thêm mới khách hàng
                                         </button>
                                     </div>
@@ -153,7 +158,8 @@ function Order() {
                                 <fieldset className="form-input shadow mx-auto" style={{ borderRadius: '20px', border: '1px solid black', height: 'auto', width: '80%', padding: '20px' }}>
                                     <legend className="float-none w-auto px-1">Sản phẩm đã chọn</legend>
                                     <div className="d-flex justify-content-center mb-3">
-                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>
+                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalProduct" style={{ width: '30%' }}>
                                             Chọn sản phẩm
                                         </button>
                                         <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Scan QR</button>
@@ -306,6 +312,9 @@ function Order() {
                     {/*></BillNotPayConfirm>*/}
                 </Form>
             </Formik>
+            <CustomerChooseModal handleData={handleData}/>
+            <CustomerCreateModal />
+            <ProductChooseModal />
         </>
     );
 }
