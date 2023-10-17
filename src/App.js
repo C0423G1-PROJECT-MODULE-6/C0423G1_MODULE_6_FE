@@ -1,3 +1,7 @@
+
+import 'react-toastify/dist/ReactToastify.css';
+import {Route, Routes} from "react-router-dom";
+import Order from "./components/order/Order";
 import Information from "./components/user/Information";
 import HomeAdmin from "./components/user/HomeAdmin";
 import {axiosClient} from "./service/user/AxiosClient";
@@ -6,7 +10,6 @@ import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
 import {EnumAppUserRole} from "./components/user/EnumAppUserRole";
 import React from "react";
-import {Routes, Route} from "react-router";
 import {ToastContainer} from "react-toastify";
 import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
 import {CustomerList} from "./components/customer/CustomerList";
@@ -19,10 +22,14 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
+//                 
+                <Route path="/admin/order" element={<Order/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/403" element={<Error403/>}/>
+                <Route path="/customer" element={<CustomerList/>}/>
+                <Route path="/history/:id" element={<ShoppingHistoryList/>}/>
 
                 <Route
                     element={
