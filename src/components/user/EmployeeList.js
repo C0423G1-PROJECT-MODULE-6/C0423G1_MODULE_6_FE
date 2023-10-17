@@ -1,20 +1,25 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { getEmployeeList } from "../../service/user/EmployeeService";
-import { Prev } from "react-bootstrap/esm/PageItem";
 import { Link } from "react-router-dom";
+import { getAppRoleList } from "../../service/user/AppRoleService";
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState();
   const [searchName, setSearchName] = useState("");
+  const [listJob, setListJob] = useState([]);
   const [searchJob, setSearchJob] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
-  const [selectedRow, setSelectedRow] = useState(null);
-  const handleRowClick = (index) => {
-    selectedRow(index);
+  const loadListJob = async () => {
+    const data = await getAppRoleList();
+    setListJob(data);
   };
+  useEffect(()=>{
+    loadListJob();
+  },[]);
+
   const loadEmployeeList = async () => {
     const result = await getEmployeeList(
       page,
@@ -24,6 +29,7 @@ const EmployeeList = () => {
     );
     setTotalPage(result.totalPages);
     setEmployeeList(result.content);
+    console.log(result);
   };
 
   useEffect(() => {
@@ -46,6 +52,10 @@ const EmployeeList = () => {
     setSearchName(searchName);
     const searchPhone = document.getElementById("searchPhone").value;
     setSearchPhone(searchPhone);
+    const searchJob = document.getElementById("searchJob").value;
+    console.log(searchJob);
+    setSearchJob(searchJob);
+    setPage(0);
   };
 
   return (
@@ -202,11 +212,11 @@ const EmployeeList = () => {
         <div>
           <div className="col-12 d-flex justify-content-end my-3">
             <div className="col-auto mx-2">
-              <select className="form-select">
-                <option selected="">--Tìm công việc--</option>
-                <option>Admin</option>
-                <option>Nhân viên bán hàng</option>
-                <option>Thủ Kho</option>
+              <select className="form-select" id="searchJob">
+                <option value={""} selected>--Tìm theo công việc--</option>
+                {listJob.map((job) =>(
+                <option key={job.id} value={job.name}>{job.name}</option>
+              ))}
               </select>
             </div>
             <div className="col-auto">
@@ -221,7 +231,7 @@ const EmployeeList = () => {
             <div className="col-auto mx-2">
               <input
                 className="form-control"
-                type="search"
+                type="number"
                 aria-label="Search"
                 placeholder="Tìm theo số điện thoại"
                 id="searchPhone"
@@ -252,11 +262,7 @@ const EmployeeList = () => {
           <tbody>
             {employeeList.map((employee, index) => (
               <tr
-                key={index}
-                onClick={() => handleRowClick(index)}
-                style={{
-                  backgroundColor: selectedRow === index ? "yellow" : "",
-                }}
+                key={employee.id}
               >
                 <td>{index + 1}</td>
                 <td>{employee.employeeName}</td>

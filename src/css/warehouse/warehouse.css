@@ -1,0 +1,20 @@
+.form-input-Phap {
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.form-input-Phap label {
+    font-weight: bold;
+}
+
+
+#file-upload {
+    width: 200px;
+}
+
+.highlight {
+    background-color: gray;
+    color: white;
+    /* Màu nền sáng */
+}
