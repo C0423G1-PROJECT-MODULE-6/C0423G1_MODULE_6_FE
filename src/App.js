@@ -8,6 +8,8 @@ import {axiosClient} from "./service/user/AxiosClient";
 import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
+import EmployeeList from './components/user/EmployeeList';
+import EditEmployee from './components/user/EditEmployee';
 import {EnumAppUserRole} from "./components/user/EnumAppUserRole";
 import React from "react";
 import {ToastContainer} from "react-toastify";
@@ -16,13 +18,16 @@ import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 
 
+
 function App() {
     axiosClient();
     return (
         <>
             <ToastContainer></ToastContainer>
             <Routes>
-//                 
+//              
+                <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
+                <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
                 <Route path="/admin/order" element={<Order/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
@@ -30,6 +35,7 @@ function App() {
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/customer" element={<CustomerList/>}/>
                 <Route path="/history/:id" element={<ShoppingHistoryList/>}/>
+
 
                 <Route
                     element={
