@@ -9,6 +9,7 @@ import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
 import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
+import CreateProduct from "./components/product/CreateProduct";
 
 function App() {
     axiosClient();
@@ -20,6 +21,7 @@ function App() {
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/403" element={<Error403/>}/>
+                {/*<Route path="/add" element={<CreateProduct />}/>*/}
                 <Route
                     element={
                         <Authentication
