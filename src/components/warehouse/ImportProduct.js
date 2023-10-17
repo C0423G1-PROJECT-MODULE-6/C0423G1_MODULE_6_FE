@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
+import ProductChooseModal from "../modal/ProductChooseModal";
 
 export function ImportProduct () {
 const navigate = useNavigate();
@@ -30,6 +31,7 @@ useEffect(() => {
 },[param])
 
     return(
+        <>
         <Formik
         initialValues={{
             quantity:0,
@@ -79,7 +81,7 @@ useEffect(() => {
           </label>
         </div>
         <div className="col-6 mb-2">
-          <Field id="file-upload" type="image" name="img" src="https://cdn.hoanghamobile.com/i/preview/Uploads/2023/09/13/iphone-15-pro-blue-titanium-pure-back-iphone-15-pro-blue-titanium-pure-front-2up-screen-usen.png" className="form-control mt-2 border border-dark" />
+          <Field id="file-upload" type="image" name="img" src="" className="form-control mt-2 border border-dark" />
         </div>
         <div className="col-4 p-2">
           <label>Số lượng</label>
@@ -110,5 +112,7 @@ useEffect(() => {
 
             </Form>
         </Formik>
+            <ProductChooseModal/>
+        </>
     )
 }
