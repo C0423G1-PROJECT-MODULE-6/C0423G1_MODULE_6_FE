@@ -12,7 +12,7 @@ export const getEmployeeList = async (page,searchJob, searchName,searchPhone) =>
 export const deleteEmployee = async (id) => {
     try{
         await axios.delete(`http://localhost:8080/api/admin/employee/delete/${id}`);
-    }catch(e){~
+    }catch(e){
         console.log(e);
     }
 }
