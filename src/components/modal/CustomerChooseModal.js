@@ -135,7 +135,7 @@ const CustomerChooseModal = ({handleData}) => {
                                                 <td>{customer?.nameCustomer}</td>
                                                 <td>{customer?.phoneNumberCustomer}</td>
                                                 <td>{customer?.addressCustomer}</td>
-                                                <td>1</td>
+                                                <td>{customer?.dateOfBirthCustomer}</td>
                                                 <td>{customer?.emailCustomer}</td>
                                             </tr>))}
                                         </tbody> :
