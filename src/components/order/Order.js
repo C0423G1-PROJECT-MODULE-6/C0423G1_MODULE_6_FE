@@ -15,8 +15,18 @@ function Order() {
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const [modalStatus, setModalStatus] = useState(false);
 
-    const handleData=(data)=>{
-        console.log(data)
+    const findCustomerByid = async (data) => {
+        const res =await orderService.findCustomerById(data);
+        console.log(res)
+        if (res.idOrderBill !== null){
+            setCustomer(res);
+        }else {
+            setOrderBillNotPay(res);
+        }
+    };
+
+    const handleDataByChooseCustomer=(data)=>{
+        findCustomerByid(data);
     }
 
     const getAllCart = async () => {
@@ -102,7 +112,7 @@ function Order() {
                                                 <Field
                                                     className="form-control mt-2 border border-dark"
                                                     type="text"
-                                                    placeholder="Nguyen Dinh Thoi"
+                                                    placeholder="{customer.nameCustomer}"
                                                     readOnly
                                                 />
                                             </div>
@@ -165,7 +175,7 @@ function Order() {
                                         <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Scan QR</button>
                                     </div>
                                     <div className="row">
-                                        <table className="table" style={{ width: '100%' }}>
+                                        <table className="table " style={{ width: '100%' }}>
                                             <thead>
                                             <tr>
                                                 <th className="col-1 text-center">#</th>
@@ -312,7 +322,7 @@ function Order() {
                     {/*></BillNotPayConfirm>*/}
                 </Form>
             </Formik>
-            <CustomerChooseModal handleData={handleData}/>
+            <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
             <CustomerCreateModal />
             <ProductChooseModal />
         </>

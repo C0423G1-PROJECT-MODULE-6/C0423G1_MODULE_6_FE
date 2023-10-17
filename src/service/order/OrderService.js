@@ -1,5 +1,15 @@
 import axios from "axios";
 
+export const findCustomerById = async (data) => {
+    try{
+        const res = await axios.get(`http://localhost:8080/api/admin/order/customer/{id}`,data)
+        return res.data;
+    }catch (e){
+        alert("Access Denied");
+    }
+};
+
+
 export const deleteChosenProduct =async (idProduct,idUser) => {
     try{
         const res = await axios.post(`http://localhost:8080/api/admin/order/cart/deleteChosenProduct/${idUser},${idProduct}`)
