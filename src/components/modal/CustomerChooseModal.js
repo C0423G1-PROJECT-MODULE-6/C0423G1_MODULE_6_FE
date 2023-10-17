@@ -101,7 +101,7 @@ const CustomerChooseModal = ({handleData}) => {
                                     <button className="btn btn-outline-primary text-center shadow">Tìm kiếm</button>
                                 </div>
                             </div>
-                            <div className="mx-auto p-3" style={{width: '95%'}}>
+                            <div className="mx-auto p-3" style={{width: '95%'}} id="TinDT">
                                 <table className=" shadow w-100 " >
                                     <thead style={{fontSize: 'large', backgroundColor: 'darkgrey'}}>
                                     <tr>

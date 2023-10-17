@@ -1,6 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "./modal_table.css";
+import * as productService from "../../service/product/ProductService";
 const ProductChooseModal = () => {
+    const [productList, setProductList] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
+    const [choose, setChoose] = useState("");
+    const [page, setPage] = useState(0);
+    const [totalPage, setTotalPage] = useState();
+    const [selectedProduct, setSelectedProduct] = useState({
+        id: null,
+        name: ""
+    });
+    const loadProductList = async (choose,page,searchValue) => {
+        const result = await productService.getPageProductModal(choose,page,searchValue);
+        if (result?.status === 200) {
+            setProductList(result?.data.content);
+            setTotalPage(result?.data.totalPages);
+        } else {
+            handleReset();
+        }
+    }
+    const handleReset = () => {
+        setPage(0);
+        setChoose("name");
+        setSearchValue("");
+    }
+    useEffect(() => {
+        loadProductList(choose, page, searchValue);
+    }, [choose, page, searchValue]);
+
+    if (!productList) {
+        return <div></div>;
+    }
     return (
         <div className="modal fade" id="exampleModalProduct" data-bs-backdrop="static" tabIndex="-1"
              aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -56,22 +87,33 @@ const ProductChooseModal = () => {
                             </div>
                             <div className="mx-auto p-3 " style={{ width: "93%" }}>
                                 <table className=" shadow w-100">
-                                    <tbody>
-                                    <tr style={{ fontSize: "larger", backgroundColor: "darkgrey" }}>
-                                        <th style={{ width: "15%", paddingLeft: "1%"}}>STT</th>
-                                        <th style={{ width: "30%" }}>Tên</th>
+
+                                    <tr style={{ fontSize: "larger", backgroundColor: "darkgrey" }} className="border-dark">
+                                        <th style={{ width: "5%", paddingLeft: "1%"}}>STT</th>
+                                        <th style={{ width: "40%" }}>Tên</th>
                                         <th style={{ width: "25%" }}>Giá</th>
                                         <th style={{ width: "19%" }}>CPU</th>
                                         <th style={{ width: "15%" }}>Lưu trữ</th>
                                     </tr>
-                                    <tr>
-                                        <td style={{ width: "15%" }}>1</td>
-                                        <td style={{ width: "30%" }}>Sam Sung Galaxy S21 4GB-250GB</td>
-                                        <td style={{ width: "25%" }}>23.190.000</td>
-                                        <td style={{ width: "19%" }}>SCT 301</td>
-                                        <td style={{ width: "15%" }}>250 GB</td>
-                                    </tr>
-                                    </tbody>
+                                    {productList && productList.length !== 0 ?
+                                        <tbody>
+                                        {productList.map((product, index) => (
+                                            <tr>
+                                        <td style={{ width: "5%" , paddingLeft: "1%"}}>{(index + 1) + page * 5}</td>
+                                        <td style={{ width: "40%" }}>{product?.name}</td>
+                                        <td style={{ width: "25%" }}>{product?.price}</td>
+                                        <td style={{ width: "19%" }}>{product?.cpu.name}</td>
+                                        <td style={{ width: "15%" }}>{product?.capacity.name}</td>
+                                    </tr>))}
+                                        </tbody> :
+                                        <tbody>
+                                        <tr style={{height: '150px'}}>
+                                            <td style={{fontSize: '30px', textAlign: 'center'}} colSpan="6">Không có dữ
+                                                liệu
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    }
                                 </table>
                             </div>
                         </div>
