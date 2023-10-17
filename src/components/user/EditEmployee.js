@@ -245,7 +245,7 @@ function EditEmployee(props) {
                                             aria-describedby="inputGroupFileAddon03"
                                             aria-label="Upload"
                                             accept="image/png, image/gif, image/jpeg"
-                                            ref="{inputFileRef}"
+                                         
                                             onchange="{handleInputChange}"
                                             name="image"
                                         />
