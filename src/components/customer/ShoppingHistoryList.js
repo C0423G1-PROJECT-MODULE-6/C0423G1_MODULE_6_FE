@@ -26,7 +26,7 @@ export function ShoppingHistoryList() {
             setHistorys(result.data.content);
             setRecords(result.data.totalElements);
             setTotalPage(result.data.totalPages);
-        }catch (e) {
+        } catch (e) {
             setHistorys([]);
             setRecords(0);
             setTotalPage(0);
@@ -101,11 +101,14 @@ export function ShoppingHistoryList() {
                     <div className="col-12 d-flex justify-content-end my-3">
                         <div className="col-auto mx-2">
                             <input className="form-control" type="search" placeholder="Tìm theo tên"
-                                   aria-label="Search" onChange={(name)=>{setSearchName(name.target.value)}}/>
+                                   aria-label="Search" onChange={(name) => {
+                                setSearchName(name.target.value)
+                            }}/>
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
-                                    onClick={handleSearch}>Tìm kiếm</button>
+                                    onClick={handleSearch}>Tìm kiếm
+                            </button>
                         </div>
                     </div>
                     <table className="border border-dark table table-hover table-layout">
@@ -130,12 +133,9 @@ export function ShoppingHistoryList() {
                                     </tr>
                                 )
                             })) : (<tr>
-
                             <td colSpan={4} style={{textAlign: "center"}}>Không tìm thấy!</td>
-
                         </tr>)
                         }
-
                         </tbody>
                     </table>
                 </div>
@@ -143,7 +143,7 @@ export function ShoppingHistoryList() {
                 <div className="container mt-3">
                     <div className="row">
                         <div className="col-auto ms-auto">
-                            <nav className="bottom-NguyenHN" aria-label="Page navigation">
+                            <nav style={{display: "flex"}} aria-label="Page navigation">
                                 <ul className="pagination mb-0 me-2">
                                     <li className="page-item ">
                                         <a onClick={() => previousPage()}
@@ -159,10 +159,10 @@ export function ShoppingHistoryList() {
                                            href="#">Sau</a>
                                     </li>
                                 </ul>
-                                <a href="">
+                                <Link to="/customer">
                                     <button className="btn btn-outline-primary text-center" type="button">Trở về
                                     </button>
-                                </a>
+                                </Link>
                             </nav>
                         </div>
                     </div>
