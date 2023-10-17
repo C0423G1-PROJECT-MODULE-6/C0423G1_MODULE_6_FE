@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import * as AuthService from "../../service/user/AuthService";
 import {toast} from "react-toastify";
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import HeaderAdmin from "./HeaderAdmin";
 import {useParams} from "react-router-dom";
 import * as UserService from '../../service/user/UserService';
 import {RingLoader} from "react-spinners";
-import '../../css/user/spinner.css'
+import '../../css/user/spinner.css';
+import * as Yup from "yup";
 
 function Information() {
 
@@ -202,6 +203,10 @@ function Information() {
         setLoading(false);
     }
 
+    const today = new Date();
+    const eighteenYearsAgo = new Date(today);
+    eighteenYearsAgo.setFullYear(today.getFullYear() - 18);
+
 
     return (infoUser != null &&
         <>
@@ -218,6 +223,25 @@ function Information() {
                         onSubmit={(values) => {
                             changeInfo(values);
                         }}
+                        validationSchema={Yup.object({
+                            employeeName: Yup.string().trim()
+                                .required("Vui lòng nhập tên")
+                                .max(100, "Quá ký tự cho phép (100 ký tự)"),
+                            employeePhone: Yup.string().trim()
+                                .required("Vui lòng nhập số điện thoại")
+                                .matches(/^(?:\+84|0)(90|91|94)\d{7}$/, "Phone number invalid"),
+                            employeeBirthday: Yup.date()
+                                .required("Vui lòng nhập ngày sinh")
+                                .max(eighteenYearsAgo, "Nhân viên chưa đủ 18 tuổi"),
+                            email: Yup.string().trim()
+                                .required("Vui lòng bổ sung email khách hàng")
+                                .matches(/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, "Bạn nhập sai định dạng email")
+                                .min(12, "Email không đủ ký tự cho phép (12 ký tự)")
+                                .max(50, "Email vượt quá ký tự cho phép (50 ký tự)"),
+                            employeeAddress: Yup.string().trim()
+                                .required("Vui lòng nhập địa chỉ")
+                                .max(100, "Địa chỉ quá ký tự cho phép (100 ký tự)")
+                        })}
                     >
                         <Form>
                             <h1 style={{textAlign: 'center'}}>Thông Tin Cá Nhân</h1>
@@ -225,25 +249,29 @@ function Information() {
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Họ Và Tên</label>
                                 <Field type="text" className="form-control" id="name" name="employeeName" disabled={input2Disabled}/>
+                                <ErrorMessage name="employeeName" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Email</label>
                                 <Field type="email" className="form-control" id="email" name="email" disabled={input2Disabled}/>
+                                <ErrorMessage name="email" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="dateOfBirth" className="form-label">Ngày Sinh</label>
                                 <Field type="date" className="form-control" id="dateOfBirth" name="employeeBirthday" disabled={input2Disabled}/>
+                                <ErrorMessage name="employeeBirthday" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="phoneNumber" className="form-label">Số Điện Thoại</label>
                                 <Field type="text" className="form-control" id="phoneNumber" name="employeePhone" disabled={input2Disabled}/>
+                                <ErrorMessage name="employeePhone" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="address" className="form-label">Địa Chỉ</label>
                                 <Field type="text" className="form-control" id="address" name="employeeAddress" disabled={input2Disabled}/>
+                                <ErrorMessage name="employeeAddress" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3 mt-4">
-
                                     <div className="row" style={{
                                         marginLeft: '5%',
                                         marginRight: '5%'
@@ -275,6 +303,17 @@ function Information() {
                         onSubmit={(values) => {
                             changePass(values);
                         }}
+                        validationSchema={Yup.object({
+                            password: Yup.string().trim()
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                            newPassword: Yup.string().trim()
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                            newPasswordConfirmation: Yup.string().trim()
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                        })}
                     >
                         <Form>
                             <h1 style={{textAlign: 'center'}}>Thay Đổi Mật Khẩu</h1>
@@ -285,17 +324,21 @@ function Information() {
                                 <Field type="hidden" className="form-control" name="userName"/>
                                 <Field type="password" className="form-control" name="password" onChange={handlePasswordChange}
                                        value={password} disabled={input1Disabled} />
+                                <ErrorMessage name="password" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="newPassword" className="form-label">Mật Khẩu Mới</label>
                                 <Field type="password" className="form-control" name="newPassword"
                                        onChange={handleNewPasswordChange} value={newPassword} disabled={input1Disabled} />
+                                <ErrorMessage name="newPassword" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="newPasswordConfirmation" className="form-label">Nhập Lại Mật Khẩu
                                     Mới</label>
                                 <Field type="password" className="form-control" name="newPasswordConfirmation"
                                        onChange={handleConfirmPasswordChange} value={confirmPassword} disabled={input1Disabled} />
+                                <ErrorMessage name="newPasswordConfirmation" component="span" style={{color: "red"}}></ErrorMessage>
+
                                 {passwordsMatch || confirmPassword === "" ? (
                                     <p style={{color: "green"}}></p>
                                 ) : (
@@ -327,11 +370,19 @@ function Information() {
                             initialValues={user}
                             onSubmit={(values) => {
                                 auth(values);
-                            }}>
+                            }}
+                            validationSchema={Yup.object({
+                                otp: Yup.string().trim()
+                                    .min(8, "Không đủ ký tự cho phép (8 ký tự)")
+                                    .max(8, "Quá ký tự cho phép (8 ký tự)"),
+                            })}
+                        >
+
                             <Form>
                                 <div className="mb-3">
                                     <label htmlFor="otp" className="form-label">Mã Xác Nhận</label>
                                     <Field type="text" className="form-control" value={otp} onChange={handleOtpChange} name="otp"/>
+                                    <ErrorMessage name="otp" component="span" style={{color: "red"}}></ErrorMessage>
                                     <Field type="hidden" className="form-control" name="password"/>
                                 </div>
                                 <div className="mt-4">
