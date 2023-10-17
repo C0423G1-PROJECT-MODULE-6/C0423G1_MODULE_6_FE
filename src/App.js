@@ -2,6 +2,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from "react-toastify";
 import LoginForm from "./components/user/LoginForm";
 import {Route, Routes} from "react-router-dom";
+import Order from "./components/order/Order";
 import Information from "./components/user/Information";
 import HomeAdmin from "./components/user/HomeAdmin";
 import { axiosClient } from "./service/user/AxiosClient";
@@ -17,6 +18,8 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
+//                 
+                <Route path="/admin/order" element={<Order/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
