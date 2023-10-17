@@ -104,7 +104,7 @@ const CustomerChooseModal = ({handleData}) => {
                             <div className="mx-auto p-3" style={{width: '95%'}}>
                                 <table className=" shadow w-100 " >
                                     <thead style={{fontSize: 'large', backgroundColor: 'darkgrey'}}>
-                                    <tr >
+                                    <tr>
                                         <th style={{width: '6%'}} className="text-center">STT</th>
                                         <th style={{width: '20%'}}>Tên khách hàng</th>
                                         <th style={{width: '15%'}}>Số điện thoại</th>
@@ -117,15 +117,17 @@ const CustomerChooseModal = ({handleData}) => {
                                         <tbody>
                                         {customerList.map((customer, index) => (
                                             <tr key={index} id={index} onClick={() => {
-                                                if (selectedCustomer.idCustomer === null || selectedCustomer.idCustomer !== customer?.id) {
+                                                if (selectedCustomer.idCustomer === null || selectedCustomer.idCustomer !== customer?.idCustomer) {
                                                     setSelectedCustomer({ idCustomer: customer?.idCustomer, nameCustomer: customer?.nameCustomer });
-                                                } else {
+                                                    console.log(selectedCustomer.idCustomer)
+                                                } else  {
                                                     setSelectedCustomer({ idCustomer: null, nameCustomer: "" });
+                                                    console.log(selectedCustomer.idCustomer)
                                                 }
-                                            }} style={(selectedCustomer.nameCustomer === customer?.nameCustomer) ?{
+                                            }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
                                                 background: '#0d6efd',
                                                 height: 50
-                                            } : {height: 50}}
+                                            } : { height: 50}}
                                             >
                                                 <td className="text-center">
                                                     {(index + 1) + page * 5}
@@ -154,12 +156,16 @@ const CustomerChooseModal = ({handleData}) => {
                         <div className="row col-12 mx-auto">
                             <div className="col-6 p-3">
                                 <div style={{marginLeft: '8%'}}>
-                                    <button className="btn btn-outline-primary shadow"
-                                            style={{marginRight: '2rem', width: '40%'}}
+                                    {selectedCustomer.idCustomer === null ? null : (
+                                        <button
+                                            className="btn btn-outline-primary shadow"
+                                            style={{ marginRight: '2rem', width: '40%' }}
                                             id="submitModal"
-                                            onClick={() => handleSubmit()}>
-                                        Chọn
-                                    </button>
+                                            onClick={() => handleSubmit()}
+                                        >
+                                            Chọn
+                                        </button>
+                                    )}
                                     <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
                                             style={{width: '40%'}}>
                                         Trở về

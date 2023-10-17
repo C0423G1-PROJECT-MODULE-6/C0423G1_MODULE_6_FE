@@ -10,13 +10,10 @@ export const getAllCustomerModal = async (page, name,age,gender) => {
     }
 }
 export const addCustomer = async (customer) => {
-    // try {
         const result = await axios.post(`http://localhost:8080/api/admin/customer/create`,customer);
         console.log(result);
         return result;
-    // } catch (e) {
-    //     console.log(e);
-    // }
+
 }
 const apiURL = "http://localhost:8080/api/admin/customer/list";
 
