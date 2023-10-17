@@ -16,6 +16,7 @@ import {ToastContainer} from "react-toastify";
 import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
 import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
+import CreateEmployee from './components/user/CreateEmployee';
 
 
 
@@ -28,6 +29,7 @@ function App() {
 //              
                 <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
                 <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                <Route path='/employee/create' element={<CreateEmployee/>}></Route>
                 <Route path="/admin/order" element={<Order/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
