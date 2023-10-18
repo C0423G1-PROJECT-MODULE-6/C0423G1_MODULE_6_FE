@@ -1,9 +1,10 @@
 import axios from "axios";
 
 export const createProduct = async (product) => {
+    console.log(product)
     try {
-        const result = await axios.post(`http://localhost:8080/api/admin/product/add`, product)
-        return result.data.content;
+        const result = await axios.post(`http://localhost:8080/api/admin/product/add`,product)
+        // return result.data;
     } catch (error) {
         console.log(error);
     }
