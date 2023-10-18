@@ -18,6 +18,7 @@ import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
 
+import ProductList from "./components/product/ProductList";
 
 function App() {
     axiosClient();
@@ -55,6 +56,7 @@ function App() {
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
 
 
+                    <Route path="/product/list" element={<ProductList/>}/>
                 </Route>
             </Routes>
         </>
