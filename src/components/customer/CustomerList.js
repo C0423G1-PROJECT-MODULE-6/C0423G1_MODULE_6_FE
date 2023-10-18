@@ -53,6 +53,9 @@ export function CustomerList() {
                 </div>
                 <div className="col-12 d-flex justify-content-end my-3">
                     <div className="col-auto mx-1">
+                       <span className="text-start">Số lượng: {records}</span>
+                    </div>
+                    <div className="col-auto mx-1">
                         <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
                             <option value="0">--Sắp xếp--</option>
                             <option value="1">Họ Tên</option>
