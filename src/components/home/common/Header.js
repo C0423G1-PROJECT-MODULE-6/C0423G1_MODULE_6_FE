@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const Header = () => {
     const [nameTarget, setNameTarget] = useState('');
     const navigate = useNavigate();
@@ -31,7 +33,7 @@ const Header = () => {
 
     return (
         <>
-            <header>
+            <header className='toper'>
                 <div className="header">
                     <div>
                         <a href="/"
@@ -55,7 +57,7 @@ const Header = () => {
                     <div className="search-login">
                         <input value={nameTarget} onKeyDown={handleOnKeyDown} onChange={handleListenInput} type="text" className="search-bar" placeholder="Tìm kiếm" id='search-name' />
                         <div className="header-search" onClick={handleSearch}>
-                            <i className='search-icon bx bx-search-alt-2' ></i>
+                            <i className="search-icon bx bx-search-alt-2" ></i>
                         </div>
 
                     </div>

@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getListByName, getSeriesByProductType } from '../../../service/home/HomeService';
 
-import '../../../css/home/master.css'
+
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 

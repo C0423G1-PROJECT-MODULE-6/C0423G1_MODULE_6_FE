@@ -114,12 +114,12 @@ const Home = () => {
                     <div className='home-list-container '>
                         <div className="iphone-swiper-button-prev">
                             <div className="temp-tag">
-                                <i className="bx bx-left-arrow-alt"></i>
+                                <i class='bx bxs-chevron-left'></i>
                             </div>
                         </div>
                         <div className="iphone-swiper-button-next">
                             <div className="temp-tag">
-                                <i className="bx bx-right-arrow-alt"></i>
+                                <i class='bx bxs-chevron-right'></i>
                             </div>
                         </div>
 
@@ -177,12 +177,12 @@ const Home = () => {
                     <div className='home-list-container '>
                         <div className="macbook-swiper-button-prev">
                             <div className="temp-tag">
-                                <i className="bx bx-left-arrow-alt"></i>
+                                <i class='bx bxs-chevron-left'></i>
                             </div>
                         </div>
                         <div className="macbook-swiper-button-next">
                             <div className="temp-tag">
-                                <i className="bx bx-right-arrow-alt"></i>
+                                <i class='bx bxs-chevron-right'></i>
                             </div>
                         </div>
 
@@ -242,12 +242,12 @@ const Home = () => {
                     <div className='home-list-container '>
                         <div className="ipad-swiper-button-prev">
                             <div className="temp-tag">
-                                <i className="bx bx-left-arrow-alt"></i>
+                                <i class='bx bxs-chevron-left'></i>
                             </div>
                         </div>
                         <div className="ipad-swiper-button-next">
                             <div className="temp-tag">
-                                <i className="bx bx-right-arrow-alt"></i>
+                                <i class='bx bxs-chevron-right'></i>
                             </div>
                         </div>
 
@@ -306,12 +306,12 @@ const Home = () => {
                     <div className='home-list-container '>
                         <div className="watch-swiper-button-prev">
                             <div className="temp-tag">
-                                <i className="bx bx-left-arrow-alt"></i>
+                                <i class='bx bxs-chevron-left'></i>
                             </div>
                         </div>
                         <div className="watch-swiper-button-next">
                             <div className="temp-tag">
-                                <i className="bx bx-right-arrow-alt"></i>
+                                <i class='bx bxs-chevron-right'></i>
                             </div>
                         </div>
 
