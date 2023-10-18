@@ -6,10 +6,12 @@ import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {createProduct} from "../../service/product/ProductService";
 import {ErrorMessage, Field, Formik} from "formik";
 import * as Yup from "yup";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
+import {toast} from "react-toastify";
 
 function CreateProduct() {
+    const navigate = useNavigate();
     const [capacitys, setCapacity] = useState([]);
     const [colors, setColor] = useState([]);
     const [cpus, setCpu] = useState([]);
@@ -104,7 +106,8 @@ function CreateProduct() {
                             product1.imageDto.name = imageUpload;
                         }
                         await createProduct(product1);
-                        // code toast
+                        toast.success(`Thêm mới sản phẩm ${product1.name} thành công!`);
+                        await navigate("");
                     } catch (error) {
                         console.log(error);
                         if (error.response.data) {
