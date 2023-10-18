@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import * as SalesService from "../../service/sales_report/SalesService";
+import HeaderAdmin from "../user/HeaderAdmin";
 Chart.register(...registerables);
 
 function formatDateString(date) {
@@ -121,6 +122,8 @@ function SalesReport() {
     }, []);
 
     return (
+        <>
+            <HeaderAdmin/>
         <div className="container">
             <h1 className="text-center mt-5">Báo Cáo Doanh Thu</h1>
             <div className="row mt-5">
@@ -175,6 +178,7 @@ function SalesReport() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
