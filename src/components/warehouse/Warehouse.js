@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { getAllWarehouse } from "../../service/warehouse/WarehouseService"
+import { Link } from "react-router-dom"
 
 export function Warehouse() {
     const [warehouse, setWarehouse] = useState([])
@@ -74,9 +75,9 @@ export function Warehouse() {
   </table>
   <div className="row d-flex justify-content-around my-3">
     <div className="col float-start">
-      <a className="me-1  " href="/html/PhapTM_warehouse.html" style={{textDecoration: 'none'}}>
+      <Link className="me-1  " to="/admin/warehouse/import" style={{textDecoration: 'none'}}>
         <button type="button" className="btn btn-outline-primary">Nhập sản phẩm</button>
-      </a>
+      </Link>
     </div>
     <div className="col-auto float-end">
       <ul className="pagination mb-0">

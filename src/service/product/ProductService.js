@@ -35,6 +35,14 @@ export const getProductId = async (id) => {
         console.log(error)
     }
 }
+export const getListProduct = async (sort,otherSort,choose,value,page) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/admin/product/list?sort=${sort}&choose=${choose}&value=${value}&page=${page}&otherSort=${otherSort}`)
+        return result.data;
+    }catch (error){
+        console.log(error)
+    }
+}
 
 export const getAllCapacity = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/capacity/list`)
@@ -64,4 +72,15 @@ export const getAllSeries = async () => {
 export const getAllType = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/type/list`)
     return result.data;
+}
+/**
+ * method get page product
+ * Create TinDT
+ * Date 17-10-2023
+ * param Long id
+ * return HttpStatus
+ */
+export const getPageProductModal = async (choose,page,value) => {
+    const result = await axios.get(`http://localhost:8080/api/admin/product/list?choose=${choose}&page=${page}&value=${value}`)
+    return result;
 }

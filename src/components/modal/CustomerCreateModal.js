@@ -6,17 +6,6 @@ import {useNavigate} from "react-router-dom";
 
 const CustomerCreateModal = ({handleData}) => {
     const navigate = useNavigate();
-    // const validateBirthAge = (value) => {
-    //     const currentDate = new Date();
-    //     const birthday = parseISO(value);
-    //     const age = differenceInYears(currentDate, birthday);
-    //     return age >= 18;
-    // }
-    // const validateBirth = (value) => {
-    //     const currentDate = new Date();
-    //     const birthday = parseISO(value);
-    //     return !isAfter(birthday, currentDate);
-    // };
     const handleSubmit = async (value, setErrors) => {
         try {
             const result = await addCustomer(value);
@@ -24,11 +13,10 @@ const CustomerCreateModal = ({handleData}) => {
             submitModal.setAttribute("data-bs-dismiss", "modal");
             submitModal.click()
             submitModal.removeAttribute("data-bs-dismiss");
-            // localStorage.setItem("nameCustomer",result.data.nameCustomer)
             handleData(result.data.nameCustomer);
         } catch (err) {
             console.log(err)
-            if (err.response.data) {
+            if (err.response?.data) {
                 setErrors(err.response.data);
             }
         }
