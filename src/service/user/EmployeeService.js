@@ -15,4 +15,14 @@ export const deleteEmployee = async (id) => {
     }catch(e){
         console.log(e);
     }
+    
+}
+// CaoNV
+export const crateEmployee = async (employeeDto) => {
+    const res = await axios.post('http://localhost:8080/api/admin/employee/create', employeeDto);
+    return res
+}
+export const getNewEmployee = async () => {
+    const res = await axios.get('http://localhost:8080/api/admin/employee/create');
+    return res
 }
