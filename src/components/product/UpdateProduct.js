@@ -5,11 +5,11 @@ import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {createProduct} from "../../service/product/ProductService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import {toast} from "react-toastify";
 
-function CreateProduct() {
+function UpdateProduct() {
     const navigate = useNavigate();
     const [capacitys, setCapacity] = useState([]);
     const [colors, setColor] = useState([]);
@@ -20,119 +20,9 @@ function CreateProduct() {
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
     const [imageUpload, setImageUpload] = useState([]);
+    const params = useParams();
 
-    // const getImage = async () => {
-    //     const result = await productService.getImageProduct();
-    //     setImageUpload(result.imageDto.name)
-    // };
 
-    const getListCapacity = async () => {
-        const result = await productService.getAllCapacity();
-        setCapacity(result);
-    }
-
-    const getListColor = async () => {
-        const result = await productService.getAllColor();
-        setColor(result);
-    }
-
-    const getListCpu = async () => {
-        const result = await productService.getAllCpu();
-        setCpu(result);
-    }
-
-    const getListRam = async () => {
-        const result = await productService.getAllRam();
-        setRam(result);
-    }
-
-    const getListSeries = async () => {
-        const result = await productService.getAllSeries();
-        setSeries(result);
-    }
-
-    const getListType = async () => {
-        const result = await productService.getAllType();
-        setType(result);
-    }
-
-    // useEffect(() => {
-    //     getImage();
-    // }, [])
-
-    useEffect(() => {
-        getListCapacity();
-    }, [])
-    useEffect(() => {
-        getListColor();
-    }, [])
-    useEffect(() => {
-        getListCpu();
-    }, [])
-    useEffect(() => {
-        getListRam();
-    }, [])
-    useEffect(() => {
-        getListSeries();
-    }, [])
-    useEffect(() => {
-        getListType();
-    }, []);
-
-    const add = async (product, setErrors) => {
-        let listImgPath = [];
-        try {
-            const uploadPromises = imageUpload.map(async (image) => {
-                const imageRef = ref(storage, 'images/' + image.name);
-                const snapshot = await uploadBytes(imageRef, image);
-                const url = await getDownloadURL(snapshot.ref);
-                return url;
-            });
-
-            const downloadUrls = await Promise.all(uploadPromises);
-            listImgPath = [...downloadUrls]
-        } catch (error) {
-            console.error("Lỗi khi tải lên ảnh:", error);
-        }
-        try {
-            const product1 = {
-                ...product,
-                capacityDto: JSON.parse(product?.capacityDto),
-                colorDto: JSON.parse(product?.colorDto),
-                cpuDto: JSON.parse(product?.cpuDto),
-                ramDto: JSON.parse(product?.ramDto),
-                seriesDto: JSON.parse(product?.seriesDto),
-                typeDto: JSON.parse(product?.typeDto),
-                imageDtoList: listImgPath
-            }
-            await createProduct(product1, listImgPath);
-            await navigate("/admin/product/list");
-            toast.success(`Thêm mới sản phẩm ${product1.name} thành công!`);
-        } catch (error) {
-            console.log(error);
-            if (error.response.data) {
-                setErrors(error.response.data);
-            }
-        }
-
-    }
-
-    const handleInputChange = (event) => {
-        const file = event.target.files[0];
-        if (file.size > 3000000) {
-            toast("Dung lượng ảnh tối đa 3MB")
-            return;
-        }
-        setImageUpload((prev) => [...prev, file]);
-        const reader = new FileReader();
-        reader.addEventListener("load", function () {
-            imgPreviewRef.current.src = reader.result;
-            imgPreviewRef.current.style.display = "block";
-        });
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    };
 
     return (
         <>
@@ -163,19 +53,19 @@ function CreateProduct() {
                             .required("Không được để trống tên sản phẩm!")
                             .max(70, "Tên sản phẩm quá dài, nhập tên không quá 70 ký tự!")
                             .min(5, "Vui lòng nhập tên hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
                         ,
                         screenProduct: Yup.string()
                             .required("Không được để trống màn hình sản phẩm!")
                             .max(50, "Thông tin màn hình quá dài, vui lòng nhập ít hơn 50 ký tự!")
                             .min(5, "Thông tin màn hình phải hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
                         ,
                         cameraProduct: Yup.string()
                             .required("Không để trống camera sảm phẩm!")
                             .max(100, "Thông tin camera quá dài, vui lòng nhập không quá 100 ký tự!")
                             .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
                         ,
                         descriptionProduct: Yup.string()
                             .min(0)
@@ -185,19 +75,19 @@ function CreateProduct() {
                             .required("Vui lòng bổ sung thông tin selfie!")
                             .min(5, "Thông tin selfie quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin selfie quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
                         ,
                         batteryProduct: Yup.string()
                             .required("Không được để trống thông tin pin!")
                             .min(5, "Thông tin pin quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin pin quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
                         ,
                         weightProduct: Yup.string()
                             .required("Không được để trống thông tin trọng lượng!")
                             .min(5, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin trọng lượng quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
                         ,
                         priceProduct: Yup.number()
                             .typeError("Thông tin giá không đúng định dạng!")
@@ -517,4 +407,4 @@ function CreateProduct() {
 
 }
 
-export default CreateProduct;
+export default UpdateProduct;

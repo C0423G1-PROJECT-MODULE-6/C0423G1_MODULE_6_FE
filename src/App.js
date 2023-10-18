@@ -18,6 +18,12 @@ import { CustomerList } from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
 import ProductList from "./components/product/ProductList";
+import {Warehouse} from './components/warehouse/Warehouse';
+import {ImportProduct} from './components/warehouse/ImportProduct';
+import Supplier from "./components/supplier/Supplier";
+import SalesReport from "./components/sales_report/SalesReport";
+import CreateProduct from "./components/product/CreateProduct";
+
 
 import Home from './components/home/home/Home';
 import List from './components/home/home/List';
@@ -39,9 +45,6 @@ function App() {
                 <Route path="/:type/:id" element={<Detail />} />
 
 
-
-
-
                 <Route
                     element={
                         <Authentication
@@ -58,13 +61,17 @@ function App() {
                     <Route path="/admin/home" element={<HomeAdmin />}></Route>
                     <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
                     <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
-                    <Route path='/admin/employee/create' element={<CreateEmployee />}></Route>
-                    <Route path="/admin/order" element={<Order />} />
-                    <Route path="/admin/customer" element={<CustomerList />} />
-                    <Route path="/admin/history/:id" element={<ShoppingHistoryList />} />
+                    <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/warehouse" element={<Warehouse/>}/>
+                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
+                    <Route path="/admin/supplier" element={<Supplier/>}/>
+                    <Route path="/admin/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/salesreport" element={<SalesReport/>}/>
 
-
-                    <Route path="/product/list" element={<ProductList />} />
                 </Route>
             </Routes>
         </>
