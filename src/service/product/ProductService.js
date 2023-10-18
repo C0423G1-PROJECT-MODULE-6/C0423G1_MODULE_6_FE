@@ -65,3 +65,14 @@ export const getAllType = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/type/list`)
     return result.data;
 }
+/**
+ * method get page product
+ * Create TinDT
+ * Date 17-10-2023
+ * param Long id
+ * return HttpStatus
+ */
+export const getPageProductModal = async (choose,page,value) => {
+    const result = await axios.get(`http://localhost:8080/api/admin/product/list?choose=${choose}&page=${page}&value=${value}`)
+    return result;
+}
