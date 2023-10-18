@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
+import SupplierChooseModal from "./SupplierChooseModal";
 
 export function ImportProduct() {
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ export function ImportProduct() {
                     <ErrorMessage className="text-danger" name="supplier" component="span"></ErrorMessage>
                   </div>
                   <div className="col-4">
-                    <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModalSupplier">
                       Chọn NCC
                     </button>
                   </div>
@@ -124,6 +125,7 @@ export function ImportProduct() {
         </Form>
       </Formik>
       <ProductChooseModal />
+      <SupplierChooseModal/>
     </>
   )
 }
