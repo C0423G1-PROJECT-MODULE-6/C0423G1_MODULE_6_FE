@@ -15,7 +15,7 @@ function Order() {
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const [modalStatus, setModalStatus] = useState(false);
 
-    const handleData=(data)=>{
+    const handleDataChooseCustomer=(data)=>{
         console.log(data)
     }
 
@@ -312,7 +312,7 @@ function Order() {
                     {/*></BillNotPayConfirm>*/}
                 </Form>
             </Formik>
-            <CustomerChooseModal handleData={handleData}/>
+            <CustomerChooseModal handleData={handleDataChooseCustomer}/>
             <CustomerCreateModal />
             <ProductChooseModal />
         </>
