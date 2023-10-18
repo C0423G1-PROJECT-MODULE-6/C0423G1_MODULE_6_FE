@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
+import HeaderAdmin from "../user/HeaderAdmin";
 
 export function CustomerList() {
     const [customers, setCustomers] = useState([]);
@@ -47,24 +48,25 @@ export function CustomerList() {
 
     return (
         <>
+            <HeaderAdmin/>
             <div className="container mt-5 pt-5">
                 <div className="col-12 d-flex justify-content-center">
                     <h1>Quản lý báo cáo khách hàng</h1>
                 </div>
                 <div className="col-12 d-flex justify-content-end my-3">
-                    <div className="col-auto d-flex justify-content-start" style={{marginRight:"20%"}}>
+                    <div className="col-auto d-flex justify-content-start" style={{marginRight:"17%"}}>
                         <p className="m-0"> Số lượng: <span style={{color:"#0d6efd"}}>{records}</span> </p>
                     </div>
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
-                            <option value="0">--Sắp xếp--</option>
-                            <option value="1">Họ Tên</option>
-                            <option value="2">Số lần mua</option>
+                            <option value="0">Sắp xếp số lần mua</option>
+                            <option value="1">Tăng dần</option>
+                            <option value="2">Giảm dần</option>
                         </select>
                     </div>
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(gender) => setSearchGender(gender.target.value)}>
-                            <option selected value="3">--Tìm theo giới tính--</option>
+                            <option selected value="3">Tìm theo giới tính</option>
                             <option value="1">Nam</option>
                             <option value="0">Nữ</option>
                         </select>
@@ -117,13 +119,13 @@ export function CustomerList() {
                                     <td style={{textAlign: "center"}}>{customer.totalPurchases}</td>
                                     <td style={{textAlign:"center"}}>
                                         <Link className="btn btn-outline-primary"
-                                              to={`/history/${customer.idCustomer}`}>Xem</Link>
+                                              to={`/admin/history/${customer.idCustomer}`}>Xem</Link>
                                     </td>
                                 </tr>
                             )
                         })) : (<tr>
 
-                        <td colSpan={9} style={{textAlign: "center"}}>Không tìm thấy!</td>
+                        <td colSpan={9} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
 
                     </tr>)
                     }

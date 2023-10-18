@@ -151,7 +151,7 @@ export function ShoppingHistoryList() {
                                     </tr>
                                 )
                             })) : (<tr>
-                            <td colSpan={4} style={{textAlign: "center"}}>Không tìm thấy!</td>
+                            <td colSpan={4} style={{textAlign: "center",color:"red"}}>Không tìm thấy!</td>
                         </tr>)
                         }
                         </tbody>
@@ -177,7 +177,7 @@ export function ShoppingHistoryList() {
                                            href="#">Sau</a>
                                     </li>
                                 </ul>
-                                <Link to="/customer">
+                                <Link to="/admin/customer">
                                     <button className="btn btn-outline-primary text-center" type="button">Trở về
                                     </button>
                                 </Link>
