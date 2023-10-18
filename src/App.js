@@ -59,8 +59,8 @@ function App() {
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
-                    <Route path="/admin/supplier/"  element={<Supplier />}/>
-                    <Route path="/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/supplier"  element={<Supplier />}/>
+                    <Route path="/admin/product/list" element={<ProductList/>}/>
                 </Route>
             </Routes>
         </>
