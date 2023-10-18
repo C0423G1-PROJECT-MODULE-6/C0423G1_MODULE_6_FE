@@ -83,7 +83,13 @@ function HeaderAdmin() {
     return (
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <div className="container-fluid">
-                <Navbar.Brand as={Link} to="/HaiBH_Home_Admin">Home</Navbar.Brand> {/* Sử dụng Link thay cho <a> */}
+                <Navbar.Brand as={Link} to="/admin/home" style={{padding: "0"}}>
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/c4zone-da49c.appspot.com/o/logoplus.png?alt=media&token=8abd0661-05bf-4fc3-804f-60ab9482b75f&_gl=1*pc8atb*_ga*OTEwMjg5ODY2LjE2OTM3NjU2MzY.*_ga_CW55HF8NVT*MTY5NzU5ODI2OS44LjEuMTY5NzU5ODM1Ni41Mi4wLjA" // Đường dẫn đến hình ảnh logo của bạn
+                        alt="Home"
+                        height="40"
+                    />
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarNavDarkDropdown"/>
                 <Navbar.Collapse id="navbarNavDarkDropdown">
                     {(roleAdmin) && (
@@ -139,14 +145,6 @@ function HeaderAdmin() {
                         </li>
                     </ul>
                 </div>
-                {/*<Navbar.Collapse className="justify-content-end navbarNavDarkDropdown">*/}
-                {/*    <NavDropdown id="nav-dropdown-dark" style={{color: "white"}} title={userName.sub}>*/}
-                {/*        <Link to="/HaiBH_Infomation" className="dropdown-item">Thông Tin Cá Nhân</Link>*/}
-                {/*        <button onClick={() => {*/}
-                {/*            handleLogOut();*/}
-                {/*        }} className="dropdown-item">Đăng Xuất</button>*/}
-                {/*    </NavDropdown>*/}
-                {/*</Navbar.Collapse>*/}
             </div>
         </Navbar>
     );
