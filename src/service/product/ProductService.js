@@ -31,7 +31,7 @@ export const updateProduct = async (id, product) => {
 export const getProductId = async (id) => {
     try {
         const result = await axios.patch(`http://localhost:8080/api/admin/product/${id}`)
-        return result.data.content;
+        return result.data;
     } catch (error) {
         console.log(error)
     }

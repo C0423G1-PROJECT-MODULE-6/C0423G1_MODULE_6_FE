@@ -22,6 +22,7 @@ import {Warehouse} from './components/warehouse/Warehouse';
 import {ImportProduct} from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
+import CreateProduct from "./components/product/CreateProduct";
 
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
                     <Route path="/admin/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                 </Route>
             </Routes>
