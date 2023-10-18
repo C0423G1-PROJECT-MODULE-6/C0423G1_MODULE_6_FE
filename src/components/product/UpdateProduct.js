@@ -23,7 +23,6 @@ function UpdateProduct() {
     const params = useParams();
 
 
-
     return (
         <>
             <div id="anhdao">

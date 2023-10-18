@@ -83,7 +83,7 @@ function CreateProduct() {
         let listImgPath = [];
         try {
             const uploadPromises = imageUpload.map(async (image) => {
-                const imageRef = ref(storage, 'images/' + image.name);
+                const imageRef = ref(storage, 'product/' + image.name);
                 const snapshot = await uploadBytes(imageRef, image);
                 const url = await getDownloadURL(snapshot.ref);
                 return url;
@@ -107,7 +107,7 @@ function CreateProduct() {
             }
             await createProduct(product1, listImgPath);
             await navigate("/admin/product/list");
-            toast.success(`Thêm mới sản phẩm ${product1.name} thành công!`);
+            toast.success(`Thêm mới sản phẩm ${product1.nameProduct} thành công!`);
         } catch (error) {
             console.log(error);
             if (error.response.data) {
@@ -163,19 +163,19 @@ function CreateProduct() {
                             .required("Không được để trống tên sản phẩm!")
                             .max(70, "Tên sản phẩm quá dài, nhập tên không quá 70 ký tự!")
                             .min(5, "Vui lòng nhập tên hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
                         ,
                         screenProduct: Yup.string()
                             .required("Không được để trống màn hình sản phẩm!")
                             .max(50, "Thông tin màn hình quá dài, vui lòng nhập ít hơn 50 ký tự!")
                             .min(5, "Thông tin màn hình phải hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
                         ,
                         cameraProduct: Yup.string()
                             .required("Không để trống camera sảm phẩm!")
                             .max(100, "Thông tin camera quá dài, vui lòng nhập không quá 100 ký tự!")
                             .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
                         ,
                         descriptionProduct: Yup.string()
                             .min(0)
@@ -185,19 +185,19 @@ function CreateProduct() {
                             .required("Vui lòng bổ sung thông tin selfie!")
                             .min(5, "Thông tin selfie quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin selfie quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
                         ,
                         batteryProduct: Yup.string()
                             .required("Không được để trống thông tin pin!")
                             .min(5, "Thông tin pin quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin pin quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
                         ,
                         weightProduct: Yup.string()
                             .required("Không được để trống thông tin trọng lượng!")
                             .min(5, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 5 ký tự!")
                             .max(100, "Thông tin trọng lượng quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
                         ,
                         priceProduct: Yup.number()
                             .typeError("Thông tin giá không đúng định dạng!")
@@ -219,16 +219,16 @@ function CreateProduct() {
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
-                                <div id="upload-img" className="mt-2">
+                                <div id="upload-img" className="image-gap mx-2 mb-2">
                                     {imageUpload ? imageUpload.map((img) => {
                                         return (
                                             <img
                                                 src={img}
                                                 ref={imgPreviewRef}
                                                 style={{
-                                                    padding: "0",
-                                                    width: "400px",
-                                                    height: "300px",
+                                                    margin: "0px 8px 8px",
+                                                    width: "150px",
+                                                    height: "100px",
                                                     borderRadius: "10px",
                                                     objectFit: "cover",
                                                     border: "1px solid black"
