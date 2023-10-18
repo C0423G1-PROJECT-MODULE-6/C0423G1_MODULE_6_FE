@@ -18,9 +18,10 @@ export const importProduct = async (warehouse) => {
 export const findProductById = async (id) => {
     try{
         const res = await axios.get("http://localhost:8080/api/admin/warehouse/product/"+id)
+        console.log("Find:", res);
         return res.data;
     }catch(e){
-        console.log(e);
+        alert("nôtk")
     }
 }
 export const findSupplierById = async (id) => {
