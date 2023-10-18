@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Field, Form, Formik, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
@@ -13,7 +13,7 @@ const CustomerCreateModal = ({handleData}) => {
             submitModal.setAttribute("data-bs-dismiss", "modal");
             submitModal.click()
             submitModal.removeAttribute("data-bs-dismiss");
-            handleData(result.data.nameCustomer);
+            handleData(result.data.idCustomer);
         } catch (err) {
             console.log(err)
             if (err.response?.data) {
@@ -23,14 +23,16 @@ const CustomerCreateModal = ({handleData}) => {
     };
     return (
         <Formik
-            initialValues={{
-                nameCustomer: "",
-                phoneNumberCustomer: "",
-                dateOfBirthCustomer: "",
-                emailCustomer: "",
-                addressCustomer: "",
-                genderCustomer: true,
-            }}
+            initialValues={
+                {
+                    nameCustomer: "",
+                    phoneNumberCustomer: "",
+                    dateOfBirthCustomer: "",
+                    emailCustomer: "",
+                    addressCustomer: "",
+                    genderCustomer: true,
+                }
+            }
             validationSchema={Yup.object({
                 nameCustomer: Yup.string()
                     .max(50, "Tên khách hàng tối đa 50 ký tự")
@@ -53,10 +55,10 @@ const CustomerCreateModal = ({handleData}) => {
                         "Nhập sai định dạng vd:nguyenvanan@gmail.com"
                     ).max(50, "Email tối đa 50 ký tự"),
             })}
-            onSubmit={(values, {setErrors}) => {
+            onSubmit={(values, {resetForm}, {setErrors}) => {
                 console.log("1")
-                handleSubmit(values, setErrors)
-
+                handleSubmit(values, setErrors);
+                resetForm();
             }}>
             <Form>
                 <div className="modal fade" id="exampleModalCreateCustomer" data-bs-backdrop="static" tabIndex="-1"
