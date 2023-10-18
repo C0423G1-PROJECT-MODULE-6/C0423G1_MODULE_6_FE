@@ -83,22 +83,30 @@ function HeaderAdmin() {
     return (
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <div className="container-fluid">
-                <Navbar.Brand as={Link} to="/HaiBH_Home_Admin">Home</Navbar.Brand> {/* Sử dụng Link thay cho <a> */}
+                <Navbar.Brand as={Link} to="/admin/home" style={{padding: "0"}}>
+                    <img
+                        src="https://firebasestorage.googleapis.com/v0/b/c4zone-da49c.appspot.com/o/logoplus.png?alt=media&token=8abd0661-05bf-4fc3-804f-60ab9482b75f&_gl=1*pc8atb*_ga*OTEwMjg5ODY2LjE2OTM3NjU2MzY.*_ga_CW55HF8NVT*MTY5NzU5ODI2OS44LjEuMTY5NzU5ODM1Ni41Mi4wLjA" // Đường dẫn đến hình ảnh logo của bạn
+                        alt="Home"
+                        height="40"
+                    />
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarNavDarkDropdown"/>
                 <Navbar.Collapse id="navbarNavDarkDropdown">
                     {(roleAdmin) && (
                         <Nav>
-                            <Link to="/PhuocLQ_EmployeeList" className="nav-link">Quản Lý Nhân Viên</Link>
+                            <NavDropdown title="Quản Lý" id="nav-dropdown-dark">
+                            <Link to="/admin/employee" className="dropdown-item">Quản Lý Nhân Viên</Link>
+                            <Link to="/admin/customer" className="dropdown-item">Quản Lý Khách Hàng</Link>
+                            </NavDropdown>
                         </Nav>
                     )}
                     {(roleAdmin || roleBusiness) && (
                         <Nav>
                             <NavDropdown title="Kinh Doanh" id="nav-dropdown-dark">
-                                <Link to="/ThoiND_sale_history" className="dropdown-item">Quản Lý Lịch Sử Bán
-                                    Hàng</Link>
+                                <Link to="/ThoiND_sale_history" className="dropdown-item">Quản Lý Lịch Sử Bán Hàng</Link>
                                 <Link to="/LoiVT_SalesReport" className="dropdown-item">Quản Lý Báo Cáo Doanh Thu</Link>
-                                <Link to="/QuanND_Product_List" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
-                                <Link to="/ThienPT_supplierList" className="dropdown-item">Quản Lý Nhà Cung Cấp</Link>
+                                <Link to="/admin/product/list" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
+                                <Link to="/admin/supplier" className="dropdown-item">Quản Lý Nhà Cung Cấp</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -106,7 +114,7 @@ function HeaderAdmin() {
                     {(roleAdmin || roleSale) && (
                         <Nav>
                             <NavDropdown title="Bán Hàng" id="nav-dropdown-dark">
-                                <Link to="/ThoiND_sale_management" className="dropdown-item">Quản Lý Bán Hàng</Link>
+                                <Link to="/admin/order" className="dropdown-item">Quản Lý Bán Hàng</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -114,7 +122,7 @@ function HeaderAdmin() {
                     {(roleAdmin || roleWarehouse) && (
                         <Nav>
                             <NavDropdown title="Thủ Kho" id="nav-dropdown-dark">
-                                <Link to="/PhapTM_warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
+                                <Link to="/admin/warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -139,14 +147,6 @@ function HeaderAdmin() {
                         </li>
                     </ul>
                 </div>
-                {/*<Navbar.Collapse className="justify-content-end navbarNavDarkDropdown">*/}
-                {/*    <NavDropdown id="nav-dropdown-dark" style={{color: "white"}} title={userName.sub}>*/}
-                {/*        <Link to="/HaiBH_Infomation" className="dropdown-item">Thông Tin Cá Nhân</Link>*/}
-                {/*        <button onClick={() => {*/}
-                {/*            handleLogOut();*/}
-                {/*        }} className="dropdown-item">Đăng Xuất</button>*/}
-                {/*    </NavDropdown>*/}
-                {/*</Navbar.Collapse>*/}
             </div>
         </Navbar>
     );
