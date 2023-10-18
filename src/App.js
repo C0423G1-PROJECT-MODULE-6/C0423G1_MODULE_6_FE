@@ -8,16 +8,19 @@ import {axiosClient} from "./service/user/AxiosClient";
 import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
+import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
 import EmployeeList from './components/user/EmployeeList';
 import EditEmployee from './components/user/EditEmployee';
-import {EnumAppUserRole} from "./components/user/EnumAppUserRole";
 import React from "react";
 import {ToastContainer} from "react-toastify";
 import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
 import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
+import CreateEmployee from './components/user/CreateEmployee';
 
-
+import ProductList from "./components/product/ProductList";
+import { Warehouse } from './components/warehouse/Warehouse';
+import { ImportProduct } from './components/warehouse/ImportProduct';
 
 function App() {
     axiosClient();
@@ -25,16 +28,12 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
-//              
-                <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
-                <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
-                <Route path="/admin/order" element={<Order/>}/>
-                <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
-                <Route path="/login" element={<LoginForm/>}/>
+                <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
-                <Route path="/customer" element={<CustomerList/>}/>
-                <Route path="/history/:id" element={<ShoppingHistoryList/>}/>
+                <Route path="/login" element={<LoginForm/>}/>
+
+
 
 
                 <Route
@@ -51,9 +50,17 @@ function App() {
                 >
                     <Route path="/admin/information/:id" element={<Information/>}></Route>
                     <Route path="/admin/home" element={<HomeAdmin/>}></Route>
-                    {/*<Route path="/login" element={<LoginForm />}></Route>*/}
+                    <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
+                    <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/warehouse" element={<Warehouse/>}/>
+                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
 
 
+                    <Route path="/product/list" element={<ProductList/>}/>
                 </Route>
             </Routes>
         </>
