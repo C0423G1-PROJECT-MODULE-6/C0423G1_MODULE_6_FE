@@ -46,17 +46,17 @@ function Order() {
         }
     }
 
-    useEffect(() => {
-        getAllCart();
-    }, []);
-
-    useEffect(() => {
-        let total = 0;
-        carts.forEach((cart, index) => {
-            total += cart.priceProduct * quantity[index] + cart.priceProduct * 0.1;
-        });
-        setTotalPrice(total);
-    }, [carts, quantity]);
+    // useEffect(() => {
+    //     getAllCart();
+    // }, []);
+    //
+    // useEffect(() => {
+    //     let total = 0;
+    //     carts.forEach((cart, index) => {
+    //         total += cart.priceProduct * quantity[index] + cart.priceProduct * 0.1;
+    //     });
+    //     setTotalPrice(total);
+    // }, [carts, quantity]);
 
     const closeModal = () => {
         setOrderBillNotPay(null);
