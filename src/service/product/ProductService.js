@@ -37,8 +37,9 @@ export const getProductId = async (id) => {
 }
 export const getListProduct = async (sort,otherSort,choose,value,page) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/product/list?sort=${sort}&choose=${choose}&value=${value}&page=${page}&otherSort=${otherSort}`)
-        return result.data;
+        const result = (await axios.get(`http://localhost:8080/api/admin/product/list?sort=${sort}&choose=${choose}&value=${value}&page=${page}&otherSort=${otherSort}`)).data
+        console.log(result)
+        return result;
     }catch (error){
         console.log(error)
     }
@@ -71,7 +72,12 @@ export const getAllSeries = async () => {
 
 export const getAllType = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/type/list`)
+    console.log(result)
     return result.data;
+}
+export const removeProduct = async (id) => {
+    const result = await axios.patch(`http://localhost:8080/api/admin/product/remove?id=${id}`)
+    return result
 }
 /**
  * method get page product
