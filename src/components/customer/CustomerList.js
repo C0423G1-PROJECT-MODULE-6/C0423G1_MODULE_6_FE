@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
+import HeaderAdmin from "../user/HeaderAdmin";
 
 export function CustomerList() {
     const [customers, setCustomers] = useState([]);
@@ -47,34 +48,35 @@ export function CustomerList() {
 
     return (
         <>
+            <HeaderAdmin/>
             <div className="container mt-5 pt-5">
                 <div className="col-12 d-flex justify-content-center">
                     <h1>Quản lý báo cáo khách hàng</h1>
                 </div>
                 <div className="col-12 d-flex justify-content-end my-3">
-                    <div className="col-auto mx-1">
-                       <span className="text-start">Số lượng: {records}</span>
+                    <div className="col-auto d-flex justify-content-start" style={{marginRight:"17%"}}>
+                        <p className="m-0"> Số lượng: <span style={{color:"#0d6efd"}}>{records}</span> </p>
                     </div>
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
-                            <option value="0">--Sắp xếp--</option>
-                            <option value="1">Họ Tên</option>
-                            <option value="2">Số lần mua</option>
+                            <option value="0">Sắp xếp số lần mua</option>
+                            <option value="1">Tăng dần</option>
+                            <option value="2">Giảm dần</option>
                         </select>
                     </div>
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(gender) => setSearchGender(gender.target.value)}>
-                            <option selected value="3">--Tìm theo giới tính--</option>
+                            <option selected value="3">Tìm theo giới tính</option>
                             <option value="1">Nam</option>
                             <option value="0">Nữ</option>
                         </select>
                     </div>
                     <div className="col-auto mx-1">
-                        <input className="form-control" type="number" placeholder="Tìm theo tuổi" aria-label="Search"
-                               onChange={(age) => (setSearchAge(age.target.value))}/>
+                        <input className="form-control" type="number" placeholder="Tìm theo tuổi" aria-label="Search"  style={{ width: '140px' }}
+                               onChange={(age) => (setSearchAge(age.target.value))} />
                     </div>
                     <div className="col-auto mx-1">
-                        <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
+                        <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"  style={{ width: '200px' }}
                                onChange={(name) => (setSearchName(name.target.value))}/>
                     </div>
                     <div className="col-auto mx-1">
@@ -84,17 +86,17 @@ export function CustomerList() {
                     </div>
                 </div>
                 <table className="border border-dark table table-hover table-layout">
-                    <thead style={{background: "red"}}>
+                    <thead >
                     <tr>
-                        <th>#</th>
-                        <th>Họ và tên</th>
-                        <th>Giới tính</th>
-                        <th>Email</th>
-                        <th>Tuổi</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Số lần mua</th>
-                        <th>Lịch sử mua hàng</th>
+                        <th style={{background: "darkgrey", width:"3%"}}>#</th>
+                        <th style={{background: "darkgrey", width:"17%"}}>Họ và tên</th>
+                        <th style={{background: "darkgrey", width:"10%"}}>Giới tính</th>
+                        <th style={{background: "darkgrey", width:"15%"}}>Email</th>
+                        <th style={{background: "darkgrey", width:"5%"}}>Tuổi</th>
+                        <th style={{background: "darkgrey", width:"15%"}}>Số điện thoại</th>
+                        <th style={{background: "darkgrey", width:"10%"}}>Địa chỉ</th>
+                        <th style={{background: "darkgrey", width:"10%",textAlign:"center"}}>Số lần mua</th>
+                        <th style={{background: "darkgrey", width:"15%",textAlign:"center"}}>Lịch sử mua hàng</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -114,16 +116,16 @@ export function CustomerList() {
                                     <td>{age}</td>
                                     <td>{customer.phoneNumberCustomer}</td>
                                     <td>{customer.addressCustomer}</td>
-                                    <td>{customer.totalPurchases}</td>
-                                    <td>
+                                    <td style={{textAlign: "center"}}>{customer.totalPurchases}</td>
+                                    <td style={{textAlign:"center"}}>
                                         <Link className="btn btn-outline-primary"
-                                              to={`/history/${customer.idCustomer}`}>Xem</Link>
+                                              to={`/admin/history/${customer.idCustomer}`}>Xem</Link>
                                     </td>
                                 </tr>
                             )
                         })) : (<tr>
 
-                        <td colSpan={9} style={{textAlign: "center"}}>Không tìm thấy!</td>
+                        <td colSpan={9} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
 
                     </tr>)
                     }

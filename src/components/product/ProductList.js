@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
-import {getListProduct} from "../../service/product/ProductService";
-import {toast} from "react-toastify";
+import {getAllType, getListProduct, removeProduct} from "../../service/product/ProductService";
+import {toast, ToastContainer} from "react-toastify";
+import HeaderAdmin from "../user/HeaderAdmin";
 
 export default function ProductList() {
     const [listType, setListType] = useState([]);
-    const [listProduct, setListProduct] = useState(null);
+    const [listProduct, setListProduct] = useState([]);
     const [value, setValue] = useState("");
     const [choose, setChoose] = useState("name");
     const [sort, setSort] = useState("");
@@ -18,19 +19,25 @@ export default function ProductList() {
         style: 'currency',
         currency: 'VND'
     })
-    const confirmDelete = (id) => {
-        console.log(id)
+    const confirmDelete =async () => {
+        const res= await removeProduct(productSelect.id);
+        if (res.status===200){
+            toast("Xóa thành công")
+        }
+        else {
+            toast("Xóa thất bại")
+        }
+
+        list();
     }
     const list = async () => {
+        const res=await getAllType();
+        setListType(res)
         const list = await getListProduct(sort, otherSort, choose, value, page);
         setListProduct(list.content);
         setTotalPages(list.totalPages);
         setTotalElements(list.totalElements);
-
     }
-    // const getType=async ()=>{
-    //     ;
-    // }
     const handleOnClick = (p) => {
         setProductSelect(p);
     }
@@ -39,6 +46,7 @@ export default function ProductList() {
     }, [page])
     return (
         <>
+            <HeaderAdmin/>
             <div className="container mt-5 pt-5">
                 <div className="col-12 d-flex justify-content-center my-3">
                     <h1>Thông tin hàng hóa</h1>
@@ -90,10 +98,11 @@ export default function ProductList() {
                                 </select>)}
                             {choose === "type" && (
                                 <select onChange={event => setValue(event.target.value)} className="form-select"
-                                        name="type" id="type">
+                                        name="type">
                                     <option value="">--Chọn loại--</option>
-                                    {listType.map(t =>
-                                        <option value={t.id}>{t.name}</option>
+                                    {listType.map((type)=>(
+                                        <option key={type.idType} value={type.idType}>{type.name}</option>
+                                        )
                                     )}
                                 </select>)}
                             {choose === "name" && (
@@ -162,25 +171,25 @@ export default function ProductList() {
                                         <button type="button" className="btn btn-outline-success">Cập nhật</button>
                                     </a>
                                     <button type="button" className="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal">Xóa
+                                            data-bs-target="#deleteModal" >Xóa
                                     </button>
                                 </>
                             )
                         }
 
                     </div>
-                    {totalPages && (
+                    {totalPages>1 && (
                         <div className="col-auto float-end">
                             <ul className="pagination mb-0">
                                 <li className="page-item">
-                                    <a className="page-link" onClick={() => setPage(page - 1)} tabIndex="-1"
+                                    <a className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => setPage(page - 1)} tabIndex="-1"
                                        aria-disabled="true">Trước</a>
                                 </li>
                                 <li className="page-item" aria-current="page">
                                     <a className="page-link" href="#">{page + 1}/{totalPages}</a>
                                 </li>
                                 <li className="page-item">
-                                    <a className="page-link" onClick={() => setPage(page + 1)}>Sau</a>
+                                    <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`} onClick={() => setPage(page + 1)}>Sau</a>
                                 </li>
                             </ul>
                         </div>)}
@@ -201,8 +210,9 @@ export default function ProductList() {
                                 <p>Bạn có muốn xóa sản phẩm {productSelect.name} không ??</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-outline-primary"
-                                        onClick={() => confirmDelete(productSelect.id)}>Xác nhận
+                                <button type="submit" className="btn btn-outline-primary"
+                                        data-bs-dismiss="modal"
+                                        onClick={()=> confirmDelete()}>Xác nhận
                                 </button>
                                 <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy
                                 </button>
@@ -211,6 +221,7 @@ export default function ProductList() {
                     </div>
                 </div>
             )}
+            <ToastContainer/>
         </>
     )
 }

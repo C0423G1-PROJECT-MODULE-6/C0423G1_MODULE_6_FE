@@ -17,11 +17,12 @@ import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
 import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
-
 import ProductList from "./components/product/ProductList";
-import { Warehouse } from './components/warehouse/Warehouse';
-import { ImportProduct } from './components/warehouse/ImportProduct';
+import {Warehouse} from './components/warehouse/Warehouse';
+import {ImportProduct} from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
+import SalesReport from "./components/sales_report/SalesReport";
+
 
 function App() {
     axiosClient();
@@ -33,9 +34,6 @@ function App() {
                 <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
-
-
-
 
                 <Route
                     element={
@@ -59,8 +57,9 @@ function App() {
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
-                    <Route path="/admin/supplier"  element={<Supplier />}/>
+                    <Route path="/admin/supplier" element={<Supplier/>}/>
                     <Route path="/admin/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/salesreport" element={<SalesReport/>}/>
                 </Route>
             </Routes>
         </>
