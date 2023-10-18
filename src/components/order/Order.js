@@ -13,22 +13,26 @@ function Order() {
     const [hasResult, setHasResult] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
-    const [modalStatus, setModalStatus] = useState(false);
 
     const findCustomerByid = async (data) => {
         const res =await orderService.findCustomerById(data);
-        console.log(res)
-        if (res.idOrderBill !== null){
-            setCustomer(res);
-        }else {
-            setOrderBillNotPay(res);
+        console.log(res.objectResponse)
+        if (res && res.type === "customer") {
+            setCustomer(res.objectResponse);
+        } else if (res && res.type === "orderBill") {
+            setOrderBillNotPay(res.objectResponse);
+        } else {
+            console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
     };
 
     const handleDataByChooseCustomer=(data)=>{
         findCustomerByid(data);
     }
-
+    const updateCustomerConfirm = (data) => {
+        console.log(data)
+        setCustomer(data)
+    }
     const getAllCart = async () => {
         const res = await orderService.getAllCart(1);
         if (res.status === 200){
@@ -44,6 +48,7 @@ function Order() {
     useEffect(() => {
         getAllCart();
     }, []);
+
     useEffect(() => {
         let total = 0;
         carts.forEach((cart, index) => {
@@ -53,13 +58,10 @@ function Order() {
     }, [carts, quantity]);
 
     const closeModal = () => {
-        getAllCart();
-        setModalStatus(false);
-    }
-    const showModal = () => {
-        setModalStatus(true);
+        setOrderBillNotPay(null);
     }
 
+    console.log("customer "+JSON.stringify(customer))
 
     const decreaseValue = (index) => {
         if (quantity[index] > 1) {
@@ -109,10 +111,10 @@ function Order() {
                                                 <label>Tên khách hàng</label>
                                             </div>
                                             <div className="col-8 mb-2">
-                                                <Field
+                                                <input
                                                     className="form-control mt-2 border border-dark"
                                                     type="text"
-                                                    placeholder="{customer.nameCustomer}"
+                                                    value={customer ? customer.nameCustomer : ""}
                                                     readOnly
                                                 />
                                             </div>
@@ -120,10 +122,10 @@ function Order() {
                                                 <label>Số điện thoại</label>
                                             </div>
                                             <div className="col-8 mb-2">
-                                                <Field
+                                                <input
                                                     className="form-control mt-2 border border-dark"
                                                     type="text"
-                                                    placeholder="0784443801"
+                                                    value={customer ? customer.phoneNumberCustomer : ""}
                                                     readOnly
                                                 />
                                             </div>
@@ -131,10 +133,10 @@ function Order() {
                                                 <label>Địa chỉ</label>
                                             </div>
                                             <div className="col-8 mb-2">
-                                                <Field
+                                                <input
                                                     className="form-control mt-2 border border-dark"
                                                     type="text"
-                                                    placeholder="Da Nang"
+                                                    value={customer ? customer.addressCustomer : ""}
                                                     readOnly
                                                 />
                                             </div>
@@ -142,10 +144,10 @@ function Order() {
                                                 <label>Ngày sinh </label>
                                             </div>
                                             <div className="col-8 mb-2">
-                                                <Field
+                                                <input
                                                     className="form-control mt-2 border border-dark"
                                                     type="text"
-                                                    placeholder="24/09/2023"
+                                                    value={customer ? customer.dateOfBirthCustomer : ""}
                                                     readOnly
                                                 />
                                             </div>
@@ -153,10 +155,10 @@ function Order() {
                                                 <label>Email</label>
                                             </div>
                                             <div className="col-8 mb-2">
-                                                <Field
+                                                <input
                                                     className="form-control mt-2 border border-dark"
                                                     type="email"
-                                                    placeholder="dinhthoi2411@gmail.com"
+                                                    value={customer ? customer.emailCustomer : ""}
                                                     readOnly
                                                 />
                                             </div>
@@ -267,7 +269,7 @@ function Order() {
                                     <Field
                                         className="form-control mt-2 border border-dark"
                                         type="text"
-                                        placeholder={totalPrice.toFixed(0)
+                                        value={totalPrice.toFixed(0)
                                             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " ₫"}
                                         readOnly
                                     />
@@ -316,10 +318,11 @@ function Order() {
                             </div>
                         </fieldset>
                     </div>
-                    {/*<BillNotPayConfirm*/}
-                    {/*    orderBill={orderBillNotPay}*/}
-                    {/*    handleClose={closeModal}*/}
-                    {/*></BillNotPayConfirm>*/}
+                    <BillNotPayConfirm
+                        orderBill={orderBillNotPay}
+                        handleClose={closeModal}
+                        handleData={updateCustomerConfirm}
+                    ></BillNotPayConfirm>
                 </Form>
             </Formik>
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
