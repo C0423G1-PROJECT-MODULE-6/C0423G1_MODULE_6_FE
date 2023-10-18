@@ -1,18 +1,18 @@
 import axios from "axios";
-export const getAllCustomerModal = async (page, name,age,gender) => {
+export const getAllCustomerModal = async (page, name,phone,gender) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/customer/list?_limit=5&_page=${page}&name_like=${name}&age=${age}&gender=${gender}`);
+        const result = await axios.get(`http://localhost:8080/api/admin/customer/modal?_limit=5&_page=${page}&name_like=${name}&gender=${gender}&phone=${phone}`);
         // console.log("1");
-        console.log(result);
+        // console.log(result);
         return result;
     } catch (e) {
         console.log(e);
     }
 }
 export const addCustomer = async (customer) => {
-        const result = await axios.post(`http://localhost:8080/api/admin/customer/create`,customer);
-        console.log(result);
-        return result;
+    const result = await axios.post(`http://localhost:8080/api/admin/customer/create`,customer);
+    console.log(result);
+    return result;
 
 }
 const apiURL = "http://localhost:8080/api/admin/customer/list";

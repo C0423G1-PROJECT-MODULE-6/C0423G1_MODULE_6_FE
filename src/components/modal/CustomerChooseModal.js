@@ -7,37 +7,36 @@ import {Field, Form, Formik, ErrorMessage} from "formik";
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
+    const [change, setChange] = useState();
     const [name, setName] = useState("");
-    const [gender, setGender] = useState(3);
-    const [age, setAge] = useState("");
+    const [gender, setGender] = useState("2");
+    const [phone, setPhone] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [selectedCustomer, setSelectedCustomer] = useState({
         idCustomer: null,
         nameCustomer: ""
     });
-    const [optionSearch, setOptionSearch] = useState();
-    const loadCustomerList = async (page, name, age, gender) => {
-        const result = await customerService.getAllCustomerModal(page, name, age, gender);
+    // const [optionSearch, setOptionSearch] = useState();
+    const loadCustomerList = async (page, name, phone, gender) => {
+        const result = await customerService.getAllCustomerModal(page, name, phone, gender);
         if (result?.status === 200) {
             setCustomerList(result?.data.content);
             setTotalPage(result?.data.totalPages);
-        } else {
-            handleReset();
+        }else {
+            setCustomerList([]);
         }
     }
     const handleOptionSearchChange = (e) => {
-        const {value} = e.target;
-        setOptionSearch(+value);
-        setSearchValue(document.getElementById("search").value);
-        handleReset();
+        const { value } = e.target;
+        setChange(+value);
+        // loadCustomerList();
     }
     const handleReset = () => {
         setPage(0);
         setName("");
-        setAge("");
-        setGender("");
+        setPhone("");
+        setGender("2");
     }
     const handleSubmit = () => {
         console.log(selectedCustomer);
@@ -52,6 +51,42 @@ const CustomerChooseModal = ({handleData}) => {
             setPage((pre) => pre - 1)
         }
     }
+    const handleSearch = () => {
+        const choose = +document.getElementById("chooseSearch").value;
+        const value = document.getElementById("search").value;
+        let  valueGender = document.getElementById("valueGender");
+        if (valueGender){
+            valueGender = valueGender.value;
+        }
+        // console.log(valueGender)
+
+        if (choose === 0){
+            console.log(choose);
+            setName(value);
+            setPhone("");
+            setGender("2");
+            setPage(0);
+            console.log(value);
+            console.log(valueGender);
+        }
+        if (choose === 1){
+            console.log(choose);
+            console.log(value);
+            setName(value);
+            setGender(valueGender);
+            setPage(0);
+
+            console.log(valueGender);
+        }
+        if (choose === 2){
+            setPhone(value);
+            setPage(0);
+            console.log(choose);
+            console.log(value);
+            console.log(valueGender);
+        }
+
+    }
 
     const nextPage = () => {
         if (page + 1 < totalPage) {
@@ -64,8 +99,8 @@ const CustomerChooseModal = ({handleData}) => {
         }
     }
     useEffect(() => {
-        loadCustomerList(page, name, age, gender);
-    }, [page, name, age, gender]);
+        loadCustomerList(page, name, phone, gender);
+    }, [page, name, phone, gender,change]);
 
     if (!customerList) {
         return <div></div>;
@@ -85,24 +120,37 @@ const CustomerChooseModal = ({handleData}) => {
                                     <h1 className="col-form-label">Tìm kiếm theo</h1>
                                 </div>
                                 <div className="col-auto">
-                                    <select name='optionSearch' defaultValue={0} onChange={handleOptionSearchChange}
-                                            className="form-select shadow border-dark">
-                                        <option value="1">Tên khách hàng</option>
-                                        <option value="2">Giới tính</option>
-                                        <option value="3">Tuổi</option>
+                                    <select name='optionSearch' defaultValue={0} id="chooseSearch"
+                                            className="form-select shadow border-dark" onChange={handleOptionSearchChange}>
+                                        <option value={0} >Tên khách hàng</option>
+                                        <option value={1} >Giới tính</option>
+                                        <option value={2} >Số điện thoại</option>
                                     </select>
                                 </div>
                                 <div className="col-auto">
-                                    <input type="text" name="inputSearch" id="inputPassword6"
-                                           className="shadow form-control border-dark"
-                                           aria-describedby="passwordHelpInline"/>
+                                    {change === 1 &&
+                                    <select className="form-select shadow border-dark" name="groupValue"
+                                            id="valueGender">
+                                        <option value={0}>Nữ</option>
+                                        <option value={1}>Nam</option>
+                                        <option value={2}>Tất cả</option>
+                                    </select>}
                                 </div>
                                 <div className="col-auto">
-                                    <button className="btn btn-outline-primary text-center shadow">Tìm kiếm</button>
+
+                                    <input type="text" name="inputSearch" id="search"
+                                           className="shadow form-control border-dark"
+                                           aria-describedby="passwordHelpInline"
+                                           placeholder={(change === 2) ? "Nhập tên số điện thoại..." : "Nhập tên khách hàng"}
+                                    />
+
+                                </div>
+                                <div className="col-auto">
+                                    <button className="btn btn-outline-primary text-center shadow"  onClick={handleSearch}>Tìm kiếm</button>
                                 </div>
                             </div>
-                            <div className="mx-auto p-3" style={{width: '95%'}}>
-                                <table className=" shadow w-100 " >
+                            <div className="mx-auto p-3 " style={{width: '95%'}} id="TinDT">
+                                <table className=" shadow w-100 ">
                                     <thead style={{fontSize: 'large', backgroundColor: 'darkgrey'}}>
                                     <tr>
                                         <th style={{width: '6%'}} className="text-center">STT</th>
@@ -118,16 +166,19 @@ const CustomerChooseModal = ({handleData}) => {
                                         {customerList.map((customer, index) => (
                                             <tr key={index} id={index} onClick={() => {
                                                 if (selectedCustomer.idCustomer === null || selectedCustomer.idCustomer !== customer?.idCustomer) {
-                                                    setSelectedCustomer({ idCustomer: customer?.idCustomer, nameCustomer: customer?.nameCustomer });
+                                                    setSelectedCustomer({
+                                                        idCustomer: customer?.idCustomer,
+                                                        nameCustomer: customer?.nameCustomer
+                                                    });
                                                     console.log(selectedCustomer.idCustomer)
-                                                } else  {
-                                                    setSelectedCustomer({ idCustomer: null, nameCustomer: "" });
+                                                } else {
+                                                    setSelectedCustomer({idCustomer: null, nameCustomer: ""});
                                                     console.log(selectedCustomer.idCustomer)
                                                 }
                                             }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
                                                 background: '#0d6efd',
                                                 height: 50
-                                            } : { height: 50}}
+                                            } : {height: 50}}
                                             >
                                                 <td className="text-center">
                                                     {(index + 1) + page * 5}
@@ -159,7 +210,7 @@ const CustomerChooseModal = ({handleData}) => {
                                     {selectedCustomer.idCustomer === null ? null : (
                                         <button
                                             className="btn btn-outline-primary shadow"
-                                            style={{ marginRight: '2rem', width: '40%' }}
+                                            style={{marginRight: '2rem', width: '40%'}}
                                             id="submitModal"
                                             onClick={() => handleSubmit()}
                                         >
@@ -181,8 +232,10 @@ const CustomerChooseModal = ({handleData}) => {
                                                         href="#">Trước
                                                 </button>
                                             </li>
-                                            <li className="page-item"><button className="page-link "
-                                                                        >{page + 1} / {totalPage}</button></li>
+                                            <li className="page-item">
+                                                <button className="page-link "
+                                                >{page + 1} / {totalPage}</button>
+                                            </li>
                                             <li className="page-item">
                                                 <button className="page-link " onClick={() => nextPage()} href="#">Sau
                                                 </button>

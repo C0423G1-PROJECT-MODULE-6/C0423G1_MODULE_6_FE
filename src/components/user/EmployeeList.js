@@ -7,7 +7,7 @@ import {
 import { Link } from "react-router-dom";
 import { getAppRoleList } from "../../service/user/AppRoleService";
 import ModalDelete from "./EmployeeDeleteModal";
-import { result } from "lodash";
+import '../../css/user/employee.css'
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -342,7 +342,7 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/employee/add"}>
+            <Link to={"/employee/create"}>
               <button type="button" className="btn btn-outline-primary mx-1">
                 Thêm mới
               </button>
