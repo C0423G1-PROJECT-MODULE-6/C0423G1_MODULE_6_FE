@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { deleteSupplier, getList } from "../../service/supplier/SupplierService";
 import "../../css/supplier/supplier.css";
 import Modal from "react-bootstrap/Modal";
+import HeaderAdmin from "../user/HeaderAdmin";
+import { list } from "@firebase/storage";
+import { tr } from "date-fns/locale";
 
 function Supplier() {
     const [listSupplier, setListSupplier] = useState([]);
@@ -16,29 +19,35 @@ function Supplier() {
     const [supplierDelete, setSupplierDelete] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [typeSearch, setTypeSearch] = useState("");
-    const [valueInput,setValueInput] = useState("");
+    const [valueInput, setValueInput] = useState("");
     useEffect(() => {
         getAll();
     }, [refresh])
 
     const handleSetTypeSearch = () => {
-        switch (typeSearch) {
-            case "Tên nhà cung cấp":
-                setSearchName(valueInput);
-                break;
-            case "Địa chỉ":
-                setAddressSearch(valueInput);
-                break;
-            case "Email":
-                setEmailSearch(valueInput);
-                break;
+        const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if(!specialCharsRegex.test(valueInput)){
+            switch (typeSearch) {
+                case "Tên nhà cung cấp":
+                    setSearchName(valueInput);
+                    break;
+                case "Địa chỉ":
+                    setAddressSearch(valueInput);
+                    break;
+                case "Email":
+                    setEmailSearch(valueInput);
+                    break;
+                default:
+                    setSearchName("");
+                    setAddressSearch("");
+                    setEmailSearch("");
+            }
+            setRefresh(!refresh);
+        }else{
+            alert("Không được nhập ký tự đặc biệt");
         }
-        setRefresh(!refresh);
     }
-    console.log(searchName);
-    console.log(addressSearch);
-    console.log(emailSearch);
-
+   
     const handleRowClick = (index, obj) => {
         if (activeRow === index) {
             setActiveRow(null);
@@ -62,17 +71,27 @@ function Supplier() {
 
     const getAll = async () => {
         const newList = await getList(currentPage, limit, searchName, addressSearch, emailSearch);
-        setSearchName("");
-        setAddressSearch("");
-        setEmailSearch("");
-        setListSupplier(newList[0]);
-        setTotalPage(Math.ceil(newList[1] / limit));
-        console.log(newList[2]);
+        if (newList[2].status === 200) {
+            setSearchName("");
+            setAddressSearch("");
+            setEmailSearch("");
+            setListSupplier(newList[0]);
+            setTotalPage(Math.ceil(newList[1] / limit));
+            console.log(newList[2].status);
+        } else {
+            console.log("aaaaaaaa");
+            setListSupplier([]);
+            setTotalPage(1);
+            setCurrentPage(0);
+        }
+
+
+
     }
 
     const handleDelete = async () => {
         const result = await deleteSupplier(supplierDelete.idSupplier);
-        if (listSupplier.length === 1) {
+        if (listSupplier.length === 1 && totalPage != 1) {
             setCurrentPage(currentPage - 1);
         }
         handleCloseModal();
@@ -94,14 +113,11 @@ function Supplier() {
             setRefresh(!refresh);
         }
     }
-
-    if (!listSupplier) {
-        return null;
-    }
-    console.log(typeSearch);
+    console.log(listSupplier.length);
 
     return (
         <>
+            <HeaderAdmin />
             <div className="container mt-5 pt-5">
                 <div className="col-12 d-flex justify-content-center">
                     <h1>Danh sách nhà cung cấp</h1>
@@ -110,7 +126,7 @@ function Supplier() {
                     <div className="col-12 d-flex justify-content-end">
                         <div className="col-auto me-2">
                             <select className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
-                                <option selected>--Tìm kiếm theo--</option>
+                                <option selected value={""}>--Tìm kiếm theo--</option>
                                 <option>Tên nhà cung cấp</option>
                                 <option>Địa chỉ</option>
                                 <option>Email</option>
@@ -125,6 +141,7 @@ function Supplier() {
                     </div>
                 </div>
                 <table className="border border-dark table table-hover">
+
                     <thead style={{ background: 'darkgrey' }}>
                         <tr>
                             <th>
@@ -138,8 +155,9 @@ function Supplier() {
                         </tr>
                     </thead>
                     <tbody>
-                        {listSupplier.map((supplier, index) => {
-                            return (
+                        {listSupplier
+                            && listSupplier.length != 0 ? listSupplier.map((supplier, index) =>
+
                                 <>
                                     <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
                                         onClick={() => handleRowClick(index, supplier)}
@@ -152,8 +170,12 @@ function Supplier() {
                                         <td>{supplier.emailSupplier}</td>
                                     </tr>
                                 </>
+
                             )
-                        })}
+                            : <tr>
+                                 <td colSpan="10" className="text-center"><h4>Không tìm thấy dữ liệu</h4></td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
 
