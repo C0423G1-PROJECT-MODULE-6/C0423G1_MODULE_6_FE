@@ -52,8 +52,8 @@ export function CustomerList() {
                     <h1>Quản lý báo cáo khách hàng</h1>
                 </div>
                 <div className="col-12 d-flex justify-content-end my-3">
-                    <div className="col-auto mx-1">
-                       <span className="text-start">Số lượng: {records}</span>
+                    <div className="col-auto d-flex justify-content-start" style={{marginRight:"20%"}}>
+                        <p className="m-0"> Số lượng: <span style={{color:"#0d6efd"}}>{records}</span> </p>
                     </div>
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
@@ -70,11 +70,11 @@ export function CustomerList() {
                         </select>
                     </div>
                     <div className="col-auto mx-1">
-                        <input className="form-control" type="number" placeholder="Tìm theo tuổi" aria-label="Search"
-                               onChange={(age) => (setSearchAge(age.target.value))}/>
+                        <input className="form-control" type="number" placeholder="Tìm theo tuổi" aria-label="Search"  style={{ width: '140px' }}
+                               onChange={(age) => (setSearchAge(age.target.value))} />
                     </div>
                     <div className="col-auto mx-1">
-                        <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
+                        <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"  style={{ width: '200px' }}
                                onChange={(name) => (setSearchName(name.target.value))}/>
                     </div>
                     <div className="col-auto mx-1">
@@ -84,17 +84,17 @@ export function CustomerList() {
                     </div>
                 </div>
                 <table className="border border-dark table table-hover table-layout">
-                    <thead style={{background: "red"}}>
+                    <thead >
                     <tr>
-                        <th>#</th>
-                        <th>Họ và tên</th>
-                        <th>Giới tính</th>
-                        <th>Email</th>
-                        <th>Tuổi</th>
-                        <th>Số điện thoại</th>
-                        <th>Địa chỉ</th>
-                        <th>Số lần mua</th>
-                        <th>Lịch sử mua hàng</th>
+                        <th style={{background: "darkgrey", width:"3%"}}>#</th>
+                        <th style={{background: "darkgrey", width:"17%"}}>Họ và tên</th>
+                        <th style={{background: "darkgrey", width:"10%"}}>Giới tính</th>
+                        <th style={{background: "darkgrey", width:"15%"}}>Email</th>
+                        <th style={{background: "darkgrey", width:"5%"}}>Tuổi</th>
+                        <th style={{background: "darkgrey", width:"15%"}}>Số điện thoại</th>
+                        <th style={{background: "darkgrey", width:"10%"}}>Địa chỉ</th>
+                        <th style={{background: "darkgrey", width:"10%",textAlign:"center"}}>Số lần mua</th>
+                        <th style={{background: "darkgrey", width:"15%",textAlign:"center"}}>Lịch sử mua hàng</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -114,8 +114,8 @@ export function CustomerList() {
                                     <td>{age}</td>
                                     <td>{customer.phoneNumberCustomer}</td>
                                     <td>{customer.addressCustomer}</td>
-                                    <td>{customer.totalPurchases}</td>
-                                    <td>
+                                    <td style={{textAlign: "center"}}>{customer.totalPurchases}</td>
+                                    <td style={{textAlign:"center"}}>
                                         <Link className="btn btn-outline-primary"
                                               to={`/history/${customer.idCustomer}`}>Xem</Link>
                                     </td>

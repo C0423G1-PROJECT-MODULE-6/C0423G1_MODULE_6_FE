@@ -13,7 +13,10 @@ export function ShoppingHistoryList() {
     const [historys, setHistorys] = useState([]);
     const [customer, setCustomer] = useState(null);
     const [refresh, setRefresh] = useState(true);
-
+    const vnd = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    })
 
     const getCustomer = async () => {
         const result = await customerService.findById(param.id);
@@ -79,8 +82,20 @@ export function ShoppingHistoryList() {
                                 <td style={{paddingLeft: "30%"}}>{customer.phoneNumberCustomer}</td>
                             </tr>
                             <tr>
-                                <td>Tuổi:</td>
-                                <td style={{paddingLeft: "30%"}}>{customer.dateOfBirthCustomer}</td>
+                                {
+                                    (() => {
+                                        const birthDate = new Date(customer.dateOfBirthCustomer);
+                                        const currentDate = new Date();
+                                        const age = currentDate.getFullYear() - birthDate.getFullYear();
+
+                                        return (
+                                            <>
+                                                <td>Tuổi:</td>
+                                                <td style={{ paddingLeft: "30%" }}>{age}</td>
+                                            </>
+                                        );
+                                    })()
+                                }
                             </tr>
                             <tr>
                                 <td>Email:</td>
@@ -99,6 +114,9 @@ export function ShoppingHistoryList() {
                         <h2 className="mb-3">Chi tiết lịch sử mua hàng</h2>
                     </div>
                     <div className="col-12 d-flex justify-content-end my-3">
+                        <div className="col-auto d-flex justify-content-start" style={{marginRight:"64%"}}>
+                            <p className="m-0"> Số lượng: <span style={{color:"#0d6efd"}}>{records}</span> </p>
+                        </div>
                         <div className="col-auto mx-2">
                             <input className="form-control" type="search" placeholder="Tìm theo tên"
                                    aria-label="Search" onChange={(name) => {
@@ -112,12 +130,12 @@ export function ShoppingHistoryList() {
                         </div>
                     </div>
                     <table className="border border-dark table table-hover table-layout">
-                        <thead style={{background: "darkgrey"}}>
+                        <thead>
                         <tr>
-                            <th>Stt</th>
-                            <th>Ngày mua</th>
-                            <th>Sản phẩm mua</th>
-                            <th>Số tiền</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>#</th>
+                            <th style={{background: "darkgrey", width:"30%"}}>Ngày mua</th>
+                            <th style={{background: "darkgrey", width:"40%"}}>Sản phẩm mua</th>
+                            <th style={{background: "darkgrey", width:"20%"}}>Số tiền</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -126,9 +144,9 @@ export function ShoppingHistoryList() {
                                 return (
                                     <tr>
                                         <td>{index + 1}</td>
-                                        <td>{history.dateOfOrder}</td>
+                                        <td>{new Date(history.dateOfOrder).toLocaleDateString('en-GB')}</td>
                                         <td>{history.nameProduct}</td>
-                                        <td>{history.priceOrder}</td>
+                                        <td>{vnd.format(history.priceOrder)}</td>
 
                                     </tr>
                                 )
