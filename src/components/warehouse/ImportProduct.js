@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
+import ProductChooseModal from "../modal/ProductChooseModal";
 
 export function ImportProduct () {
 const navigate = useNavigate();
 const param = useParams();
-const [supplier, setSupplier] = useState({})
-const [product, setProduct] = useState({})
+const [supplier, setSupplier] = useState(null)
+const [product, setProduct] = useState(null)
     const getSupplier = async () => {
         const res = await findSupplierById(param.id)
         setSupplier(res)
@@ -30,12 +31,13 @@ useEffect(() => {
 },[param])
 
     return(
+        <>
         <Formik
         initialValues={{
             quantity:0,
             img: "",
-            supplier,
-            product
+            supplier:"",
+            product: ""
         }}
         validationSchema={Yup.object({
             quantity: Yup.number()
@@ -65,13 +67,14 @@ useEffect(() => {
           <label>Tên sản phẩm</label>
         </div>
         <div className="col-6 mb-2">
-          <Field className="form-control mt-2 border border-dark" name="product" type="text" placeholder="Iphone 15" readOnly />
+          <Field className="form-control mt-2 border border-dark" name="product" type="text" readOnly />
         </div>
         <div className="col-4 p-2">
           <label>Đơn giá</label>
         </div>
         <div className="col-6 mb-2">
-          <Field className="form-control mt-2 border border-dark" name="product" type="text" placeholder="30.000.000" readOnly />
+          <Field className="form-control mt-2 border border-dark" name="product" type="text" readOnly />
+          <ErrorMessage className="text-danger" name="product" component="span"></ErrorMessage>
         </div>
         <div className="col-4 p-2">
           <label htmlFor="file-upload">
@@ -79,20 +82,22 @@ useEffect(() => {
           </label>
         </div>
         <div className="col-6 mb-2">
-          <Field id="file-upload" type="image" name="img" src="https://cdn.hoanghamobile.com/i/preview/Uploads/2023/09/13/iphone-15-pro-blue-titanium-pure-back-iphone-15-pro-blue-titanium-pure-front-2up-screen-usen.png" className="form-control mt-2 border border-dark" />
+          <Field id="file-upload" type="image" name="img" src="" className="form-control mt-2 border border-dark" />
+          <ErrorMessage className="text-danger" name="img" component="span"></ErrorMessage>
         </div>
         <div className="col-4 p-2">
           <label>Số lượng</label>
         </div>
         <div className="col-6">
-          <Field className="form-control mt-2 border border-dark" name="quantity" placeholder={100} type="text" />
-          <ErrorMessage name="quantity" component="span"></ErrorMessage>
+          <Field className="form-control mt-2 border border-dark" name="quantity" type="number" />
+          <ErrorMessage className="text-danger" name="quantity" component="span"></ErrorMessage>
         </div>
         <div className="col-4 p-2">
           <label>Nhà cung cấp </label>
         </div>
         <div className="col-4 mb-2">
-          <Field className="form-control mt-2 border border-dark" name="supplier" placeholder="Apple inc." type="text" readOnly />
+          <Field className="form-control mt-2 border border-dark" name="supplier" type="text" readOnly />
+          <ErrorMessage className="text-danger" name="supplier" component="span"></ErrorMessage>
         </div>
         <div className="col-4">
           <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -110,5 +115,7 @@ useEffect(() => {
 
             </Form>
         </Formik>
+            <ProductChooseModal/>
+        </>
     )
 }
