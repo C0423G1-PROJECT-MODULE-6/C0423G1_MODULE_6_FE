@@ -32,3 +32,11 @@ export const findSupplierById = async (id) => {
         console.log(e);
     }
 }
+export const getAllSupplierModal = async (page, searchName,addressSearch,emailSearch) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/admin/supplier?_page=${page}&_limit=5&name_like=${searchName}&addressSearch=${addressSearch}&emailSearch=${emailSearch}`);
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
