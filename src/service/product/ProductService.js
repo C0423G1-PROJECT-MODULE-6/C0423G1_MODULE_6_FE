@@ -35,6 +35,14 @@ export const getProductId = async (id) => {
         console.log(error)
     }
 }
+export const getListProduct = async (sort,otherSort,choose,value,page) => {
+    try {
+        const result = await axios.get(`http://localhost:8080/api/admin/product/list?sort=${sort}&choose=${choose}&value=${value}&page=${page}&otherSort=${otherSort}`)
+        return result.data;
+    }catch (error){
+        console.log(error)
+    }
+}
 
 export const getAllCapacity = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/capacity/list`)
