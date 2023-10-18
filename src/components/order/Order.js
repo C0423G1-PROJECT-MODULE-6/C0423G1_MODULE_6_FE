@@ -14,6 +14,7 @@ function Order() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
 
+
     const findCustomerByid = async (data) => {
         const res =await orderService.findCustomerById(data);
         console.log(res.objectResponse)
@@ -32,7 +33,7 @@ function Order() {
     const updateCustomerConfirm = (data) => {
         console.log(data)
         setCustomer(data)
-    }
+
     const getAllCart = async () => {
         const res = await orderService.getAllCart(1);
         if (res.status === 200){
@@ -325,11 +326,13 @@ function Order() {
                     ></BillNotPayConfirm>
                 </Form>
             </Formik>
+
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
+
             <CustomerCreateModal />
             <ProductChooseModal />
         </>
     );
 }
-
+}
 export default Order;
