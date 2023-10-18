@@ -83,7 +83,7 @@ const SupplierChooseModal = ({handleData}) => {
                                     <h1 className="col-form-label">Tìm kiếm theo</h1>
                                 </div>
                                 <div className="col-auto">
-                                    <select name='optionSearch' defaultValue={0} onChange={handleOptionSearchChange}
+                                    <select name='optionSearch' defaultValue={0} onChange={(even)=>handleOptionSearchChange(even.target.value)}
                                             className="form-select shadow border-dark">
                                         <option value="1">Tên nhà cung cấp</option>
                                         <option value="2">Địa chỉ</option>
