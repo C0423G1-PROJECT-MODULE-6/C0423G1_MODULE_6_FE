@@ -61,29 +61,20 @@ const CustomerChooseModal = ({handleData}) => {
         // console.log(valueGender)
 
         if (choose === 0){
-            console.log(choose);
             setName(value);
             setPhone("");
             setGender("2");
             setPage(0);
-            console.log(value);
-            console.log(valueGender);
+
         }
         if (choose === 1){
-            console.log(choose);
-            console.log(value);
             setName(value);
             setGender(valueGender);
             setPage(0);
-
-            console.log(valueGender);
         }
         if (choose === 2){
             setPhone(value);
             setPage(0);
-            console.log(choose);
-            console.log(value);
-            console.log(valueGender);
         }
 
     }
@@ -170,13 +161,12 @@ const CustomerChooseModal = ({handleData}) => {
                                                         idCustomer: customer?.idCustomer,
                                                         nameCustomer: customer?.nameCustomer
                                                     });
-                                                    console.log(selectedCustomer.idCustomer)
                                                 } else {
                                                     setSelectedCustomer({idCustomer: null, nameCustomer: ""});
-                                                    console.log(selectedCustomer.idCustomer)
                                                 }
                                             }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
-                                                background: '#0d6efd',
+                                                background: '#282c34',
+                                                color: '#f5f5f5',
                                                 height: 50
                                             } : {height: 50}}
                                             >
