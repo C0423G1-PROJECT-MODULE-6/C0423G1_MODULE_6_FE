@@ -222,14 +222,14 @@ function MyModal({ action, data, deleteFunc }) {
     return (
         <>
             <Modal.Header>
-                <h5 class="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
+                <h5 className="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
             </Modal.Header>
             <Modal.Body>
                 <p>Bạn có muốn xóa sản phẩm này không {data.nameSupplier} ?</p>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" class="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onClick={() => action()}>Hủy</button>
+                <button type="button" className="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>
+                <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal" onClick={() => action()}>Hủy</button>
             </Modal.Footer>
         </>
     )
