@@ -51,6 +51,7 @@ function Order() {
     }
 
 
+
     useEffect(() => {
         getAllCart();
     }, [customer]);
@@ -63,11 +64,6 @@ function Order() {
         setTotalPrice(total);
     }, [carts, quantity]);
 
-
-
-    // const closeModal = () => {
-    //     setOrderBillNotPay(null);
-    // }
 
     console.log("customer "+JSON.stringify(customer))
 
