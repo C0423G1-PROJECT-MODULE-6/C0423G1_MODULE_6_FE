@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import * as orderService from "../../service/order/OrderService";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
+import * as UserService from "../../service/user/UserService";
 
 function ShowBill() {
     const [orderBill, setOrderBill] = useState(null);
@@ -9,20 +11,37 @@ function ShowBill() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [print, setPrint] = useState(false);
     const navigate = useNavigate();
+    const [userId, setUserId] = useState("");
+    const [userAppName, setUserAppName] = useState("");
+
+    const getAppUserId = async () => {
+        const isLoggedIn = infoAppUserByJwtToken();
+        if (isLoggedIn) {
+            const id = await getIdByUserName(isLoggedIn.sub);
+            setUserId(id.data);
+            const nameUser = await UserService.findById(id.data);
+            setUserAppName(nameUser.data.employeeName)
+        }
+    };
+
     const findOrderBillNewest = async () => {
         const res = await orderService.findOrderBillNewest();
         setOrderBill(res);
     };
 
-    const getAllCart = async (idUser) => {
-        const res = await orderService.getAllCart(idUser);
+    const getAllCart = async () => {
+        const res = await orderService.getAllCart(userId);
         setCarts(res.data);
     };
 
+
     useEffect(() => {
+        getAppUserId();
         findOrderBillNewest();
-        getAllCart(1);
     }, []);
+    useEffect(() => {
+        userId && getAllCart();
+    }, [userId]);
 
     useEffect(() => {
         if (carts.length > 0) {
@@ -111,8 +130,8 @@ function ShowBill() {
                                 </tr>
                             ))}
                             <tr>
-                                <th colSpan="4" className="text-right">Thành tiền (đã bao gồm thuế):</th>
-                                <td className="text-center text-danger">
+                                <th colSpan="4" className="text-right border border-end-0">Thành tiền (đã bao gồm thuế):</th>
+                                <td className="text-center text-danger border border-start-0">
                                     {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                 </td>
                             </tr>
@@ -126,6 +145,7 @@ function ShowBill() {
                                 name="print"
                                 checked={print}
                                 onChange={handlePrintChange}
+                                defaultChecked={false}
                             />
                             <label className="form-check-label" htmlFor="print">In hóa đơn</label>
                         </div>

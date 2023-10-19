@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
+import HeaderAdmin from "../user/HeaderAdmin";
 
 export function ShoppingHistoryList() {
     const param = useParams();
@@ -57,7 +58,8 @@ export function ShoppingHistoryList() {
 
     return (customer &&
         <>
-            <div className="container-fluid">
+            <HeaderAdmin/>
+            <div className="container-fluid mt-5">
                 <div className="pt-5">
                     <fieldset className="form-input shadow mx-auto" style={{
                         borderRadius: "20px",

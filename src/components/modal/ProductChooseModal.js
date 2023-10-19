@@ -25,10 +25,11 @@ const ProductChooseModal = ({data1, handleData}) => {
     });
     //---------------Get id User--------------------
 
-    const getAppUserId = async () => {
+    const getUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
         if (isLoggedIn) {
             const id = await getIdByUserName(isLoggedIn.sub);
+
             setUserId(id.data);
             // const nameUser = await UserService.findById(id.data);
             // setUserAppName(nameUser.data.employeeName)
@@ -40,6 +41,7 @@ const ProductChooseModal = ({data1, handleData}) => {
     //     }
     // };
     const handleSubmit = async () => {
+
         if (data1 === 1) {
             handleData(selectedProduct.id);
             let submitModal = await document.getElementById("closeModalProduct");
@@ -50,10 +52,12 @@ const ProductChooseModal = ({data1, handleData}) => {
         if (data1 === 0) {
             const result = await customerService.createCart(userId, selectedProduct.id);
             if (result?.status === 200) {
+                handleData(selectedProduct.id);
                 let submitModal = await document.getElementById("closeModalProduct");
                 // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
                 // submitModal.removeAttribute("data-bs-dismiss");
+
             }
             if (result?.status === 204) {
 
@@ -87,7 +91,7 @@ const ProductChooseModal = ({data1, handleData}) => {
     const loadProductList = async (choose, page, searchValue) => {
         const result = await productService.getPageProductModal(choose, page, searchValue);
         const listType = await productService.getAllType();
-        getAppUserId();
+        getUserId();
         setTypeProduct(listType);
         if (result?.status === 200) {
             setProductList(result?.data.content);
@@ -300,6 +304,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                                         data-bs-dismiss="modal"
                                         style={{width: "35%"}}
                                         id="closeModalProduct"
+
                                     >
                                         Trở về
                                     </button>

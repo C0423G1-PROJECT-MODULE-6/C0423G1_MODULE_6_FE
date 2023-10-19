@@ -103,7 +103,7 @@ function HeaderAdmin() {
                     {(roleAdmin || roleBusiness) && (
                         <Nav>
                             <NavDropdown title="Kinh Doanh" id="nav-dropdown-dark">
-                                <Link to="/ThoiND_sale_history" className="dropdown-item">Quản Lý Lịch Sử Bán Hàng</Link>
+                                <Link to="/admin/order/saleHistory" className="dropdown-item">Quản Lý Lịch Sử Bán Hàng</Link>
                                 <Link to="/admin/salesreport" className="dropdown-item">Quản Lý Báo Cáo Doanh Thu</Link>
                                 <Link to="/admin/product/list" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
                                 <Link to="/admin/supplier" className="dropdown-item">Quản Lý Nhà Cung Cấp</Link>
