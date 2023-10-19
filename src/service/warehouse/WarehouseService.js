@@ -1,9 +1,9 @@
 import axios from "axios"
-export const getAllWarehouse = async () => {
+export const getAllWarehouse = async (sort, choose, value, page) => {
     try{
-        const res = await axios.get("http://localhost:8080/api/admin/warehouse")
-        console.log(res);
-        return res.data.content
+        const res = (await axios.get(`http://localhost:8080/api/admin/warehouse?sort=${sort}&choose=${choose}&value=${value}&page=${page}`)).data
+        console.log("Res Service:", res);
+        return res
     }catch(e){
         console.log(e);
     }

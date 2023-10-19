@@ -3,10 +3,11 @@ import { deleteSupplier, getList } from "../../service/supplier/SupplierService"
 import "../../css/supplier/supplier.css";
 import Modal from "react-bootstrap/Modal";
 import HeaderAdmin from "../user/HeaderAdmin";
-import { list } from "@firebase/storage";
-import { tr } from "date-fns/locale";
+import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 function Supplier() {
+    const navigate = useNavigate();
     const [listSupplier, setListSupplier] = useState([]);
     const limit = 5;
     const [currentPage, setCurrentPage] = useState(0);
@@ -44,7 +45,7 @@ function Supplier() {
             }
             setRefresh(!refresh);
         }else{
-            alert("Không được nhập ký tự đặc biệt");
+            toast("Không được nhập ký tự đặc biệt");
         }
     }
    
@@ -91,8 +92,13 @@ function Supplier() {
 
     const handleDelete = async () => {
         const result = await deleteSupplier(supplierDelete.idSupplier);
-        if (listSupplier.length === 1 && totalPage != 1) {
+        if (listSupplier.length === 1 && totalPage !== 1) {
             setCurrentPage(currentPage - 1);
+        }
+        if(result===204){
+            toast("Xóa thành công")
+        }else{
+            toast.error("Lỗi không thể xóa đối tượng này")
         }
         handleCloseModal();
         setActiveRow(null);
@@ -162,7 +168,7 @@ function Supplier() {
                                     <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
                                         onClick={() => handleRowClick(index, supplier)}
                                     >
-                                        <td>{index + 1}</td>
+                                        <td>#</td>
                                         <td>{supplier.idSupplier}</td>
                                         <td>{supplier.nameSupplier}</td>
                                         <td>{supplier.addressSupplier}</td>
@@ -181,10 +187,7 @@ function Supplier() {
 
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
-                        <a className="me-1" href="NghiaNPX_CreateSupplier.html" style={{ textDecoration: 'none' }}>
-                            <button type="button```jsx
-" className="btn btn-outline-primary">Thêm mới</button>
-                        </a>
+                        <button type="button" className="btn btn-outline-primary me-1" onClick={() => navigate('/admin/supplier/create')}>Thêm mới</button>
                         <a className="me-1" href="NghiaNPX_EditSupplier.html" style={{ textDecoration: 'none' }}>
                             <button type="button" className="btn btn-outline-success">Cập nhật</button>
                         </a>
@@ -218,14 +221,14 @@ function MyModal({ action, data, deleteFunc }) {
     return (
         <>
             <Modal.Header>
-                <h5 class="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
+                <h5 className="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
             </Modal.Header>
             <Modal.Body>
                 <p>Bạn có muốn xóa sản phẩm này không {data.nameSupplier} ?</p>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" class="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" onClick={() => action()}>Hủy</button>
+                <button type="button" className="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>
+                <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal" onClick={() => action()}>Hủy</button>
             </Modal.Footer>
         </>
     )

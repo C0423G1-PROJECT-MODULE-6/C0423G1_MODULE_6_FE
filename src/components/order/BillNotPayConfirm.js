@@ -3,7 +3,13 @@ import * as orderService from "../../service/order/OrderService"
 function BillNotPayConfirm(props) {
     let {orderBill,handleClose,handleData} = props;
     const handleOldBill = async () => {
-        const newOrder =await orderService.getOrderNotPayByChoose(orderBill.customer.idCustomer,1,1);
+        const oldOrder =await orderService.getOrderNotPayByChoose(orderBill.customer.idCustomer,1,1);
+        console.log(oldOrder)
+        handleData(oldOrder.customer);
+        handleClose();
+    };
+    const handleCreateNewBill = async () => {
+        const newOrder = await orderService.getOrderNotPayByChoose(orderBill.customer.idCustomer,1,2);
         console.log(newOrder)
         handleData(newOrder.customer);
         handleClose();
@@ -32,7 +38,8 @@ function BillNotPayConfirm(props) {
                                             onClick={handleOldBill}>
                                         Sử dụng lại
                                     </button>
-                                    <button type="button" className="btn btn-primary">
+                                    <button type="button" className="btn btn-primary"
+                                    onClick={handleCreateNewBill}>
                                         Tạo mới
                                     </button>
                                 </div>
