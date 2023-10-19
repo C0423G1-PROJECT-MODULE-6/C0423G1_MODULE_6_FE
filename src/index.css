@@ -2,16 +2,16 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 :root {
@@ -49,8 +49,6 @@ code {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
-    Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: var(--font-size-for-text);
 }
 
@@ -82,6 +80,8 @@ a {
 }
 .home-body {
   background-color: var(--main-background);
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+    Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 .logo {
   width: auto;
@@ -125,7 +125,7 @@ ul li .link:hover {
 .search-login {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 10px;
 }
 .search-bar {
   background-color: var(--main-background);
@@ -144,8 +144,8 @@ ul li .link:hover {
 .header-login {
   position: relative;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   background-color: var(--circle-background);
   transform: var(--transition-02);
 }
@@ -170,6 +170,7 @@ ul li .link:hover {
 .facebook-icon,
 .instagram-icon,
 .twitter-icon {
+  margin-right: 10px;
   position: relative;
   display: inline-block;
   background-color: var(--circle-background);
@@ -289,22 +290,29 @@ h3.title {
   height: 400px;
   width: auto;
 }
-
-.tranding-slide-image img {
-  width: 300px;
-  height: 600px;
+.bestsellers-container {
+  height: 500px;
+}
+.bestseller-carousel {
+  border-radius: 20px;
+  margin: 30px auto;
+  max-width: 1200px;
+  background-color: #161616;
+}
+.bestsellers-title {
+  display: block;
+  margin: 0 auto;
+}
+.slider-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
-.tranding-slide {
-  width: 300px;
-  height: 600px;
+.no-products-found {
+  color: #888;
+  font-size: 23px;
+  margin: auto;
 }
-.tranding-slide-image img {
-  height: 290px;
-  width: auto;
-  object-fit: cover;
-}
-
 .swiper-container {
   padding-top: 50px;
   padding-bottom: 50px;
@@ -338,7 +346,7 @@ h3.title {
 }
 .product-list {
   margin: 0 auto !important;
-  padding: 30px !important;
+  padding: 20px !important;
 }
 .product-link {
   display: flex;
@@ -348,6 +356,70 @@ h3.title {
   position: relative;
   background-color: var(--product-background);
   width: 250px;
+}
+.bestseller-swiper {
+  position: relative;
+}
+.bs-swiper-button-prev {
+  background-color: var(--circle-background);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  position: absolute;
+  left: -50px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.bs-swiper-button-next {
+  background-color: var(--circle-background);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  position: absolute;
+  right: -95px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.bestseller-image img {
+  transition: var(--transition-02);
+}
+.bestseller-card {
+  transition: var(--transition-02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
+  position: relative;
+  background-color: var(--product-background);
+  width: 210px;
+  min-height: 345px;
+}
+.bestseller-card:hover {
+  box-shadow: var(--box-shadow-small);
+}
+.bestseller-card:hover img {
+  transition: var(--transition-02);
+  scale: 1.05;
+}
+.bestseller-image {
+  width: 100%;
+  height: auto;
+  padding: 15px;
+  object-fit: cover;
+}
+.bestseller-name {
+  flex-grow: 1;
+  text-align: center;
+  padding: 0 15px;
+  color: white;
+  font-size: 15px;
+  line-height: 2;
+}
+.bestseller-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff9921;
+  margin-top: auto;
 }
 .product-link:hover img {
   scale: 1.05;
@@ -424,7 +496,9 @@ h3.title {
 .watch-swiper-button-next:hover .temp-tag,
 .watch-swiper-button-prev:hover .temp-tag,
 .amthanh-swiper-button-next:hover .temp-tag,
-.amthanh-swiper-button-prev:hover .temp-tag {
+.amthanh-swiper-button-prev:hover .temp-tag,
+.bs-swiper-button-next:hover .temp-tag,
+.bs-swiper-button-prev:hover .temp-tag {
   background-color: var(--circle-background-hover);
 }
 .product-name {
@@ -780,7 +854,7 @@ h3.title {
   width: 45%;
   padding: 10px;
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
   line-height: 3;
   border-bottom: 1px solid #888;
 }

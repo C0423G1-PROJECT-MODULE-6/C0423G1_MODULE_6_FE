@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { getAppRoleList } from "../../service/user/AppRoleService";
 import ModalDelete from "./EmployeeDeleteModal";
 import '../../css/user/employee.css'
+import HeaderAdmin from "./HeaderAdmin";
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -23,7 +24,7 @@ const EmployeeList = () => {
     show: false,
     info: {},
   });
-
+  console.log(listJob);
   //loadListJob
   const loadListJob = async () => {
     const data = await getAppRoleList();
@@ -110,151 +111,7 @@ const EmployeeList = () => {
 
   return (
     <>
-      <nav
-        className="navbar navbar-expand-lg navbar-dark bg-dark"
-        style={{ position: "fixed", width: "100%", top: 0, zIndex: 10 }}
-      >
-        <div className="container-fluid">
-          <a className="navbar-brand" href="HaiBH_Home_Admin.html">
-            Home
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDarkDropdown"
-            aria-controls="navbarNavDarkDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
-            <ul className="navbar-nav">
-              <a
-                className="nav-link"
-                href="PhuocLQ_EmployeeList.html"
-                role="button"
-                aria-expanded="false"
-              >
-                Quản Lý Nhân Viên
-              </a>
-            </ul>
-            <ul className="navbar-nav">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Kinh Doanh
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <a className="dropdown-item" href="LoiVT_SalesReport.html">
-                      Quản Lý Báo Cáo Doanh Thu
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="QuanND_Product_List.html"
-                    >
-                      Xem Thông Tin Hàng Hoá
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="ThienPT_supplierList.html"
-                    >
-                      Quản Lý Nhà Cung Cấp
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <ul className="navbar-nav">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="ThoiND_sale_management.html"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Bán Hàng
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="ThoiND_sale_management.html"
-                    >
-                      Quản Lý Bán Hàng
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <ul className="navbar-nav">
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="PhapTM_warehouse.html"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Thủ Kho
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="QuanND_Product_List.html"
-                    >
-                      Quản Lý Xuất/Nhập Kho
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <div
-            className="collapse navbar-collapse"
-            style={{ marginLeft: "auto", width: 0 }}
-          >
-            <ul className="navbar-nav" style={{ marginLeft: "auto" }}>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="HaiBH_Infomation.html"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Bùi Hữu Hải - Admin
-                </a>
-                <ul className="dropdown-menu dropdown-menu-dark">
-                  <li>
-                    <a className="dropdown-item" href="HaiBH_Infomation.html">
-                      Thông Tin Cá Nhân
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="HaiBH_Login.html">
-                      Đăng Xuất
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <HeaderAdmin></HeaderAdmin>
       <div className="container my-5 pt-5">
         <div className="col-12 d-flex justify-content-center">
           <h1>Danh sách nhân viên</h1>
@@ -316,7 +173,7 @@ const EmployeeList = () => {
           <tbody>
             {employeeList.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center" }}>
+                <td colSpan={6} style={{ textAlign: "center", color: "red" }}>
                   Không tìm thấy
                 </td>
               </tr>
