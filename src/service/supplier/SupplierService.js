@@ -21,7 +21,7 @@ export const deleteSupplier = async (idSupplier) => {
 
 export const getAllAddress = async () => {
     try {
-        const res = await axios.get(`https://provinces.open-api.vn/api/p/`);
+        const res = await axios.get(`/api/p/`);
         return res.data;
     } catch (e) {
         alert("Yêu cầu địa chỉ thất bại!")
