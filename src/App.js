@@ -17,10 +17,8 @@ import { ShoppingHistoryList } from "./components/customer/ShoppingHistoryList";
 import { CustomerList } from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
-<<<<<<< HEAD
 import ShowBill from "./components/order/ShowBill";
 import PrintPDF from "./components/order/PrintPDF";
-=======
 import ProductList from "./components/product/ProductList";
 import {Warehouse} from './components/warehouse/Warehouse';
 import {ImportProduct} from './components/warehouse/ImportProduct';
@@ -32,7 +30,7 @@ import CreateProduct from "./components/product/CreateProduct";
 import Home from './components/home/home/Home';
 import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
->>>>>>> 90e540f000b07d6a3398109ea9ac7eb0d7dd103d
+
 
 
 function App() {
@@ -40,19 +38,8 @@ function App() {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <Routes>
-<<<<<<< HEAD
-//              
-                <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
-                <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
-                <Route path='/employee/create' element={<CreateEmployee/>}></Route>
-                <Route path="/admin/order" element={<Order/>}/>
-                <Route path="/admin/order/showBill" element={<ShowBill/>}/>
-                <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+            <Routes>   
 
-                <Route path="/401" element={<Error401/>}/>
-=======
->>>>>>> 90e540f000b07d6a3398109ea9ac7eb0d7dd103d
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/401" element={<Error401 />} />
                 <Route path="/403" element={<Error403 />} />
@@ -88,7 +75,9 @@ function App() {
                     <Route path="/admin/product/list" element={<ProductList/>}/>
                     <Route path="/admin/product/create" element={<CreateProduct/>}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
-
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/order/showBill" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                 </Route>
             </Routes>
         </>
