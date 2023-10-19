@@ -8,6 +8,8 @@ import * as Yup from "yup";
 import {NavLink, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import {toast} from "react-toastify";
+import "../../css/product/CreateProduct.css"
+import HeaderAdmin from "../user/HeaderAdmin";
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -136,7 +138,8 @@ function CreateProduct() {
 
     return (
         <>
-            <div id="anhdao">
+            <HeaderAdmin/>
+            <div id="anhdao" className="pt-5">
                 <Formik
                     initialValues={{
                         nameProduct: "",
@@ -213,18 +216,20 @@ function CreateProduct() {
                     <div className="row p-2 mt-3 container" style={{marginLeft: 110}}>
                         <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
                             <fieldset
-                                className="form-input-1 shadow"
+                                className="form-input-dao shadow"
                                 style={{width: 600, height: 480}}
                             >
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
-                                <div id="upload-img" className="image-gap mx-2 mb-2">
+                                <div id="upload-img" className="mt-2 ">
                                     {imageUpload ? imageUpload.map((img) => {
                                         return (
                                             <img
+                                                alt=""
                                                 src={img}
                                                 ref={imgPreviewRef}
+                                                className="image-gap mx-2 mb-2 float-start"
                                                 style={{
                                                     margin: "0px 8px 8px",
                                                     width: "150px",
@@ -240,7 +245,7 @@ function CreateProduct() {
                         </div>
                         <div className="d-flex justify-content-center col-6  float-end">
                             <Form>
-                                <fieldset className="form-input-1 shadow">
+                                <fieldset className="form-input-dao shadow">
                                     <legend className="float-none w-auto px-3">
                                         <h2>Thêm mới thông tin hàng hóa</h2>
                                     </legend>
@@ -252,7 +257,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="nameProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
@@ -264,7 +269,7 @@ function CreateProduct() {
                                                     Giá điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     name="priceProduct"
                                                     type="number"
                                                     style={{width: 270}}
@@ -280,7 +285,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="screenProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
@@ -293,7 +298,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="batteryProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
@@ -308,7 +313,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="cameraProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
@@ -321,7 +326,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="selfieProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
@@ -336,7 +341,7 @@ function CreateProduct() {
                                                 </label>
                                                 <Field
                                                     name="weightProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
@@ -347,11 +352,12 @@ function CreateProduct() {
                                                 <label>
                                                     Số lượng <span style={{color: "red"}}>*</span>
                                                 </label>
-                                                <div
+                                                <Field
                                                     name="quantityProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="number"
                                                     style={{width: 270}}
+                                                    readOnly
                                                 />
                                             </div>
                                         </div>
@@ -361,7 +367,7 @@ function CreateProduct() {
                                                     Dung lượng điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="capacityDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn dung lượng điện thoại</option>
@@ -378,7 +384,7 @@ function CreateProduct() {
                                                     Màu sắc điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="colorDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn màu sắc điện thoại</option>
@@ -397,7 +403,7 @@ function CreateProduct() {
                                                     Cpu điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="cpuDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn cpu điện thoại</option>
@@ -414,7 +420,7 @@ function CreateProduct() {
                                                     Ram điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="ramDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn Ram điện thoại</option>
@@ -433,7 +439,7 @@ function CreateProduct() {
                                                     Series điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="seriesDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn Series điện thoại</option>
@@ -450,7 +456,7 @@ function CreateProduct() {
                                                     Loại điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="typeDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn loại điện thoại</option>
@@ -484,7 +490,7 @@ function CreateProduct() {
                                         <div>
                                             <Field
                                                 as="textarea"
-                                                className="form-control-1 mt-2 border border-dark"
+                                                className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
                                                 style={{width: 540, height: 90}}/>
                                         </div>

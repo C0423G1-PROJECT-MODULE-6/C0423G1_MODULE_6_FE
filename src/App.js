@@ -60,7 +60,7 @@ function App() {
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
                     <Route path="/admin/product/list" element={<ProductList/>}/>
-                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/product/create" element={<CreateProduct />}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                 </Route>
             </Routes>
