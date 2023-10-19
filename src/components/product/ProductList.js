@@ -44,7 +44,7 @@ export default function ProductList() {
             } else {
                 toast("Xóa thất bại")
             }
-        }-
+        }
         list();
     }
     const list = async () => {
