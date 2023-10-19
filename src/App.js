@@ -41,65 +41,59 @@ function App() {
             <ToastContainer></ToastContainer>
 
             <Routes>
-                {/*<Route path="*" element={<Home />}></Route>*/}
+
+                <Route path="*" element={<Home/>}></Route>
                 <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
-                <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                <Route path='/home' element={<Home/>}/>
+                <Route path="/list/:type" element={<List/>}/>
                 <Route path="/admin/product/update/:id" element={<UpdateProduct/>}/>
                 <Route path="/admin/product/list" element={<ProductList/>}/>
-                <Routes>
-
-                    <Route path="*" element={<Home/>}></Route>
-                    <Route path="/401" element={<Error401/>}/>
-                    <Route path="/403" element={<Error403/>}/>
-                    <Route path="/login" element={<LoginForm/>}/>
-                    <Route path='/home' element={<Home/>}/>
-                    <Route path="/list/:type" element={<List/>}/>
-                    <Route path="/detail/:type/:id" element={<Detail/>}/>
+                <Route path="/detail/:type/:id" element={<Detail/>}/>
 
 
-                    <Route
-                        element={
-                            <Authentication
-                                allowedRoles={[
-                                    EnumAppUserRole.ROLE_ADMIN,
-                                    EnumAppUserRole.ROLE_SALE,
-                                    EnumAppUserRole.ROLE_BUSINESS,
-                                    EnumAppUserRole.ROLE_WAREHOUSE,
-                                ]}
-                            />
-                        }
-                    >
-                        <Route path="/admin/information/:id" element={<Information/>}></Route>
-                        <Route path="/admin/*" element={<HomeAdmin/>}></Route>
-                        <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
-                        <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
-                        <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
-                        <Route path="/admin/order" element={<Order/>}/>
-                        <Route path="/admin/customer" element={<CustomerList/>}/>
-                        <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
-                        <Route path="/admin/warehouse" element={<Warehouse/>}/>
-                        <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
-                        <Route path="/admin/supplier" element={<Supplier/>}/>
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_ADMIN,
+                                EnumAppUserRole.ROLE_SALE,
+                                EnumAppUserRole.ROLE_BUSINESS,
+                                EnumAppUserRole.ROLE_WAREHOUSE,
+                            ]}
+                        />
+                    }
+                >
+                    <Route path="/admin/information/:id" element={<Information/>}></Route>
+                    <Route path="/admin/*" element={<HomeAdmin/>}></Route>
+                    <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
+                    <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/warehouse" element={<Warehouse/>}/>
+                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
+                    <Route path="/admin/supplier" element={<Supplier/>}/>
 
-                        <Route path="/admin/supplier/create" element={<CreateSupplier/>}/>
-                        <Route path="/admin/product/list" element={<ProductList/>}/>
-                        <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/supplier/create" element={<CreateSupplier/>}/>
+                    <Route path="/admin/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
 
-                        <Route path="/admin/salesreport" element={<SalesReport/>}/>
-                        <Route path="/admin/order" element={<Order/>}/>
-                        <Route path="/admin/order/showBill" element={<ShowBill/>}/>
-                        <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
-                        <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
+                    <Route path="/admin/salesreport" element={<SalesReport/>}/>
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/order/showBill" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+                    <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
 
 
-                    </Route>
-                </Routes>
+                </Route>
             </Routes>
         </>
     );
 }
+
 export default App;
 
 
