@@ -263,8 +263,10 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
-                                                              component="small">Error </ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -276,12 +278,14 @@ function CreateProduct() {
                                                     type="number"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
                                                     Kích thước màn hình <span style={{color: "red"}}>*</span>
                                                 </label>
@@ -291,10 +295,12 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{ height: "16px" }}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
                                                     Pin điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
@@ -304,8 +310,10 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -319,8 +327,10 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -332,8 +342,10 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -347,8 +359,10 @@ function CreateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -361,6 +375,10 @@ function CreateProduct() {
                                                     style={{width: 270}}
                                                     readOnly
                                                 />
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage name="priceProduct" className="p-3 mb-2 text-danger"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">

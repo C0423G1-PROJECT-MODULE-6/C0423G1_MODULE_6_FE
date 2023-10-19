@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {v4} from "uuid";
+import CKEditorComponent from "./CKEditorComponent";
 
 function randomString(length) {
     const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -132,7 +133,7 @@ function UpdateProduct() {
 
     }
     const removeImg = (index) => {
-        setImageUpload((pre)=> pre.filter((e,i)=> i !== index ));
+        setImageUpload((pre) => pre.filter((e, i) => i !== index));
     }
     const handleInputChange = (event) => {
         const file = event.target.files[0];
@@ -225,7 +226,7 @@ function UpdateProduct() {
                             .max(300000000, "Giá không quá 300.000.000")
                     })}
                     onSubmit={(values, {setSubmitting, setErrors}) => {
-                        setSubmitting(false)
+                        setSubmitting(true)
                         add(values, setErrors);
                     }}>
 
@@ -243,7 +244,7 @@ function UpdateProduct() {
                                         return (
                                             <div className="float-start ">
                                                 <div className=" h-100 d-flex justify-content-end w-100 pe-2">
-                                                    <div onClick={()=>removeImg(index)}>X</div>
+                                                    <div onClick={() => removeImg(index)}>X</div>
                                                 </div>
                                                 <img
                                                     alt=""
@@ -274,7 +275,7 @@ function UpdateProduct() {
                                     </legend>
                                     <div className="row p-2">
                                         <div className="row">
-                                            <div className="col-6">
+                                            <div className="col-6 ">
                                                 <label>
                                                     Tên điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
@@ -284,8 +285,10 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
-                                                              component="small">Error </ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -297,13 +300,15 @@ function UpdateProduct() {
                                                     type="number"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
+                                                <label className="mt-2">
                                                     Kích thước màn hình <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
@@ -312,11 +317,13 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{ height: "16px" }}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
-                                                <label>
+                                                <label className="mt-2">
                                                     Pin điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
@@ -325,8 +332,10 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -340,8 +349,10 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -353,8 +364,10 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -368,8 +381,10 @@ function UpdateProduct() {
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -382,6 +397,10 @@ function UpdateProduct() {
                                                     style={{width: 270}}
                                                     readOnly
                                                 />
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage name="priceProduct" className="p-3 mb-2 text-danger"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -512,10 +531,11 @@ function UpdateProduct() {
                                         </div>
                                         <div>
                                             <Field
-                                                as="textarea"
                                                 className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
-                                                style={{width: 540, height: 90}}/>
+                                                component={CKEditorComponent}
+                                                // style={{width: 540, height: 90}}
+                                            />
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
@@ -542,8 +562,8 @@ function UpdateProduct() {
                 </Formik>
             </div>
         </>
-    )
+)
 
 }
 
-    export default UpdateProduct;
+export default UpdateProduct;
