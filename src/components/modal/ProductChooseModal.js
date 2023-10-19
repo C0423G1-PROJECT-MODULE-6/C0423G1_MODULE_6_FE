@@ -6,7 +6,8 @@ import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthSer
 import * as UserService from "../../service/user/UserService";
 import * as customerService from '../../service/customer/CustomerService';
 import Swal from "sweetalert2";
-const ProductChooseModal = ({handleData}) => {
+const ProductChooseModal = ({data1,handleData}) => {
+
     const modalRef = useRef(null); // Tạo một ref để truy cập modal
     const [productList, setProductList] = useState([]);
     const [typeProduct, setTypeProduct] = useState([]);
@@ -38,29 +39,43 @@ const ProductChooseModal = ({handleData}) => {
     //     }
     // };
     const handleSubmit = async () => {
-            const result = await customerService.createCart(userId,selectedProduct.id);
+            if (data1 === 1){
+                handleData(selectedProduct.id);
+                let submitModal = document.getElementById("closeModal");
+                submitModal.setAttribute("data-bs-dismiss", "modal");
+                submitModal.click()
+                submitModal.removeAttribute("data-bs-dismiss");
+            }else {
+        const result = await customerService.createCart(userId,selectedProduct.id);
         if (result?.status === 200) {
-            let submitModal = document.getElementById("closeModal");
-            submitModal.setAttribute("data-bs-dismiss", "modal");
-            submitModal.click()
-            submitModal.removeAttribute("data-bs-dismiss");}
-         if(result?.status === 204) {
-             Swal.fire({
-                 icon: 'error',
-                 title: 'Rất tiếc...',
-                 text: 'Sản phẩm đã hết hàng!',
-             })
-        }
-         if(result?.status === 201) {
-             Swal.fire({
-                 icon: 'error',
-                 title: 'Rất tiếc...',
-                 text: 'Số lượng nhập hàng quá số lượng kho!',
-             })
-        }
+                    let submitModal = document.getElementById("closeModal");
+                    submitModal.setAttribute("data-bs-dismiss", "modal");
+                    submitModal.click()
+                    submitModal.removeAttribute("data-bs-dismiss");}
+                if(result?.status === 204) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Rất tiếc',
+                        text: 'Sản phẩm đã hết hàng',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+                if(result?.status === 201) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Sản phẩm đã hết hàng',
+                        text: 'Vui lòng chọn sản phẩm khác',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            }
+
 
     //     //-----Pass the product id through the sales page----
-    //     // handleData(selectedProduct.id);
     // //    ----create cart-------
         // closeModal();
     };

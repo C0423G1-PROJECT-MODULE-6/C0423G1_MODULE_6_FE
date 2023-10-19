@@ -1,9 +1,14 @@
 import axios from "axios";
 export const getAllCustomerModal = async (page, name,phone,gender) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/customer/modal?_limit=5&_page=${page}&name_like=${name}&gender=${gender}&phone=${phone}`);
+        // console.log("page"+page)
+        // console.log("name"+name)
+        // console.log("phone"+phone)
+        // console.log("gender"+gender)
+        const result = await axios.get(`http://localhost:8080/api/admin/customer/list/modal?_limit=5&_page=${page}&name_like=${name}&gender=${gender}&phone=${phone}`);
         // console.log("1");
         // console.log(result);
+        console.log(result)
         return result;
     } catch (e) {
         console.log(e);
