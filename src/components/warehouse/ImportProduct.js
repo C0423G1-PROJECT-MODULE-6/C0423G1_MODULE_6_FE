@@ -10,15 +10,23 @@ import SupplierChooseModal from "./SupplierChooseModal";
 
 export function ImportProduct() {
   const navigate = useNavigate();
-  const [supplierId, setSupplier] = useState()
+  const [supplierId, setSupplier] = useState(null)
   const [productId, setProduct] = useState()
   const getProduct = async (id) => {
     const res = await findProductById(id)
     setProduct(res);
   }
-  const getSupplier = async (id) => {
-    const res = await findSupplierById(id)
-    setSupplier(res); 
+  // const getSupplier = async (id) => {
+  //   const res = await findSupplierById(id)
+  //   setSupplier(res); 
+  // }
+  const findSupplier = async (id) => {
+    const res = await findSupplierById(id);
+    console.log("ré", res);
+    setSupplier(res)
+  }
+  const handleDataByChooseSupplier = (data) => {
+    findSupplier(data);
   }
 
   const addWarehouse = async (value) => {
@@ -27,23 +35,24 @@ export function ImportProduct() {
       productId: productId.id,
       supplierId: supplierId.idSupplier
     }
-    alert(JSON.stringify(newValue))
+    // alert(JSON.stringify(newValue))
     await importProduct(newValue);
     navigate("/admin/warehouse");
     toast("Nhập thêm sản phẩm thành công!");
   }
   useEffect(() => {
-      getProduct(17)
-      getSupplier(1)
+    getProduct(17)
+
   }, [])
+  console.log("Supplier:", supplierId);
 
   return (
     <>
       <Formik
         initialValues={{
-          quantity: 0,
+          quantity: 1,
           // img: "dhdhđ",
-          supplierId: supplierId ? supplierId.id : null,
+          supplierId: supplierId ? supplierId.idSupplier : null,
           productId: productId ? productId.id : null
         }}
         validationSchema={Yup.object({
@@ -52,11 +61,18 @@ export function ImportProduct() {
             .min(1, "Số lượng phải lớn hơn 0")
             .max(2000, "Không được nhập quá 2000 sản phẩm")
           // img: Yup.string().required(),
-          // supplier: Yup.object().required("Vui lòng chọn nhà cung cấp"),
+          // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
           // product: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
         onSubmit={(values) => {
-        addWarehouse(values);
+          console.log("values:", values);
+          const newSubmit = {
+            ...values,
+            productId: productId.id,
+            supplierId: supplierId.idSupplier
+          }
+          console.log("submit:", newSubmit);
+          addWarehouse(newSubmit);
         }}>
         <Form>
           <div className="mt-5">
@@ -66,7 +82,7 @@ export function ImportProduct() {
                 <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }} data-bs-toggle="modal" data-bs-target="#exampleModalProduct">
                   Chọn hàng có sẵn
                 </button>
-                <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Quét mã QR</button>
+                <Link to="#" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Quét mã QR</Link>
               </div>
               <div>
                 <div className="row p-2 mx-auto" style={{ width: '90%' }}>
@@ -104,7 +120,7 @@ export function ImportProduct() {
                   </div>
                   <div className="col-4 mb-2">
                     <Field className="form-control mt-2 border border-dark" value={supplierId?.nameSupplier} name="supplier" type="text" readOnly />
-                    <ErrorMessage className="text-danger" name="supplier" component="span"></ErrorMessage>
+                    <ErrorMessage className="text-danger" name="supplierId" component="span"></ErrorMessage>
                   </div>
                   <div className="col-4">
                     <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModalSupplier">
@@ -123,7 +139,7 @@ export function ImportProduct() {
         </Form>
       </Formik>
       <ProductChooseModal />
-      <SupplierChooseModal/>
+      <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
   )
 }
