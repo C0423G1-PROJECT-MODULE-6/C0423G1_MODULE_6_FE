@@ -8,9 +8,12 @@ import * as Yup from 'yup';
 import { storage } from "../../firebase/Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { crateEmployee, getNewEmployee } from '../../service/user/EmployeeService';
+import { async } from '@firebase/util';
+import {getAppRoleList} from '../../service/user/AppRoleService'
 
 function CreateEmployee(props) {
     const navigate = useNavigate();
+    const [roles,setRole] = useState()
     const [employee, setEmployee] = useState();
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
@@ -27,7 +30,7 @@ function CreateEmployee(props) {
                             image: url,
                         })
                             .then(() => {
-                                navigate("/dashboard/employee");
+                                navigate("/employee");
                             })
                             .then(() => {
                                 Swal.fire({
@@ -96,6 +99,7 @@ function CreateEmployee(props) {
         if (file) {
             reader.readAsDataURL(file);
         }
+        console.log(imgPreviewRef);
     };
     useEffect(() => {
         document.title = "C4Zone - Thêm mới nhân viên";
@@ -105,6 +109,13 @@ function CreateEmployee(props) {
         const newEmployee = await getNewEmployee();
         setEmployee(newEmployee.data);
     };
+
+    const displayRole = async () => {
+        const data = await getAppRoleList()
+        setRole(data)
+    }
+    useEffect(() => { displayRole() }, [])
+    
     if (employee === undefined) {
         return null;
     }
@@ -123,7 +134,7 @@ function CreateEmployee(props) {
                         employeeBirthday: "",
                         employeeIdCard: "",
                         email: "",
-                        employeeGender: "",
+                        employeeGender: "Nam",
 
                     }}
                     validationSchema={Yup.object({
@@ -148,8 +159,7 @@ function CreateEmployee(props) {
                             .required("Vui lòng nhập tên tài khoản.")
                             .max(30, "Vui lòng nhập dưới 30 kí tự")
                             .matches(/^[0-9a-zA-Z]+$/u, "Tên tài khoản chỉ chứa chữ và số"),
-                        employeeImage: Yup.string()
-                            .required("Vui lòng chọn ảnh."),
+                       
                         employeeStartDate: Yup.date()
                             .required("Vui lòng nhập ngày bắt đầu làm.."),
                         employeeBirthday: Yup.string()
@@ -210,6 +220,7 @@ function CreateEmployee(props) {
                                         src={employee.employeeImage}
                                         ref={imgPreviewRef}
                                     />
+                                    
                                 </div>
                                 <div className="col-8 d-flex justify-content-center align-items-center">
                                     <fieldset
@@ -330,8 +341,9 @@ function CreateEmployee(props) {
                                                     aria-label="Upload"
                                                     accept="image/png, image/gif, image/jpeg"
                                                     ref={inputFileRef}
-                                                    onchange={handleInputChange}
+                                                    onChange={handleInputChange}
                                                     name="employeeImage"
+                                                   
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
@@ -428,10 +440,10 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <select className="form-select border border-dark mt-2">
-                                                    <option value={1}>Nam</option>
-                                                    <option value={2}>Nữ</option>
-                                                </select>
+                                                <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
+                                                    <option value="Nam" >Nam</option>
+                                                    <option value="Nữ" >Nữ</option>
+                                                </Field>
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
                                                         name="employeeGender"
@@ -447,11 +459,13 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <select className="form-select border border-dark mt-2">
-                                                    <option value={1}>Nhân viên kinh doanh</option>
-                                                    <option value={2}>Nhân viên bán hàng</option>
-                                                    <option value={2}>Thủ kho</option>
-                                                </select>
+                                        
+                                                <Field as="select" name="roleId" className="form-select border border-dark mt-2">
+                                                  
+                                                    <option value="" label='--Chọn công việc--'></option>
+                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.name} />))}
+                                                    
+                                                </Field>
                                                 <div style={{ height: 16 }}>
                                                    <ErrorMessage
                                                         name="email"
