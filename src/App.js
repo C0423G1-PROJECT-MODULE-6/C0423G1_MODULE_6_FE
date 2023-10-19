@@ -30,6 +30,7 @@ import CreateProduct from "./components/product/CreateProduct";
 import Home from './components/home/home/Home';
 import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
+import {SaleHistoryList} from "./components/order/SaleHistoryList";
 
 
 
@@ -78,6 +79,7 @@ function App() {
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/order/showBill" element={<ShowBill/>}/>
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+                    <Route path="/admin/order/saleHistory" element={<SaleHistoryList/>}/>
                 </Route>
             </Routes>
         </>
