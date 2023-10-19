@@ -48,7 +48,7 @@ const SupplierChooseModal = ({ handleData }) => {
     }
     const handleSubmit = () => {
         // console.log(selectedCustomer);
-        let submitModal = document.getElementById("submitModal");
+        let submitModal = document.getElementById("closeModal");
         submitModal.setAttribute("data-bs-dismiss", "modal");
         submitModal.click()
         submitModal.removeAttribute("data-bs-dismiss");
@@ -170,8 +170,9 @@ const SupplierChooseModal = ({ handleData }) => {
                                     {selectedSupplier.idSupplier === null ? null : (
                                         <button
                                             className="btn btn-outline-primary shadow"
+                                            data-bs-dismiss="modal"
                                             style={{ marginRight: '2rem', width: '40%' }}
-                                            id="submitModal"
+                                            id="closeModal"
                                             onClick={() => handleSubmit()}
                                         >
                                             Chọn

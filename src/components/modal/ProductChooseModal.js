@@ -300,6 +300,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                                         data-bs-dismiss="modal"
                                         style={{width: "35%"}}
                                         id="closeModalProduct"
+
                                     >
                                         Trở về
                                     </button>
