@@ -124,8 +124,8 @@ const EmployeeList = () => {
                   --Tìm theo công việc--
                 </option>
                 {listJob.map((job) => (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
+                  <option key={job.id} value={job.type}>
+                    {job.type}
                   </option>
                 ))}
               </select>
@@ -188,7 +188,7 @@ const EmployeeList = () => {
                   <td>{employee.employeeName}</td>
                   <td>{employee.employeeBirthday}</td>
                   <td>{employee.employeeAddress}</td>
-                  <td>{employee.employeeRoleName}</td>
+                  <td>{employee.employeeTypeName}</td>
                   <td>{employee.employeePhone}</td>
                 </tr>
               ))
