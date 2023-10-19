@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as orderService from "../../service/order/OrderService"
 import BillNotPayConfirm from "./BillNotPayConfirm";
 import CustomerChooseModal from "../modal/CustomerChooseModal";
 import CustomerCreateModal from "../modal/CustomerCreateModal";
 import ProductChooseModal from "../modal/ProductChooseModal";
+import {useNavigate} from "react-router-dom";
+import * as Yup from "yup"
+import HeaderAdmin from "../user/HeaderAdmin";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -13,7 +16,7 @@ function Order() {
     const [hasResult, setHasResult] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
-
+    const navigate = useNavigate();
 
     const findCustomerByid = async (data) => {
         const res =await orderService.findCustomerById(data);
@@ -30,9 +33,10 @@ function Order() {
     const handleDataByChooseCustomer=(data)=>{
         findCustomerByid(data);
     }
-    const updateCustomerConfirm = (data) => {
-        console.log(data)
-        setCustomer(data)
+    // const updateCustomerConfirm = (data) => {
+    //     console.log(data)
+    //     setCustomer(data)
+    // }
 
     const getAllCart = async () => {
         const res = await orderService.getAllCart(1);
@@ -46,9 +50,10 @@ function Order() {
         }
     }
 
+
     useEffect(() => {
         getAllCart();
-    }, []);
+    }, [customer]);
 
     useEffect(() => {
         let total = 0;
@@ -58,9 +63,11 @@ function Order() {
         setTotalPrice(total);
     }, [carts, quantity]);
 
-    const closeModal = () => {
-        setOrderBillNotPay(null);
-    }
+
+
+    // const closeModal = () => {
+    //     setOrderBillNotPay(null);
+    // }
 
     console.log("customer "+JSON.stringify(customer))
 
@@ -88,9 +95,39 @@ function Order() {
        const res= await orderService.deleteChosenProduct(idProduct,idUser);
         res.status === 200 && getAllCart();
     };
+
+    const showOrderBill =async (value) => {
+        console.log(value)
+        value = {
+            ...value,
+            idCustomerOrder : customer.idCustomer,
+            idUser: 1
+        }
+        console.log(value)
+
+      const res = await orderService.getBillNotPay(value);
+        if (res.status === 200){
+            navigate("/admin/order/showBill");
+        }
+    };
+
+    const initialValues = {
+        paymentMethod : 1,
+        idCustomerOrder : "",
+        idUser: ""
+    }
+    // const validationSchema = {
+    //     idCustomerOrder: Yup.number().required("Không được để trống")
+    // }
+
     return (
         <>
-            <Formik>
+            <HeaderAdmin/>
+            <Formik initialValues={initialValues}
+                    // validationSchema={Yup.object(validationSchema)}
+            onSubmit={(value)=>{
+                console.log("Form values:", value);
+                showOrderBill(value)}}>
                 <Form>
                     <div className="  d-flex justify-content-center my-5 pt-5">
                         <fieldset className="form-input shadow mx-auto" style={{ borderRadius: '20px', border: '1px solid black', height: 'auto', width: '80%' }}>
@@ -111,6 +148,7 @@ function Order() {
                                             <div className="col-4 p-2">
                                                 <label>Tên khách hàng</label>
                                             </div>
+
                                             <div className="col-8 mb-2">
                                                 <input
                                                     className="form-control mt-2 border border-dark"
@@ -118,7 +156,20 @@ function Order() {
                                                     value={customer ? customer.nameCustomer : ""}
                                                     readOnly
                                                 />
+                                                {/*{customer ? null : (*/}
+                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
+                                                {/*        <ErrorMessage*/}
+                                                {/*            className="text-danger"*/}
+                                                {/*            name="idCustomerOrder"*/}
+                                                {/*            component="small"*/}
+                                                {/*        />*/}
+                                                {/*    </div>*/}
+                                                {/*)}*/}
+
                                             </div>
+
+
+
                                             <div className="col-4 p-2">
                                                 <label>Số điện thoại</label>
                                             </div>
@@ -129,6 +180,15 @@ function Order() {
                                                     value={customer ? customer.phoneNumberCustomer : ""}
                                                     readOnly
                                                 />
+                                                {/*{customer ? null : (*/}
+                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
+                                                {/*        <ErrorMessage*/}
+                                                {/*            className="text-danger"*/}
+                                                {/*            name="idCustomerOrder"*/}
+                                                {/*            component="small"*/}
+                                                {/*        />*/}
+                                                {/*    </div>*/}
+                                                {/*)}*/}
                                             </div>
                                             <div className="col-4 p-2">
                                                 <label>Địa chỉ</label>
@@ -140,6 +200,15 @@ function Order() {
                                                     value={customer ? customer.addressCustomer : ""}
                                                     readOnly
                                                 />
+                                                {/*{customer ? null : (*/}
+                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
+                                                {/*        <ErrorMessage*/}
+                                                {/*            className="text-danger"*/}
+                                                {/*            name="idCustomerOrder"*/}
+                                                {/*            component="small"*/}
+                                                {/*        />*/}
+                                                {/*    </div>*/}
+                                                {/*)}*/}
                                             </div>
                                             <div className="col-4 p-2">
                                                 <label>Ngày sinh </label>
@@ -151,6 +220,15 @@ function Order() {
                                                     value={customer ? customer.dateOfBirthCustomer : ""}
                                                     readOnly
                                                 />
+                                                {/*{customer ? null : (*/}
+                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
+                                                {/*        <ErrorMessage*/}
+                                                {/*            className="text-danger"*/}
+                                                {/*            name="idCustomerOrder"*/}
+                                                {/*            component="small"*/}
+                                                {/*        />*/}
+                                                {/*    </div>*/}
+                                                {/*)}*/}
                                             </div>
                                             <div className="col-4 p-2">
                                                 <label>Email</label>
@@ -162,7 +240,18 @@ function Order() {
                                                     value={customer ? customer.emailCustomer : ""}
                                                     readOnly
                                                 />
+                                                {/*{customer ? null : (*/}
+                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
+                                                {/*        <ErrorMessage*/}
+                                                {/*            className="text-danger"*/}
+                                                {/*            name="idCustomerOrder"*/}
+                                                {/*            component="small"*/}
+                                                {/*        />*/}
+                                                {/*    </div>*/}
+                                                {/*)}*/}
                                             </div>
+                                            <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
+                                            <Field name="idUser" type="hidden" value={1}/>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -283,8 +372,9 @@ function Order() {
                                         <Field
                                             type="radio"
                                             id="theTinDung"
-                                            name="payment"
+                                            name="paymentMethod"
                                             value="1"
+                                            checked
                                             style={{ marginRight: '1%' }}
                                         />
                                         <label htmlFor="theTinDung" style={{ marginRight: '4%' }}>
@@ -295,21 +385,12 @@ function Order() {
                                         <Field
                                             type="radio"
                                             id="tienMat"
-                                            name="payment"
+                                            name="paymentMethod"
                                             value="2"
                                             style={{ marginRight: '1%' }}
                                         />
                                         <label htmlFor="tienMat">Tiền mặt</label>
                                     </div>
-                                </div>
-                                <div className="col-8 mt-2">
-                                    <Field
-                                        type="checkbox"
-                                        id="print"
-                                        name="print"
-                                        style={{ marginRight: '1%' }}
-                                    />
-                                    <label htmlFor="print">In hoá đơn</label>
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     <button type="submit" className="btn btn-outline-primary col-6 d-flex justify-content-center my-3" style={{ width: '30%', margin: '15px' }}>
@@ -319,11 +400,11 @@ function Order() {
                             </div>
                         </fieldset>
                     </div>
-                    <BillNotPayConfirm
-                        orderBill={orderBillNotPay}
-                        handleClose={closeModal}
-                        handleData={updateCustomerConfirm}
-                    ></BillNotPayConfirm>
+                    {/*<BillNotPayConfirm*/}
+                    {/*    orderBill={orderBillNotPay}*/}
+                    {/*    handleClose={closeModal}*/}
+                    {/*    handleData={updateCustomerConfirm}*/}
+                    {/*></BillNotPayConfirm>*/}
                 </Form>
             </Formik>
 
@@ -333,6 +414,5 @@ function Order() {
             <ProductChooseModal />
         </>
     );
-}
 }
 export default Order;
