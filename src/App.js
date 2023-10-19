@@ -17,6 +17,8 @@ import { ShoppingHistoryList } from "./components/customer/ShoppingHistoryList";
 import { CustomerList } from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
+import ShowBill from "./components/order/ShowBill";
+import PrintPDF from "./components/order/PrintPDF";
 import ProductList from "./components/product/ProductList";
 import {Warehouse} from './components/warehouse/Warehouse';
 import {ImportProduct} from './components/warehouse/ImportProduct';
@@ -30,12 +32,14 @@ import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 
 
+
 function App() {
     axiosClient();
     return (
         <>
             <ToastContainer></ToastContainer>
-            <Routes>
+            <Routes>   
+
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/401" element={<Error401 />} />
                 <Route path="/403" element={<Error403 />} />
@@ -71,7 +75,9 @@ function App() {
                     <Route path="/admin/product/list" element={<ProductList/>}/>
                     <Route path="/admin/product/create" element={<CreateProduct/>}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
-
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/order/showBill" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                 </Route>
             </Routes>
         </>
