@@ -85,11 +85,3 @@ export const getAllCart =async (idUser) => {
     }
 }
 
-export const getSaleHistory = async (limit, page, nameSearch) => {
-    try {
-        const res = await axios.get(`http://localhost:8080/api/admin/order/saleHistory?_limit=${limit}&_page=${page}&name_like=${nameSearch}`);
-        return res;
-    }catch (e) {
-        console.log(e);
-    }
-}
