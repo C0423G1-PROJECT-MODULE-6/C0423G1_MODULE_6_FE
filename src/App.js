@@ -23,6 +23,7 @@ import {ImportProduct} from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
 import CreateProduct from "./components/product/CreateProduct";
+import UpdateProduct from "./components/product/UpdateProduct";
 
 
 function App() {
@@ -36,6 +37,8 @@ function App() {
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
                 <Route path="/admin/product/create" element={<CreateProduct />}/>
+                <Route path="/admin/product/update/:id" element={<UpdateProduct />}/>
+                <Route path="/admin/product/list" element={<ProductList/>}/>
 
                 <Route
                     element={
@@ -60,7 +63,6 @@ function App() {
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
-                    <Route path="/admin/product/list" element={<ProductList/>}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                 </Route>
             </Routes>
