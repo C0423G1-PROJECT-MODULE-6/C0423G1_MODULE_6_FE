@@ -34,18 +34,17 @@ export default function ProductList() {
         }
     }
     const confirmDelete = async () => {
-        if (productSelect != null) {
+        if (productSelect.id != null) {
             const res = await removeProduct(productSelect.id);
             if (res.status === 200) {
                 toast("Xóa thành công");
                 setModal(false);
-                setProductSelect(null);
+                setProductSelect({id:null,
+                name:""});
             } else {
                 toast("Xóa thất bại")
             }
-        } else {
-            toast("vui lòng chọn sản phẩm")
-        }
+        }-
         list();
     }
     const list = async () => {
@@ -138,7 +137,7 @@ export default function ProductList() {
                         </div>
                     </div>
                 </div>
-                <div style={{minHeight: "250px"}} id="QuanND">
+                <div style={{minHeight: "300px"}} id="QuanND">
                     <table className="shadow w-100">
                         <thead>
                         <tr style={{background: "darkgrey"}}>
@@ -164,7 +163,7 @@ export default function ProductList() {
                                     setProductSelect({id:null,name: ""})
                                 }
                             }}
-                                 style={(productSelect.id===p?.id)?{background:'#0d6efd',height:50}:{height: 50}}>
+                                 style={(productSelect.id===p?.id)?{background:'darkgrey',height:50}:{height: 50}}>
                                 <td style={{width: "5%"}}>{status + 1}</td>
                                 <td style={{width: "30%"}}>{p.name}</td>
                                 <td style={{width: "12%"}}>{vnd.format(p.price)}</td>
