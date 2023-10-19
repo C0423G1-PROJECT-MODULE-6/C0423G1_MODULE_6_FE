@@ -78,6 +78,7 @@ function App() {
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/order/showBill" element={<ShowBill/>}/>
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+
                 </Route>
             </Routes>
         </>
