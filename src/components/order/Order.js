@@ -21,6 +21,7 @@ function Order() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState("");
     const [userAppName, setUserAppName] = useState("");
+    const [resetCart, setResetCart] = useState(false);
 
     const getAppUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
@@ -49,6 +50,12 @@ function Order() {
     };
 
     const handleDataByChooseCustomer=(data)=>{
+        findCustomerByid(data);
+    }
+    const handleDataByChooseProduct=(data)=>{
+        getAllCart();
+    }
+    const handleDataByCreateCustomer=(data)=>{
         findCustomerByid(data);
     }
     const updateCustomerConfirm = (data) => {
@@ -434,8 +441,8 @@ function Order() {
 
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
 
-            <CustomerCreateModal />
-            <ProductChooseModal data1={0}  />
+            <CustomerCreateModal handleData={handleDataByCreateCustomer} />
+            <ProductChooseModal data1={0} handleData={handleDataByChooseProduct}/>
         </>
     );
 }

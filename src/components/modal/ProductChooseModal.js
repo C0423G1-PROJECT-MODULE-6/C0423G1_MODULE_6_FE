@@ -52,6 +52,7 @@ const ProductChooseModal = ({data1, handleData}) => {
         if (data1 === 0) {
             const result = await customerService.createCart(userId, selectedProduct.id);
             if (result?.status === 200) {
+                handleData(selectedProduct.id);
                 let submitModal = await document.getElementById("closeModalProduct");
                 // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
