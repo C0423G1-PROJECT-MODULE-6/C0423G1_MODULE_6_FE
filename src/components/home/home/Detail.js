@@ -221,11 +221,11 @@ const Detail = () => {
                         <div className="product-attribute-value">{product.battery}</div>
                     </div>
                     <div className="specification-detail-row">
-                        <div className="product-attribute">RAM</div>
+                        <div className="product-attribute">RAM:</div>
                         <div className="product-attribute-value">{product.ram}</div>
                     </div>
                     <div className="specification-detail-row">
-                        <div className="product-attribute">Khối lượng</div>
+                        <div className="product-attribute">Khối lượng:</div>
                         <div className="product-attribute-value">{product.weight}</div>
                     </div>
                 </div>
