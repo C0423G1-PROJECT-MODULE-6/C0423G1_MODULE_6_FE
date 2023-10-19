@@ -2,26 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {Field, Form, Formik, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
-import {useNavigate} from "react-router-dom";
 import {isAfter, parseISO} from "date-fns";
 
 const CustomerCreateModal = ({handleData}) => {
-    const navigate = useNavigate();
     const validateBirth = (value) => {
         const currentDate = new Date();
         const birthday = parseISO(value);
         return !isAfter(birthday, currentDate);
     };
     const handleSubmit = async (value, setErrors) => {
+        console.log("create")
         try {
             const result = await addCustomer(value);
-            let submitModal = document.getElementById("submitModal");
-            submitModal.setAttribute("data-bs-dismiss", "modal");
-            submitModal.click()
-            submitModal.removeAttribute("data-bs-dismiss");
+            let submitModal = await document.getElementById("closeModalCreate");
+            submitModal.click();
             handleData(result.data.idCustomer);
         } catch (err) {
-            console.log(err)
             if (err.response?.data) {
                 setErrors(err.response.data);
             }
@@ -63,10 +59,9 @@ const CustomerCreateModal = ({handleData}) => {
                         "Nhập sai định dạng vd:nguyenvanan@gmail.com"
                     ).max(50, "Email tối đa 50 ký tự"),
             })}
-            onSubmit={(values, {resetForm}, {setErrors}) => {
-                console.log("1")
+            onSubmit={(values, {setErrors}) => {
+                console.log("1");
                 handleSubmit(values, setErrors);
-                resetForm();
             }}>
             <Form>
                 <div className="modal fade" id="exampleModalCreateCustomer" data-bs-backdrop="static" tabIndex="-1"
@@ -202,6 +197,7 @@ const CustomerCreateModal = ({handleData}) => {
                                                 Lưu
                                             </button>
                                             <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
+                                                    id="closeModalCreate"
                                                     style={{width: '45%'}} type="button">
                                                 Trở về
                                             </button>
