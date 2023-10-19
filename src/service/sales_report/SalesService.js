@@ -37,9 +37,9 @@ export const getAllProduct = async () => {
 };
 
 
-export const getAll = async (startDate, endDate, searchTerm) => {
+export const getAll = async () => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report?startDate=${startDate}&searchTerm=${searchTerm}&endDate=${endDate}`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sales-report`);
         return res.data;
     } catch (e) {
         alert("Không có dữ liệu");
