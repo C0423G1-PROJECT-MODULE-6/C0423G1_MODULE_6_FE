@@ -35,6 +35,7 @@ function App() {
                 <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
+                <Route path="/admin/product/create" element={<CreateProduct />}/>
 
                 <Route
                     element={
@@ -60,7 +61,6 @@ function App() {
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
                     <Route path="/admin/product/list" element={<ProductList/>}/>
-                    <Route path="/admin/product/create" element={<CreateProduct />}/>
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                 </Route>
             </Routes>

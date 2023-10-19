@@ -10,6 +10,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
+import CKEditorComponent from "./CKEditorComponent";
+
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -489,10 +491,11 @@ function CreateProduct() {
                                         </div>
                                         <div>
                                             <Field
-                                                as="textarea"
                                                 className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
-                                                style={{width: 540, height: 90}}/>
+                                                component={CKEditorComponent}
+                                                // style={{width: 540, height: 90}}
+                                            />
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
