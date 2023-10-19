@@ -7,15 +7,16 @@ import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import SupplierChooseModal from "./SupplierChooseModal";
+import HeaderAdmin from "../user/HeaderAdmin";
 
 export function ImportProduct() {
   const navigate = useNavigate();
   const [supplierId, setSupplier] = useState(null)
   const [productId, setProduct] = useState()
-  const getProduct = async (id) => {
-    const res = await findProductById(id)
-    setProduct(res);
-  }
+  // const getProduct = async (id) => {
+  //   const res = await findProductById(id)
+  //   setProduct(res);
+  // }
   // const getSupplier = async (id) => {
   //   const res = await findSupplierById(id)
   //   setSupplier(res); 
@@ -25,29 +26,47 @@ export function ImportProduct() {
     console.log("ré", res);
     setSupplier(res)
   }
+  const findProduct = async (id) => {
+    const res = await findProductById(id);
+    console.log("ré", res);
+    setProduct(res)
+  }
   const handleDataByChooseSupplier = (data) => {
     findSupplier(data);
   }
+  const handleDataByChooseProduct = (data) => {
+    findProduct(data);
+  }
 
-  const addWarehouse = async (value) => {
+
+  const addWarehouse = async (value, setErrors) => {
     const newValue = {
       ...value,
       productId: productId.id,
       supplierId: supplierId.idSupplier
     }
     // alert(JSON.stringify(newValue))
-    await importProduct(newValue);
-    navigate("/admin/warehouse");
-    toast("Nhập thêm sản phẩm thành công!");
+    try {
+
+      await importProduct(newValue);
+      navigate("/admin/warehouse");
+      toast("Nhập thêm sản phẩm thành công!");
+    } catch (error) {
+      console.log(error);
+      if (error.response?.data) {
+        setErrors(error.response.data);
+      }
+    }
   }
   useEffect(() => {
-    getProduct(17)
+
 
   }, [])
   console.log("Supplier:", supplierId);
 
   return (
     <>
+      <HeaderAdmin />
       <Formik
         initialValues={{
           quantity: 1,
@@ -59,12 +78,12 @@ export function ImportProduct() {
           quantity: Yup.number()
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
-            .max(2000, "Không được nhập quá 2000 sản phẩm")
+            .max(2000, "Không được nhập quá 2000 sản phẩm"),
           // img: Yup.string().required(),
           // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
-          // product: Yup.object().required("Vui lòng chọn sản phẩm")
+          // productId: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
-        onSubmit={(values) => {
+        onSubmit={(values, {setErrors}) => {
           console.log("values:", values);
           const newSubmit = {
             ...values,
@@ -72,10 +91,11 @@ export function ImportProduct() {
             supplierId: supplierId.idSupplier
           }
           console.log("submit:", newSubmit);
-          addWarehouse(newSubmit);
+          console.log(setErrors);
+          addWarehouse(newSubmit, setErrors);
         }}>
         <Form>
-          <div className="mt-5">
+          <div className="mt-5 pt-5">
             <fieldset className="form-input-Phap shadow mx-auto" style={{ borderRadius: 20, border: '1px solid black', height: 'auto', width: '60%' }}>
               <legend className="float-none w-auto px-1">Nhập kho</legend>
               <div className="d-flex justify-content-center">
@@ -91,13 +111,14 @@ export function ImportProduct() {
                   </div>
                   <div className="col-6 mb-2">
                     <Field className="form-control mt-2 border border-dark" value={productId?.name} name="product" type="text" readOnly />
+                    <ErrorMessage className="text-danger" name="productId" component="span"></ErrorMessage>
                   </div>
                   <div className="col-4 p-2">
                     <label>Đơn giá</label>
                   </div>
                   <div className="col-6 mb-2">
                     <Field className="form-control mt-2 border border-dark" value={productId?.price} name="product" type="text" readOnly />
-                    <ErrorMessage className="text-danger" name="product" component="span"></ErrorMessage>
+
                   </div>
                   {/* <div className="col-4 p-2">
                     <label htmlFor="file-upload">
@@ -138,7 +159,8 @@ export function ImportProduct() {
 
         </Form>
       </Formik>
-      <ProductChooseModal />
+      {/* <ProductChooseModal data1={handleDataByChooseProduct} /> */}
+      <ProductChooseModal data1={1} handleData={handleDataByChooseProduct} />
       <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
   )
