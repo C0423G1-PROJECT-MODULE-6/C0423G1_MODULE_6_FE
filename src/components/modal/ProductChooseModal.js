@@ -16,21 +16,21 @@ const ProductChooseModal = ({data1,handleData}) => {
     const [choose, setChoose] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [userAppName, setUserAppName] = useState("");
-    const [userId, setUserId] = useState("");
+    // const [userAppName, setUserAppName] = useState("");
+    const [user, setUser] = useState("");
     const [selectedProduct, setSelectedProduct] = useState({
         id: null,
         name: ""
     });
     //---------------Get id User--------------------
 
-    const getAppUserId = async () => {
+    const getUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
         if (isLoggedIn) {
             const id = await getIdByUserName(isLoggedIn.sub);
-            setUserId(id.data);
-            const nameUser = await UserService.findById(id.data);
-            setUserAppName(nameUser.data.employeeName)
+            setUser(id.data);
+            // const nameUser = await UserService.findById(id.data);
+            // setUserAppName(nameUser.data.employeeName)
         }
     };
     // const closeModal = () => {
@@ -45,8 +45,8 @@ const ProductChooseModal = ({data1,handleData}) => {
                 submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click()
                 submitModal.removeAttribute("data-bs-dismiss");
-            }else {
-        const result = await customerService.createCart(userId,selectedProduct.id);
+            }if (data1 === 0) {
+        const result = await customerService.createCart(user,selectedProduct.id);
         if (result?.status === 200) {
                     let submitModal = document.getElementById("closeModal");
                     submitModal.setAttribute("data-bs-dismiss", "modal");
@@ -83,7 +83,7 @@ const ProductChooseModal = ({data1,handleData}) => {
     const loadProductList = async (choose,page,searchValue) => {
         const result = await productService.getPageProductModal(choose,page,searchValue);
         const listType = await productService.getAllType();
-        getAppUserId();
+        getUserId();
         setTypeProduct(listType);
         if (result?.status === 200) {
             setProductList(result?.data.content);

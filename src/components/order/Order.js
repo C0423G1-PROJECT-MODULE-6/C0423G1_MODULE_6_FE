@@ -8,6 +8,8 @@ import ProductChooseModal from "../modal/ProductChooseModal";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup"
 import HeaderAdmin from "../user/HeaderAdmin";
+import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
+import * as UserService from "../../service/user/UserService";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -17,6 +19,22 @@ function Order() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const navigate = useNavigate();
+    const [userId, setUserId] = useState("");
+    const [userAppName, setUserAppName] = useState("");
+
+    const getAppUserId = async () => {
+        const isLoggedIn = infoAppUserByJwtToken();
+        if (isLoggedIn) {
+            const id = await getIdByUserName(isLoggedIn.sub);
+            setUserId(id.data);
+            const nameUser = await UserService.findById(id.data);
+            setUserAppName(nameUser.data.employeeName);
+        }
+    };
+    useEffect(() => {
+        getAppUserId();
+    }, []);
+
 
     const findCustomerByid = async (data) => {
         const res =await orderService.findCustomerById(data);
@@ -33,13 +51,17 @@ function Order() {
     const handleDataByChooseCustomer=(data)=>{
         findCustomerByid(data);
     }
-    // const updateCustomerConfirm = (data) => {
-    //     console.log(data)
-    //     setCustomer(data)
-    // }
+    const updateCustomerConfirm = (data) => {
+        console.log(data)
+        setCustomer(data)
+    }
+
+    useEffect(() => {
+        userId && getAllCart();
+    }, [customer,userId]);
 
     const getAllCart = async () => {
-        const res = await orderService.getAllCart(1);
+        const res = await orderService.getAllCart(userId);
         if (res.status === 200){
             setHasResult(res.data.length > 0);
             setCarts(res.data);
@@ -51,9 +73,7 @@ function Order() {
     }
 
 
-    useEffect(() => {
-        getAllCart();
-    }, [customer]);
+
 
     useEffect(() => {
         let total = 0;
@@ -65,9 +85,9 @@ function Order() {
 
 
 
-    // const closeModal = () => {
-    //     setOrderBillNotPay(null);
-    // }
+    const closeModal = () => {
+        setOrderBillNotPay(null);
+    }
 
     console.log("customer "+JSON.stringify(customer))
 
@@ -76,7 +96,7 @@ function Order() {
             const newQuantities = [...quantity];
             newQuantities[index] = quantity[index] - 1;
             setQuantity(newQuantities);
-            updateCurrentQuantity(newQuantities[index],carts[index].idProduct,1);
+            updateCurrentQuantity(newQuantities[index],carts[index].idProduct,userId);
         }
     };
 
@@ -84,7 +104,7 @@ function Order() {
         const newQuantities = [...quantity];
         newQuantities[index] = quantity[index] + 1;
         setQuantity(newQuantities);
-        updateCurrentQuantity(newQuantities[index],carts[index].idProduct,1);
+        updateCurrentQuantity(newQuantities[index],carts[index].idProduct,userId);
     };
 
     const updateCurrentQuantity =async (newQuantity, idProduct, idUser) => {
@@ -101,7 +121,7 @@ function Order() {
         value = {
             ...value,
             idCustomerOrder : customer.idCustomer,
-            idUser: 1
+            idUser: userId
         }
         console.log(value)
 
@@ -119,6 +139,7 @@ function Order() {
     // const validationSchema = {
     //     idCustomerOrder: Yup.number().required("Không được để trống")
     // }
+
 
     return (
         <>
@@ -330,7 +351,7 @@ function Order() {
                                                             <button
                                                                 className="btn btn-danger"
                                                                 type="button"
-                                                                onClick={()=>handleDeleteProduct(cart.idProduct,1)}
+                                                                onClick={()=>handleDeleteProduct(cart.idProduct,userId)}
                                                             >
                                                                 <i className="fa fa-times"></i>
                                                             </button>
@@ -400,18 +421,18 @@ function Order() {
                             </div>
                         </fieldset>
                     </div>
-                    {/*<BillNotPayConfirm*/}
-                    {/*    orderBill={orderBillNotPay}*/}
-                    {/*    handleClose={closeModal}*/}
-                    {/*    handleData={updateCustomerConfirm}*/}
-                    {/*></BillNotPayConfirm>*/}
+                    <BillNotPayConfirm
+                        orderBill={orderBillNotPay}
+                        handleClose={closeModal}
+                        handleData={updateCustomerConfirm}
+                    ></BillNotPayConfirm>
                 </Form>
             </Formik>
 
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
 
             <CustomerCreateModal />
-            <ProductChooseModal />
+            <ProductChooseModal data1={0}  />
         </>
     );
 }

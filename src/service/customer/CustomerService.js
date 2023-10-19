@@ -53,6 +53,8 @@ export const findById = async (id) => {
 }
 export const createCart = async (idUser,idProduct) => {
         const result = await axios.post(`http://localhost:8080/api/admin/cart/create?id_user=${idUser}&id_product=${idProduct}&quantity=1`);
+    console.log(idUser)
+        console.log(result);
         return result;
 
 }
