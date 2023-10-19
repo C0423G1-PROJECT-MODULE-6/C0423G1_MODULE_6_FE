@@ -8,24 +8,24 @@ const Header = () => {
     const navigate = useNavigate();
 
     const headingToIphones = () => {
-        navigate('/iphone')
+        navigate('/list/iphone')
     }
     const headingToMacbook = () => {
-        navigate('/macbook')
+        navigate('/list/macbook')
     }
     const headingToIpad = () => {
-        navigate('/ipad')
+        navigate('/list/ipad')
     }
     const headingToWatch = () => {
-        navigate('/watch')
+        navigate('/list/watch')
     }
     const handleOnKeyDown = (event) => {
         if (event.key === 'Enter') {
-            navigate(`/${nameTarget}`);
+            navigate(`/list/${nameTarget}`);
         }
     }
-    const handleSearch = (event) => {
-        navigate(`/${nameTarget}`);
+    const handleSearch = () => {
+        navigate(`/list/${nameTarget}`);
     }
     const handleListenInput = (event) => {
         setNameTarget(event.target.value);
@@ -36,7 +36,7 @@ const Header = () => {
             <header className='toper'>
                 <div className="header">
                     <div>
-                        <a href="/"
+                        <a href="/home"
                         ><img src="/images/logoplus.png" alt="topzone" className="logo"
                             /></a>
                     </div>

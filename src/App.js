@@ -44,9 +44,9 @@ function App() {
                 <Route path="/401" element={<Error401 />} />
                 <Route path="/403" element={<Error403 />} />
                 <Route path="/login" element={<LoginForm />} />
-                <Route path='/' element={<Home />} />
-                <Route path="/:type" element={<List />} />
-                <Route path="/:type/:id" element={<Detail />} />
+                <Route path='/home' element={<Home />} />
+                <Route path="/list/:type" element={<List />} />
+                <Route path="/detail/:type/:id" element={<Detail />} />
 
 
                 <Route

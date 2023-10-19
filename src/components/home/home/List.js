@@ -15,14 +15,14 @@ import Footer from '../common/Footer';
 
 const List = () => {
 
-    const [products, setProducts] = useState();
+    const [products, setProducts] = useState([]);
     const param = useParams();
     const [series, setSeries] = useState([])
     const [sortName, setSortName] = useState('id');
     const [sortType, setSortType] = useState('desc');
     const [searchName, setSearchName] = useState(param.type);
     const [isActive, setIsActive] = useState('all');
-
+    console.log(param);
 
     useEffect(() => {
         setSearchName(param.type);
@@ -65,22 +65,23 @@ const List = () => {
             setSortType('desc');
         }
     }
+    console.log(param.type);
     return (
         <>
             <div className='home-body'>
                 <Header />
                 {/* Title */}
                 <div className="list-title" style={{ margin: "20px 0" }}>
-                    <img src={'./images/' + param.type + '-logo.png'} alt="" />
+                    <img src={'/images/' + param.type + '-logo.png'} alt="" />
                 </div>
                 {/*Carousel*/}
                 <div className='carousel-on-list'>
 
                     <Swiper
-                        autoplay={{
-                            delay: 3000,
-                            disableOnInteraction: false,
-                        }}
+                        // autoplay={{
+                        //     delay: 3000,
+                        //     disableOnInteraction: false,
+                        // }}
 
                         pagination={{
                             dynamicBullets: true,
@@ -90,22 +91,18 @@ const List = () => {
                         className="mySwiper"
                         loop={true}
                     >
-                        <SwiperSlide><img className="carousel-image" src="./images/carousel-ip.webp" alt="" /></SwiperSlide>
-                        <SwiperSlide><img
-                            className="carousel-image"
-                            src="./images/carousel-watch.webp"
-                            alt=""
-                        /></SwiperSlide>
-                        <SwiperSlide><img
-                            className="carousel-image"
-                            src="./images/carousel-sale.webp"
-                            alt=""
-                        /></SwiperSlide>
-                        <SwiperSlide><img
-                            className="carousel-image"
-                            src="./images/carousel-affordable-price.webp"
-                            alt=""
-                        /></SwiperSlide>
+                        <SwiperSlide>
+                            <img className="carousel-image" src="/images/carousel-ip.webp" alt="" />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img className="carousel-image" src="/images/carousel-watch.webp" alt="" />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img className="carousel-image" src="/images/carousel-sale.webp" alt="" />
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <img className="carousel-image" src="/images/carousel-affordable-price.webp" alt="" />
+                        </SwiperSlide>
                     </Swiper>
                 </div>
 
@@ -131,9 +128,9 @@ const List = () => {
                 {/* Product List  */}
                 <div className="product-list-container" >
                     <div className="device-list">
-                        {products ? products.map((item) => {
+                        {products.length > 0 ? products.map((item) => {
                             return (
-                                <a className="device-card" href={'/' + item.type + '/' + item.id}>
+                                <a className="device-card" href={'/detail/' + item.type + '/' + item.id}>
                                     <div className="card-image">
                                         <img src={item.image} alt="" />
                                     </div>
@@ -142,7 +139,7 @@ const List = () => {
                                     <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
                                 </a>
                             )
-                        }) : <p>Loading...</p>}
+                        }) : <p className='no-products-found'>Không có sản phẩm</p>}
 
                     </div>
                 </div >
