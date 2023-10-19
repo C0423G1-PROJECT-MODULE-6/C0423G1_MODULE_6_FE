@@ -18,7 +18,8 @@ const EmployeeList = () => {
   };
   useEffect(()=>{
     loadListJob();
-  },[]);
+  }, []);
+  console.log(employeeList);
 
   const loadEmployeeList = async () => {
     const result = await getEmployeeList(
