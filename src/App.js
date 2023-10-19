@@ -17,6 +17,8 @@ import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
 import {CustomerList} from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
+import ShowBill from "./components/order/ShowBill";
+import PrintPDF from "./components/order/PrintPDF";
 
 
 function App() {
@@ -30,6 +32,9 @@ function App() {
                 <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
                 <Route path='/employee/create' element={<CreateEmployee/>}></Route>
                 <Route path="/admin/order" element={<Order/>}/>
+                <Route path="/admin/order/showBill" element={<ShowBill/>}/>
+                <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+
                 <Route path="/401" element={<Error401/>}/>
                 {/*<Route path="*" element={<Home />}></Route>*/}
                 <Route path="/login" element={<LoginForm/>}/>
