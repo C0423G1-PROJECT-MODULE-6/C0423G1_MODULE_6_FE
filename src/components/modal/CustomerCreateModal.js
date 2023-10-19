@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Field, Form, Formik, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
 import {useNavigate} from "react-router-dom";
+import {isAfter, parseISO} from "date-fns";
 
 const CustomerCreateModal = ({handleData}) => {
     const navigate = useNavigate();
+    const validateBirth = (value) => {
+        const currentDate = new Date();
+        const birthday = parseISO(value);
+        return !isAfter(birthday, currentDate);
+    };
     const handleSubmit = async (value, setErrors) => {
         try {
             const result = await addCustomer(value);
@@ -13,7 +19,7 @@ const CustomerCreateModal = ({handleData}) => {
             submitModal.setAttribute("data-bs-dismiss", "modal");
             submitModal.click()
             submitModal.removeAttribute("data-bs-dismiss");
-            handleData(result.data.nameCustomer);
+            handleData(result.data.idCustomer);
         } catch (err) {
             console.log(err)
             if (err.response?.data) {
@@ -23,21 +29,25 @@ const CustomerCreateModal = ({handleData}) => {
     };
     return (
         <Formik
-            initialValues={{
-                nameCustomer: "",
-                phoneNumberCustomer: "",
-                dateOfBirthCustomer: "",
-                emailCustomer: "",
-                addressCustomer: "",
-                genderCustomer: true,
-            }}
+            initialValues={
+                {
+                    nameCustomer: "",
+                    phoneNumberCustomer: "",
+                    dateOfBirthCustomer: "",
+                    emailCustomer: "",
+                    addressCustomer: "",
+                    genderCustomer: true,
+                }
+            }
             validationSchema={Yup.object({
                 nameCustomer: Yup.string()
                     .max(50, "Tên khách hàng tối đa 50 ký tự")
                     .min(3, "Tên khách hàng tối thiểu 3 ký tự").required("Không bỏ trống trường này"),
                 dateOfBirthCustomer: Yup.string().required(
                     "Không bỏ trống trường này."
-                ).matches(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, "Không đúng định dạng vd:12-02-2000"),
+                ).test("birthday",
+                    "Ngày sinh không được vượt quá thời gian thực tế.",
+                    validateBirth).matches(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, "Không đúng định dạng vd:12-02-2000"),
                 addressCustomer: Yup.string()
                     .required("Không bỏ trống trường này.")
                     .max(100, "Địa chỉ tối đa 100 ký tự ").min(5, "Địa chỉ tối thiểu 5 ký tự."),
@@ -53,10 +63,10 @@ const CustomerCreateModal = ({handleData}) => {
                         "Nhập sai định dạng vd:nguyenvanan@gmail.com"
                     ).max(50, "Email tối đa 50 ký tự"),
             })}
-            onSubmit={(values, {setErrors}) => {
+            onSubmit={(values, {resetForm}, {setErrors}) => {
                 console.log("1")
-                handleSubmit(values, setErrors)
-
+                handleSubmit(values, setErrors);
+                resetForm();
             }}>
             <Form>
                 <div className="modal fade" id="exampleModalCreateCustomer" data-bs-backdrop="static" tabIndex="-1"

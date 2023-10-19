@@ -1,56 +1,99 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router";
-import * as customerService from '../../service/customer/CustomerService';
+// import * as customerService from '../../service/customer/CustomerService';
 import "./modal_table.css";
 import {Field, Form, Formik, ErrorMessage} from "formik";
+import {getAllCustomerModal} from "../../service/customer/CustomerService";
 
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
-    const [searchValue, setSearchValue] = useState("");
+    const [change, setChange] = useState(0);
     const [name, setName] = useState("");
-    const [gender, setGender] = useState(3);
-    const [age, setAge] = useState("");
+    const [gender, setGender] = useState("");
+    const [phone, setPhone] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [selectedCustomer, setSelectedCustomer] = useState({
         idCustomer: null,
         nameCustomer: ""
     });
-    const [optionSearch, setOptionSearch] = useState();
-    const loadCustomerList = async (page, name, age, gender) => {
-        const result = await customerService.getAllCustomerModal(page, name, age, gender);
+    // const [optionSearch, setOptionSearch] = useState();
+    const loadCustomerList = async (page, name, phone, gender) => {
+        const result = await getAllCustomerModal(page, name, phone, gender);
         if (result?.status === 200) {
             setCustomerList(result?.data.content);
             setTotalPage(result?.data.totalPages);
         } else {
-            handleReset();
+            setCustomerList([]);
         }
     }
     const handleOptionSearchChange = (e) => {
         const {value} = e.target;
-        setOptionSearch(+value);
-        setSearchValue(document.getElementById("search").value);
-        handleReset();
+        setChange(+value);
+        // loadCustomerList();
     }
     const handleReset = () => {
         setPage(0);
         setName("");
-        setAge("");
+        setPhone("");
         setGender("");
     }
-    const handleSubmit = () => {
+    const handleSubmitCustomer = async () => {
         console.log(selectedCustomer);
-        let submitModal = document.getElementById("submitModal");
-        submitModal.setAttribute("data-bs-dismiss", "modal");
+        let submitModal = await document.getElementById("closeModal");
         submitModal.click()
-        submitModal.removeAttribute("data-bs-dismiss");
         handleData(selectedCustomer.idCustomer);
     }
     const previousPage = () => {
         if (page > 0) {
             setPage((pre) => pre - 1)
         }
+    }
+    const handleSearch = () => {
+        const choose = +document.getElementById("chooseSearchCustomer").value;
+        const value = document.getElementById("search").value;
+        let valueGender = document.getElementById("valueGender");
+        // if (valueGender) {
+        //     valueGender = valueGender.value;
+        // }
+        if (choose === 0) {
+            setName(value);
+            setPhone("");
+            setGender("");
+            setPage(0);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
+        }
+        if (choose === 1) {
+            console.log(name)
+            console.log(gender)
+            console.log(phone)
+            setName(value);
+            setGender(valueGender.value);
+            setPhone("");
+            setPage(0);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
+        }
+        if (choose === 2) {
+            console.log(name)
+            console.log(gender)
+            console.log(phone)
+            setName("");
+            setGender("");
+            setPhone(value);
+            setPage(0);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
+        }
+
     }
 
     const nextPage = () => {
@@ -64,8 +107,9 @@ const CustomerChooseModal = ({handleData}) => {
         }
     }
     useEffect(() => {
-        loadCustomerList(page, name, age, gender);
-    }, [page, name, age, gender]);
+        loadCustomerList(page, name, phone, gender);
+
+    }, [page, name, phone, gender, change]);
 
     if (!customerList) {
         return <div></div>;
@@ -85,31 +129,47 @@ const CustomerChooseModal = ({handleData}) => {
                                     <h1 className="col-form-label">Tìm kiếm theo</h1>
                                 </div>
                                 <div className="col-auto">
-                                    <select name='optionSearch' defaultValue={0} onChange={handleOptionSearchChange}
-                                            className="form-select shadow border-dark">
-                                        <option value="1">Tên khách hàng</option>
-                                        <option value="2">Giới tính</option>
-                                        <option value="3">Tuổi</option>
+                                    <select name='optionSearch' defaultValue={0} id="chooseSearchCustomer"
+                                            className="form-select shadow border-dark"
+                                            onChange={handleOptionSearchChange}>
+                                        <option value={0}>Tên khách hàng</option>
+                                        <option value={1}>Giới tính</option>
+                                        <option value={2}>Số điện thoại</option>
                                     </select>
                                 </div>
                                 <div className="col-auto">
-                                    <input type="text" name="inputSearch" id="inputPassword6"
-                                           className="shadow form-control border-dark"
-                                           aria-describedby="passwordHelpInline"/>
+                                    {change === 1 &&
+                                    <select className="form-select shadow border-dark" name="groupValue"
+                                            id="valueGender">
+                                        <option value={"0"}>Nữ</option>
+                                        <option value={"1"}>Nam</option>
+                                        <option value={"2"}>Tất cả</option>
+                                    </select>}
                                 </div>
                                 <div className="col-auto">
-                                    <button className="btn btn-outline-primary text-center shadow">Tìm kiếm</button>
+
+                                    <input type="text" name="inputSearch" id="search"
+                                           className="shadow form-control border-dark"
+                                           aria-describedby="passwordHelpInline"
+                                           placeholder={(change === 2) ? "Nhập tên số điện thoại..." : "Nhập tên khách hàng"}
+                                    />
+
+                                </div>
+                                <div className="col-auto">
+                                    <button className="btn btn-outline-primary text-center shadow"
+                                            onClick={handleSearch}>Tìm kiếm
+                                    </button>
                                 </div>
                             </div>
-                            <div className="mx-auto p-3" style={{width: '95%'}}>
-                                <table className=" shadow w-100 " >
+                            <div className="mx-auto p-3 " style={{width: '95%'}} id="TinDT">
+                                <table className=" shadow w-100 ">
                                     <thead style={{fontSize: 'large', backgroundColor: 'darkgrey'}}>
                                     <tr>
                                         <th style={{width: '6%'}} className="text-center">STT</th>
                                         <th style={{width: '20%'}}>Tên khách hàng</th>
                                         <th style={{width: '15%'}}>Số điện thoại</th>
-                                        <th style={{width: '25%'}}>Địa chỉ</th>
-                                        <th style={{width: '10%'}}>Tuổi</th>
+                                        <th style={{width: '20%'}}>Địa chỉ</th>
+                                        <th style={{width: '15%'}}>Ngày sinh</th>
                                         <th style={{width: '31%'}}>Email</th>
                                     </tr>
                                     </thead>
@@ -118,16 +178,18 @@ const CustomerChooseModal = ({handleData}) => {
                                         {customerList.map((customer, index) => (
                                             <tr key={index} id={index} onClick={() => {
                                                 if (selectedCustomer.idCustomer === null || selectedCustomer.idCustomer !== customer?.idCustomer) {
-                                                    setSelectedCustomer({ idCustomer: customer?.idCustomer, nameCustomer: customer?.nameCustomer });
-                                                    console.log(selectedCustomer.idCustomer)
-                                                } else  {
-                                                    setSelectedCustomer({ idCustomer: null, nameCustomer: "" });
-                                                    console.log(selectedCustomer.idCustomer)
+                                                    setSelectedCustomer({
+                                                        idCustomer: customer?.idCustomer,
+                                                        nameCustomer: customer?.nameCustomer
+                                                    });
+                                                } else {
+                                                    setSelectedCustomer({idCustomer: null, nameCustomer: ""});
                                                 }
                                             }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
-                                                background: '#0d6efd',
+                                                background: '#282c34',
+                                                color: '#f5f5f5',
                                                 height: 50
-                                            } : { height: 50}}
+                                            } : {height: 50}}
                                             >
                                                 <td className="text-center">
                                                     {(index + 1) + page * 5}
@@ -135,14 +197,14 @@ const CustomerChooseModal = ({handleData}) => {
                                                 <td>{customer?.nameCustomer}</td>
                                                 <td>{customer?.phoneNumberCustomer}</td>
                                                 <td>{customer?.addressCustomer}</td>
-                                                <td>1</td>
+                                                <td>{customer?.dateOfBirthCustomer}</td>
                                                 <td>{customer?.emailCustomer}</td>
                                             </tr>))}
                                         </tbody> :
                                         <tbody>
                                         <tr style={{height: '150px'}}>
-                                            <td style={{fontSize: '30px', textAlign: 'center'}} colSpan="6">Không có dữ
-                                                liệu
+                                            <td style={{fontSize: '30px', textAlign: 'center'}} colSpan="6">Không tìm
+                                                thấy khách hàng phù hợp
                                             </td>
                                         </tr>
                                         </tbody>
@@ -159,15 +221,15 @@ const CustomerChooseModal = ({handleData}) => {
                                     {selectedCustomer.idCustomer === null ? null : (
                                         <button
                                             className="btn btn-outline-primary shadow"
-                                            style={{ marginRight: '2rem', width: '40%' }}
-                                            id="submitModal"
-                                            onClick={() => handleSubmit()}
+                                            style={{marginRight: '2rem', width: '40%'}}
+                                            id="submitModalCustomer"
+                                            onClick={() => handleSubmitCustomer()}
                                         >
                                             Chọn
                                         </button>
                                     )}
                                     <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
-                                            style={{width: '40%'}}>
+                                            style={{width: '40%'}} id="closeModal" >
                                         Trở về
                                     </button>
                                 </div>
@@ -181,8 +243,10 @@ const CustomerChooseModal = ({handleData}) => {
                                                         href="#">Trước
                                                 </button>
                                             </li>
-                                            <li className="page-item"><button className="page-link "
-                                                                        >{page + 1} / {totalPage}</button></li>
+                                            <li className="page-item">
+                                                <button className="page-link "
+                                                >{page + 1} / {totalPage}</button>
+                                            </li>
                                             <li className="page-item">
                                                 <button className="page-link " onClick={() => nextPage()} href="#">Sau
                                                 </button>
