@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import * as SalesService from "../../service/sales_report/SalesService";
 import HeaderAdmin from "../user/HeaderAdmin";
+
 Chart.register(...registerables);
 
 function formatDateString(date) {
@@ -124,60 +125,60 @@ function SalesReport() {
     return (
         <>
             <HeaderAdmin/>
-        <div className="container">
-            <h1 className="text-center mt-5">Báo Cáo Doanh Thu</h1>
-            <div className="row mt-5">
-                <div className="col-md-4"></div>
-                <div className="col-md-2">
-                    <label htmlFor="startDate">Ngày Bắt Đầu:</label>
-                    <DatePicker
-                        className="form-control"
-                        selected={startDate}
-                        onChange={handleStartDateChange}
-                        maxDate={endDate}
-                    />
+            <div className="container pt-5">
+                <h1 className="text-center mt-5">Báo Cáo Doanh Thu</h1>
+                <div className="row mt-5">
+                    <div className="col-md-4"></div>
+                    <div className="col-md-2">
+                        <label htmlFor="startDate">Ngày Bắt Đầu:</label>
+                        <DatePicker
+                            className="form-control"
+                            selected={startDate}
+                            onChange={handleStartDateChange}
+                            maxDate={endDate}
+                        />
+                    </div>
+                    <div className="col-md-2">
+                        <label htmlFor="endDate">Ngày Kết Thúc:</label>
+                        <DatePicker
+                            className="form-control"
+                            selected={endDate}
+                            onChange={handleEndDateChange}
+                            maxDate={new Date()}
+                        />
+                    </div>
+                    <div className="col-md-2">
+                        <label htmlFor="search">Tìm kiếm:</label>
+                        <input
+                            type="text"
+                            id="search"
+                            list="search-options"
+                            placeholder="Tìm kiếm..."
+                            className="form-control"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <datalist id="search-options">
+                            {product.map((product) => (
+                                <option key={product.id} value={product.nameProduct}/>
+                            ))}
+                        </datalist>
+                    </div>
+                    <div className="col-md-2 d-flex align-items-end">
+                        <button
+                            className="btn btn-outline-primary me-2 text-center"
+                            onClick={handleSearch}
+                        >
+                            Tìm kiếm
+                        </button>
+                    </div>
                 </div>
-                <div className="col-md-2">
-                    <label htmlFor="endDate">Ngày Kết Thúc:</label>
-                    <DatePicker
-                        className="form-control"
-                        selected={endDate}
-                        onChange={handleEndDateChange}
-                        maxDate={new Date()}
-                    />
-                </div>
-                <div className="col-md-2">
-                    <label htmlFor="search">Tìm kiếm:</label>
-                    <input
-                        type="text"
-                        id="search"
-                        list="search-options"
-                        placeholder="Tìm kiếm..."
-                        className="form-control"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <datalist id="search-options">
-                        {product.map((product) => (
-                            <option key={product.id} value={product.nameProduct}/>
-                        ))}
-                    </datalist>
-                </div>
-                <div className="col-md-2 d-flex align-items-end">
-                    <button
-                        className="btn btn-outline-primary me-2 text-center"
-                        onClick={handleSearch}
-                    >
-                        Tìm kiếm
-                    </button>
+                <div className="row mt-5">
+                    <div className="col-lg-12">
+                        <Bar data={chartData} options={options} id="myChart" style={{width: "80%", margin: "0 auto"}}/>
+                    </div>
                 </div>
             </div>
-            <div className="row mt-5">
-                <div className="col-lg-12">
-                    <Bar data={chartData} options={options} id="myChart" style={{width: "80%", margin: "0 auto"}}/>
-                </div>
-            </div>
-        </div>
         </>
     );
 }
