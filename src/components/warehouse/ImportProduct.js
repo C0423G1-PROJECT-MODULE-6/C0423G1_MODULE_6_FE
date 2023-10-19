@@ -6,41 +6,54 @@ import { useEffect, useState } from "react";
 import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
+import SupplierChooseModal from "./SupplierChooseModal";
 
 export function ImportProduct() {
   const navigate = useNavigate();
-  const [supplier, setSupplier] = useState(null)
-  const [product, setProduct] = useState(null)
+  const [supplierId, setSupplier] = useState(null)
+  const [productId, setProduct] = useState()
   const getProduct = async (id) => {
     const res = await findProductById(id)
     setProduct(res);
   }
-  const getSupplier = async (id) => {
-    const res = await findSupplierById(id)
-    setSupplier(res); 
+  // const getSupplier = async (id) => {
+  //   const res = await findSupplierById(id)
+  //   setSupplier(res); 
+  // }
+  const findSupplier = async (id) => {
+    const res = await findSupplierById(id);
+    console.log("ré", res);
+    setSupplier(res)
+  }
+  const handleDataByChooseSupplier = (data) => {
+    findSupplier(data);
   }
 
   const addWarehouse = async (value) => {
-   const res =  await importProduct(value)
-   console.log("Res:",res);
-    navigate("/admin/warehouse")
-    toast("Nhập thêm sản phẩm thành công!")
+    const newValue = {
+      ...value,
+      productId: productId.id,
+      supplierId: supplierId.idSupplier
+    }
+    // alert(JSON.stringify(newValue))
+    await importProduct(newValue);
+    navigate("/admin/warehouse");
+    toast("Nhập thêm sản phẩm thành công!");
   }
   useEffect(() => {
-      getProduct(18)
-      getSupplier(1)
+    getProduct(17)
+
   }, [])
-  console.log("Product:",product);
-  console.log("Supplier:", supplier);
+  console.log("Supplier:", supplierId);
 
   return (
     <>
       <Formik
         initialValues={{
-          quantity: 0,
+          quantity: 1,
           // img: "dhdhđ",
-          supplier: supplier ? supplier.id : null,
-          product: product ? product.id : null
+          supplierId: supplierId ? supplierId.idSupplier : null,
+          productId: productId ? productId.id : null
         }}
         validationSchema={Yup.object({
           quantity: Yup.number()
@@ -48,16 +61,18 @@ export function ImportProduct() {
             .min(1, "Số lượng phải lớn hơn 0")
             .max(2000, "Không được nhập quá 2000 sản phẩm")
           // img: Yup.string().required(),
-          // supplier: Yup.object().required("Vui lòng chọn nhà cung cấp"),
+          // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
           // product: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
         onSubmit={(values) => {
-          console.log("Values:", values);
-          if (values.product && values.supplier) {
-            addWarehouse(values);
-          } else {
-            alert("Id ko đúng")
+          console.log("values:", values);
+          const newSubmit = {
+            ...values,
+            productId: productId.id,
+            supplierId: supplierId.idSupplier
           }
+          console.log("submit:", newSubmit);
+          addWarehouse(newSubmit);
         }}>
         <Form>
           <div className="mt-5">
@@ -67,7 +82,7 @@ export function ImportProduct() {
                 <button type="button" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }} data-bs-toggle="modal" data-bs-target="#exampleModalProduct">
                   Chọn hàng có sẵn
                 </button>
-                <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Quét mã QR</button>
+                <Link to="#" className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}>Quét mã QR</Link>
               </div>
               <div>
                 <div className="row p-2 mx-auto" style={{ width: '90%' }}>
@@ -75,13 +90,13 @@ export function ImportProduct() {
                     <label>Tên sản phẩm</label>
                   </div>
                   <div className="col-6 mb-2">
-                    <Field className="form-control mt-2 border border-dark" value={product?.name} name="product" type="text" readOnly />
+                    <Field className="form-control mt-2 border border-dark" value={productId?.name} name="product" type="text" readOnly />
                   </div>
                   <div className="col-4 p-2">
                     <label>Đơn giá</label>
                   </div>
                   <div className="col-6 mb-2">
-                    <Field className="form-control mt-2 border border-dark" value={product?.price} name="product" type="text" readOnly />
+                    <Field className="form-control mt-2 border border-dark" value={productId?.price} name="product" type="text" readOnly />
                     <ErrorMessage className="text-danger" name="product" component="span"></ErrorMessage>
                   </div>
                   {/* <div className="col-4 p-2">
@@ -104,11 +119,11 @@ export function ImportProduct() {
                     <label>Nhà cung cấp </label>
                   </div>
                   <div className="col-4 mb-2">
-                    <Field className="form-control mt-2 border border-dark" value={supplier?.nameSupplier} name="supplier" type="text" readOnly />
-                    <ErrorMessage className="text-danger" name="supplier" component="span"></ErrorMessage>
+                    <Field className="form-control mt-2 border border-dark" value={supplierId?.nameSupplier} name="supplier" type="text" readOnly />
+                    <ErrorMessage className="text-danger" name="supplierId" component="span"></ErrorMessage>
                   </div>
                   <div className="col-4">
-                    <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" className="btn btn-outline-primary float-center mt-2 shadow" data-bs-toggle="modal" data-bs-target="#exampleModalSupplier">
                       Chọn NCC
                     </button>
                   </div>
@@ -124,6 +139,7 @@ export function ImportProduct() {
         </Form>
       </Formik>
       <ProductChooseModal />
+      <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
   )
 }
