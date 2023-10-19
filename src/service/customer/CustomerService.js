@@ -15,7 +15,7 @@ export const getAllCustomerModal = async (page, name,phone,gender) => {
     }
 }
 export const addCustomer = async (customer) => {
-    const result = await axios.post(`http://localhost:8080/api/admin/customer/create`,customer);
+    const result = await axios.post(`http://localhost:8080/api/admin/customer/list/create`,customer);
     console.log(result);
     return result;
 
