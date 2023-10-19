@@ -4,8 +4,10 @@ import "../../css/supplier/supplier.css";
 import Modal from "react-bootstrap/Modal";
 import HeaderAdmin from "../user/HeaderAdmin";
 import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 function Supplier() {
+    const navigate = useNavigate();
     const [listSupplier, setListSupplier] = useState([]);
     const limit = 5;
     const [currentPage, setCurrentPage] = useState(0);
@@ -185,10 +187,7 @@ function Supplier() {
 
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
-                        <a className="me-1" href="NghiaNPX_CreateSupplier.html" style={{ textDecoration: 'none' }}>
-                            <button type="button```jsx
-" className="btn btn-outline-primary">Thêm mới</button>
-                        </a>
+                        <button type="button" className="btn btn-outline-primary me-1" onClick={() => navigate('/admin/supplier/create')}>Thêm mới</button>
                         <a className="me-1" href="NghiaNPX_EditSupplier.html" style={{ textDecoration: 'none' }}>
                             <button type="button" className="btn btn-outline-success">Cập nhật</button>
                         </a>
