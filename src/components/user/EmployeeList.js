@@ -1,41 +1,62 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { getEmployeeList } from "../../service/user/EmployeeService";
+import {
+  deleteEmployee,
+  getEmployeeList,
+} from "../../service/user/EmployeeService";
 import { Link } from "react-router-dom";
 import { getAppRoleList } from "../../service/user/AppRoleService";
+import ModalDelete from "./EmployeeDeleteModal";
+import '../../css/user/employee.css'
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
   const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState();
+  const [totalPage, setTotalPage] = useState(1);
   const [searchName, setSearchName] = useState("");
   const [listJob, setListJob] = useState([]);
   const [searchJob, setSearchJob] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [employee, setEmployee] = useState(null);
+  const [modal, setModal] = useState({
+    show: false,
+    info: {},
+  });
+
+  //loadListJob
   const loadListJob = async () => {
     const data = await getAppRoleList();
     setListJob(data);
   };
-  useEffect(()=>{
+  useEffect(() => {
     loadListJob();
-  },[]);
+  }, []);
 
+  //list
   const loadEmployeeList = async () => {
-    const result = await getEmployeeList(
-      page,
-      searchJob,
-      searchName,
-      searchPhone
-    );
-    setTotalPage(result.totalPages);
-    setEmployeeList(result.content);
-    console.log(result);
+    try {
+      const result = await getEmployeeList(
+        page,
+        searchJob,
+        searchName,
+        searchPhone
+      );
+      if(result.content.length === 0){
+        setPage(page-1);
+      }
+      setTotalPage(result.totalPages);
+      setEmployeeList(result.content);
+    } catch {
+      setEmployeeList([]);
+    }
+    // console.log(result);
   };
-
   useEffect(() => {
     loadEmployeeList();
   }, [page, searchJob, searchName, searchPhone]);
 
+  //paging
   const nextPage = () => {
     if (page < totalPage - 1) {
       setPage((Prev) => Prev + 1);
@@ -47,6 +68,35 @@ const EmployeeList = () => {
     }
   };
 
+  //delete
+  const handleRowClick = (employee) => {
+    setSelectedRow(employee.id);
+    setEmployee(employee);
+  };
+
+  const showModalDelete = (employee) => {
+    setModal({
+      show: true,
+      info: employee,
+    });
+  };
+  const hideModalDelete = () => {
+    setModal({
+      show: false,
+      info: {},
+    });
+  };
+  const deleteConfirm = async (id) => {
+    if (selectedRow !== null) {
+      await deleteEmployee(id);
+      hideModalDelete();
+      loadEmployeeList();
+      setSelectedRow(null);
+      setEmployee(null);
+    }
+  };
+
+  //search
   const getSearch = () => {
     const searchName = document.getElementById("searchName").value;
     setSearchName(searchName);
@@ -213,10 +263,14 @@ const EmployeeList = () => {
           <div className="col-12 d-flex justify-content-end my-3">
             <div className="col-auto mx-2">
               <select className="form-select" id="searchJob">
-                <option value={""} selected>--Tìm theo công việc--</option>
-                {listJob.map((job) =>(
-                <option key={job.id} value={job.name}>{job.name}</option>
-              ))}
+                <option value={""} selected>
+                  --Tìm theo công việc--
+                </option>
+                {listJob.map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-auto">
@@ -260,18 +314,28 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody>
-            {employeeList.map((employee, index) => (
-              <tr
-                key={employee.id}
-              >
-                <td>{index + 1}</td>
-                <td>{employee.employeeName}</td>
-                <td>{employee.employeeBirthday}</td>
-                <td>{employee.employeeAddress}</td>
-                <td>{employee.employeeRoleName}</td>
-                <td>{employee.employeePhone}</td>
+            {employeeList.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center" }}>
+                  Không tìm thấy
+                </td>
               </tr>
-            ))}
+            ) : (
+              employeeList.map((employee, index) => (
+                <tr
+                  key={employee.id}
+                  onClick={() => handleRowClick(employee)}
+                  className={selectedRow === employee.id ? "selected" : ""}
+                >
+                  <td>{index + 1}</td>
+                  <td>{employee.employeeName}</td>
+                  <td>{employee.employeeBirthday}</td>
+                  <td>{employee.employeeAddress}</td>
+                  <td>{employee.employeeRoleName}</td>
+                  <td>{employee.employeePhone}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         {/* java script để chọn row */}
@@ -279,22 +343,20 @@ const EmployeeList = () => {
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
             <Link to={"/employee/create"}>
-              <button type="button" className="btn btn-outline-primary">
+              <button type="button" className="btn btn-outline-primary mx-1">
                 Thêm mới
               </button>
             </Link>
-            
             <Link to={"/employee/edit"}>
-              <button type="button" className="btn btn-outline-success">
+              <button type="button" className="btn btn-outline-success mx-1">
                 Cập nhật
               </button>
             </Link>
-            {/* Button to trigger the modal */}
             <button
               type="button"
-              className="btn btn-outline-danger"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteModal"
+              className="btn btn-outline-danger mx-1"
+              onClick={() => (employee !== null) & showModalDelete(employee)}
+              disabled={employee === null}
             >
               Xóa
             </button>
@@ -307,7 +369,9 @@ const EmployeeList = () => {
                     className="page-link"
                     tabIndex={-1}
                     aria-disabled="true"
+                    href="#"
                     onClick={() => previousPage()}
+                    style={{ display: page === 0 ? "none" : "block" }}
                   >
                     Trước
                   </a>
@@ -318,7 +382,16 @@ const EmployeeList = () => {
                   </a>
                 </li>
                 <li className="page-item">
-                  <a className="page-link" onClick={() => nextPage()}>
+                  <a
+                    className="page-link"
+                    tabIndex={-1}
+                    aria-disabled="true"
+                    href="#"
+                    onClick={() => nextPage()}
+                    style={{
+                      display: page === totalPage - 1 ? "none" : "block",
+                    }}
+                  >
                     Sau
                   </a>
                 </li>
@@ -328,44 +401,12 @@ const EmployeeList = () => {
         </div>
       </div>
       {/* Modal */}
-      <div
-        className="modal fade "
-        id="deleteModal"
-        tabIndex={-1}
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="deleteModalLabel">
-                Thông báo!!!
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body">
-              <p>Bạn có muốn xóa sản phẩm này không</p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-outline-primary">
-                Xác nhận
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                Hủy
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ModalDelete
+        showModal={modal}
+        hideModal={hideModalDelete}
+        confirm={deleteConfirm}
+      ></ModalDelete>
+      {/* Modal */}
     </>
   );
 };

@@ -1,10 +1,10 @@
 
 import 'react-toastify/dist/ReactToastify.css';
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Order from "./components/order/Order";
 import Information from "./components/user/Information";
 import HomeAdmin from "./components/user/HomeAdmin";
-import {axiosClient} from "./service/user/AxiosClient";
+import { axiosClient } from "./service/user/AxiosClient";
 import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
@@ -12,13 +12,27 @@ import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
 import EmployeeList from './components/user/EmployeeList';
 import EditEmployee from './components/user/EditEmployee';
 import React from "react";
-import {ToastContainer} from "react-toastify";
-import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
-import {CustomerList} from "./components/customer/CustomerList";
+import { ToastContainer } from "react-toastify";
+import { ShoppingHistoryList } from "./components/customer/ShoppingHistoryList";
+import { CustomerList } from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
+<<<<<<< HEAD
 import ShowBill from "./components/order/ShowBill";
 import PrintPDF from "./components/order/PrintPDF";
+=======
+import ProductList from "./components/product/ProductList";
+import {Warehouse} from './components/warehouse/Warehouse';
+import {ImportProduct} from './components/warehouse/ImportProduct';
+import Supplier from "./components/supplier/Supplier";
+import SalesReport from "./components/sales_report/SalesReport";
+import CreateProduct from "./components/product/CreateProduct";
+
+
+import Home from './components/home/home/Home';
+import List from './components/home/home/List';
+import Detail from './components/home/home/Detail';
+>>>>>>> 90e540f000b07d6a3398109ea9ac7eb0d7dd103d
 
 
 function App() {
@@ -27,6 +41,7 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
+<<<<<<< HEAD
 //              
                 <Route path='/employee' element={<EmployeeList></EmployeeList>}></Route>
                 <Route path='/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
@@ -36,11 +51,16 @@ function App() {
                 <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
 
                 <Route path="/401" element={<Error401/>}/>
+=======
+>>>>>>> 90e540f000b07d6a3398109ea9ac7eb0d7dd103d
                 {/*<Route path="*" element={<Home />}></Route>*/}
-                <Route path="/login" element={<LoginForm/>}/>
-                <Route path="/403" element={<Error403/>}/>
-                <Route path="/customer" element={<CustomerList/>}/>
-                <Route path="/history/:id" element={<ShoppingHistoryList/>}/>
+                <Route path="/401" element={<Error401 />} />
+                <Route path="/403" element={<Error403 />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path='/' element={<Home />} />
+                <Route path="/:type" element={<List />} />
+                <Route path="/:type/:id" element={<Detail />} />
+
 
                 <Route
                     element={
@@ -54,10 +74,20 @@ function App() {
                         />
                     }
                 >
-                    <Route path="/admin/information/:id" element={<Information/>}></Route>
-                    <Route path="/admin/home" element={<HomeAdmin/>}></Route>
-                    {/*<Route path="/login" element={<LoginForm />}></Route>*/}
-
+                    <Route path="/admin/information/:id" element={<Information />}></Route>
+                    <Route path="/admin/home" element={<HomeAdmin />}></Route>
+                    <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
+                    <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/warehouse" element={<Warehouse/>}/>
+                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
+                    <Route path="/admin/supplier" element={<Supplier/>}/>
+                    <Route path="/admin/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/salesreport" element={<SalesReport/>}/>
 
                 </Route>
             </Routes>
