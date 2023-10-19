@@ -58,7 +58,7 @@ export function ShoppingHistoryList() {
     return (customer &&
         <>
             <div className="container-fluid">
-                <div className="my-5 pt-5">
+                <div className="pt-5">
                     <fieldset className="form-input shadow mx-auto" style={{
                         borderRadius: "20px",
                         border: "1px solid black",
