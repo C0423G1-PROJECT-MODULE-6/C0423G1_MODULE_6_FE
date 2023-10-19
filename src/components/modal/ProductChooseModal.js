@@ -17,7 +17,7 @@ const ProductChooseModal = ({data1, handleData}) => {
     const [choose, setChoose] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    const [userAppName, setUserAppName] = useState("");
+    // const [userAppName, setUserAppName] = useState("");
     const [userId, setUserId] = useState("");
     const [selectedProduct, setSelectedProduct] = useState({
         id: null,
@@ -30,8 +30,8 @@ const ProductChooseModal = ({data1, handleData}) => {
         if (isLoggedIn) {
             const id = await getIdByUserName(isLoggedIn.sub);
             setUserId(id.data);
-            const nameUser = await UserService.findById(id.data);
-            setUserAppName(nameUser.data.employeeName)
+            // const nameUser = await UserService.findById(id.data);
+            // setUserAppName(nameUser.data.employeeName)
         }
     };
     // const closeModal = () => {
@@ -42,7 +42,7 @@ const ProductChooseModal = ({data1, handleData}) => {
     const handleSubmit = async () => {
         if (data1 === 1) {
             handleData(selectedProduct.id);
-            let submitModal = await document.getElementById("closeModal");
+            let submitModal = await document.getElementById("closeModalProduct");
             submitModal.click();
             // submitModal.setAttribute("data-bs-dismiss", "modal");
             // submitModal.removeAttribute("data-bs-dismiss");
@@ -50,7 +50,7 @@ const ProductChooseModal = ({data1, handleData}) => {
         if (data1 === 0) {
             const result = await customerService.createCart(userId, selectedProduct.id);
             if (result?.status === 200) {
-                let submitModal = await document.getElementById("closeModal");
+                let submitModal = await document.getElementById("closeModalProduct");
                 // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
                 // submitModal.removeAttribute("data-bs-dismiss");
@@ -299,7 +299,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                                         className=" btn btn-outline-secondary shadow"
                                         data-bs-dismiss="modal"
                                         style={{width: "35%"}}
-                                        id="closeModal"
+                                        id="closeModalProduct"
                                     >
                                         Trở về
                                     </button>
