@@ -75,6 +75,8 @@ function Order() {
 
 
 
+
+
     useEffect(() => {
         let total = 0;
         carts.forEach((cart, index) => {
@@ -82,6 +84,7 @@ function Order() {
         });
         setTotalPrice(total);
     }, [carts, quantity]);
+
 
 
 

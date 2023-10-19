@@ -39,12 +39,10 @@ const CustomerChooseModal = ({handleData}) => {
         setPhone("");
         setGender("");
     }
-    const handleSubmitCustomer = () => {
+    const handleSubmitCustomer = async () => {
         console.log(selectedCustomer);
-        let submitModal = document.getElementById("submitModalCustomer");
-        submitModal.setAttribute("data-bs-dismiss", "modal");
+        let submitModal = await document.getElementById("closeModal");
         submitModal.click()
-        submitModal.removeAttribute("data-bs-dismiss");
         handleData(selectedCustomer.idCustomer);
     }
     const previousPage = () => {
@@ -110,6 +108,7 @@ const CustomerChooseModal = ({handleData}) => {
     }
     useEffect(() => {
         loadCustomerList(page, name, phone, gender);
+
     }, [page, name, phone, gender, change]);
 
     if (!customerList) {
@@ -230,7 +229,7 @@ const CustomerChooseModal = ({handleData}) => {
                                         </button>
                                     )}
                                     <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
-                                            style={{width: '40%'}}>
+                                            style={{width: '40%'}} id="closeModal" >
                                         Trở về
                                     </button>
                                 </div>
