@@ -116,7 +116,6 @@ const SupplierChooseModal = ({ handleData }) => {
                                     <thead style={{ fontSize: 'large', backgroundColor: 'darkgrey' }}>
                                         <tr>
                                             <th style={{ width: '6%' }} className="text-center">STT</th>
-                                            <th style={{ width: '20%' }}>MS</th>
                                             <th style={{ width: '15%' }}>Tên nhà cung cấp</th>
                                             <th style={{ width: '25%' }}>Địa chỉ</th>
                                             <th style={{ width: '10%' }}>SĐT</th>
@@ -143,7 +142,6 @@ const SupplierChooseModal = ({ handleData }) => {
                                                     <td className="text-center">
                                                         {(index + 1) + page * 5}
                                                     </td>
-                                                    <td>{supplier?.codeSupplier}</td>
                                                     <td>{supplier?.nameSupplier}</td>
                                                     <td>{supplier?.addressSupplier}</td>
                                                     <td>{supplier?.phoneNumberSupplier}</td>
