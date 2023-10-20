@@ -9,7 +9,7 @@ import {useNavigate} from "react-router-dom";
 function Supplier() {
     const navigate = useNavigate();
     const [listSupplier, setListSupplier] = useState([]);
-    const limit = 5;
+    const limit = 10;
     const [currentPage, setCurrentPage] = useState(0);
     const [searchName, setSearchName] = useState("");
     const [addressSearch, setAddressSearch] = useState("");
@@ -26,7 +26,7 @@ function Supplier() {
     }, [refresh])
 
     const handleSetTypeSearch = () => {
-        const specialCharsRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        const specialCharsRegex = /[!#$%^&*(),?":{}|<>_]/;
         if(!specialCharsRegex.test(valueInput)){
             switch (typeSearch) {
                 case "Tên nhà cung cấp":
@@ -45,7 +45,7 @@ function Supplier() {
             }
             setRefresh(!refresh);
         }else{
-            toast("Không được nhập ký tự đặc biệt");
+            setListSupplier([]);
         }
     }
    
@@ -146,18 +146,19 @@ function Supplier() {
                         </div>
                     </div>
                 </div>
-                <table className="border border-dark table table-hover">
+                <div style={{minHeight:"400px"}}>
+                <table  className="border border-dark table table-hover">
 
-                    <thead style={{ background: 'darkgrey' }}>
+                    <thead style={{ background: 'grey' }} className="colorthead">
                         <tr>
-                            <th>
-                                STT
+                            <th style={{width:"5%"}}>
+                                #
                             </th>
-                            <th>MS</th>
-                            <th>Tên nhà cung cấp</th>
-                            <th>Địa chỉ</th>
-                            <th>SĐT</th>
-                            <th>E-mail</th>
+                            <th  style={{width:"5%"}}>MS</th>
+                            <th  style={{width:"40%"}}>Tên nhà cung cấp</th>
+                            <th  style={{width:"20%"}}>Địa chỉ</th>
+                            <th  style={{width:"10%"}}>SĐT</th>
+                            <th  style={{width:"20%"}}>E-mail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,12 +169,12 @@ function Supplier() {
                                     <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
                                         onClick={() => handleRowClick(index, supplier)}
                                     >
-                                        <td>#</td>
-                                        <td>{supplier.idSupplier}</td>
-                                        <td>{supplier.nameSupplier}</td>
-                                        <td>{supplier.addressSupplier}</td>
-                                        <td>{supplier.phoneNumberSupplier}</td>
-                                        <td>{supplier.emailSupplier}</td>
+                                        <td >{index +1}</td>
+                                        <td >{supplier.idSupplier}</td>
+                                        <td >{supplier.nameSupplier}</td>
+                                        <td >{supplier.addressSupplier}</td>
+                                        <td >{supplier.phoneNumberSupplier}</td>
+                                        <td >{supplier.emailSupplier}</td>
                                     </tr>
                                 </>
 
@@ -184,7 +185,7 @@ function Supplier() {
                         }
                     </tbody>
                 </table>
-
+                </div>
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
                         <button type="button" className="btn btn-outline-primary me-1" onClick={() => navigate('/admin/supplier/create')}>Thêm mới</button>
