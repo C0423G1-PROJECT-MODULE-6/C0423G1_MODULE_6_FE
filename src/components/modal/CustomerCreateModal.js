@@ -193,12 +193,16 @@ const CustomerCreateModal = ({handleData}) => {
                                         <div style={{marginLeft: '9%'}}>
                                             <button className="btn btn-outline-primary shadow"
                                                     id="submitModal"
-                                                    style={{marginRight: '1rem', width: '45%'}} type="submit">
+                                                    style={{marginRight: '1rem', width: '30%'}} type="submit">
                                                 Lưu
+                                            </button>
+                                            <button className="btn btn-outline-secondary shadow"
+                                                    style={{marginRight: '1rem',width: '30%'}} type="reset">
+                                                Làm mới
                                             </button>
                                             <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
                                                     id="closeModalCreate"
-                                                    style={{width: '45%'}} type="button">
+                                                    style={{width: '30%'}} type="button">
                                                 Trở về
                                             </button>
                                         </div>

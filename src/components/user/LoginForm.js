@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css'
+import Footer from "../home/common/Footer";
 
 
 function LoginForm() {
@@ -139,100 +140,104 @@ function LoginForm() {
     }
 
     return (
-        <div style={{width: '40%', margin: '15% auto 20% auto'}}>
-            <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
-                <div className="spinner-container">
-                    <RingLoader color="#000000" />
+        <>
+
+            <div style={{width: '40%', margin: '15% auto 20% auto'}}>
+                <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
+                    <div className="spinner-container">
+                        <RingLoader color="#000000"/>
+                    </div>
                 </div>
-            </div>
-            <fieldset
-                className="form-input shadow"
-                style={{
-                    borderRadius: '20px',
-                    border: '1px solid #000000',
-                    height: 'auto',
-                    padding: '20px',
-                    backgroundColor: '#f8f9fa',
-                    width: '100%',
-                }}
-            >
-                <legend className="float-none w-auto px-1">
-                    <h2>Đăng Nhập</h2>
-                </legend>
-                <div style={{margin: '3%'}}>
-                    <Formik
-                        initialValues={initAccount}
-                        onSubmit={(values) => {
-                            login(values);
-                        }}
-                    >
-                        <Form>
-                            <div className="mb-3">
-                                <label htmlFor="exampleInputEmail1" className="form-label">Tên Đăng Nhập</label>
-                                <Field type="text" className="form-control" id="exampleInputEmail1"
-                                       aria-describedby="emailHelp" name="userName" disabled={isOTPVisible}/>
-                            </div>
-                            <div className="mb-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
-                                <label htmlFor="exampleInputPassword1" className="form-label">Mật Khẩu</label>
-                                <Field type="password" className="form-control" id="exampleInputPassword1"
-                                       name="password"/>
-                            </div>
-                            <div className="mt-4" style={{display: isOTPVisible ? 'none' : 'block'}}>
-                                <div style={{width: '40%', marginLeft: 'auto', marginRight: 'auto'}}>
-                                    <button type="submit" style={{width: '100%'}}
-                                            className="btn btn-outline-primary" onClick={handleClick}>Login
-                                    </button>
-                                </div>
-                            </div>
-                        </Form>
-                    </Formik>
-                    <Formik
-                        initialValues={user}
-                        onSubmit={(values) => {
-                            auth(values);
-                        }}
-                    >
-                        <Form>
-                            <div id="hiddenDiv" style={{display: isOTPVisible ? 'block' : 'none'}}>
+                <fieldset
+                    className="form-input shadow"
+                    style={{
+                        borderRadius: '20px',
+                        border: '1px solid #000000',
+                        height: 'auto',
+                        padding: '20px',
+                        backgroundColor: '#f8f9fa',
+                        width: '100%',
+                    }}
+                >
+                    <legend className="float-none w-auto px-1">
+                        <h2>Đăng Nhập</h2>
+                    </legend>
+                    <div style={{margin: '3%'}}>
+                        <Formik
+                            initialValues={initAccount}
+                            onSubmit={(values) => {
+                                login(values);
+                            }}
+                        >
+                            <Form>
                                 <div className="mb-3">
-                                    <label htmlFor="otp" className="form-label">Mã Xác Nhận</label>
-                                    <Field type="text" className="form-control" name="otp"/>
+                                    <label htmlFor="exampleInputEmail1" className="form-label">Tên Đăng Nhập</label>
+                                    <Field type="text" className="form-control" id="exampleInputEmail1"
+                                           aria-describedby="emailHelp" name="userName" disabled={isOTPVisible}/>
                                 </div>
-                                <div className="mt-4">
-                                    <div style={{
-                                        width: '50%',
-                                        marginLeft: 'auto',
-                                        marginRight: 'auto',
-                                        display: isOTPReset ? 'none' : 'block'
-                                    }}>
+                                <div className="mb-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
+                                    <label htmlFor="exampleInputPassword1" className="form-label">Mật Khẩu</label>
+                                    <Field type="password" className="form-control" id="exampleInputPassword1"
+                                           name="password"/>
+                                </div>
+                                <div className="mt-4" style={{display: isOTPVisible ? 'none' : 'block'}}>
+                                    <div style={{width: '40%', marginLeft: 'auto', marginRight: 'auto'}}>
                                         <button type="submit" style={{width: '100%'}}
-                                                className="btn btn-outline-primary">
-                                            Xác Nhận
-                                        </button>
-                                    </div>
-                                    <div className="row" style={{
-                                        display: isOTPReset ? 'block' : 'none',
-                                        marginLeft: '5%',
-                                        marginRight: '5%'
-                                    }}>
-                                        <button type="button"
-                                                style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
-                                                className="btn btn-outline-primary" disabled={isCounting}
-                                                onClick={() => resetOTP()}>
-                                            {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
-                                        </button>
-                                        <button type="submit"
-                                                style={{width: '40%', marginLeft: '10%', marginRight: 'auto'}}
-                                                className="btn btn-outline-primary" onClick={handleClick}>Xác Nhận
+                                                className="btn btn-outline-primary" onClick={handleClick}>Login
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        </Form>
-                    </Formik>
-                </div>
-            </fieldset>
-        </div>
+                            </Form>
+                        </Formik>
+                        <Formik
+                            initialValues={user}
+                            onSubmit={(values) => {
+                                auth(values);
+                            }}
+                        >
+                            <Form>
+                                <div id="hiddenDiv" style={{display: isOTPVisible ? 'block' : 'none'}}>
+                                    <div className="mb-3">
+                                        <label htmlFor="otp" className="form-label">Mã Xác Nhận</label>
+                                        <Field type="text" className="form-control" name="otp"/>
+                                    </div>
+                                    <div className="mt-4">
+                                        <div style={{
+                                            width: '50%',
+                                            marginLeft: 'auto',
+                                            marginRight: 'auto',
+                                            display: isOTPReset ? 'none' : 'block'
+                                        }}>
+                                            <button type="submit" style={{width: '100%'}}
+                                                    className="btn btn-outline-primary">
+                                                Xác Nhận
+                                            </button>
+                                        </div>
+                                        <div className="row" style={{
+                                            display: isOTPReset ? 'block' : 'none',
+                                            marginLeft: '5%',
+                                            marginRight: '5%'
+                                        }}>
+                                            <button type="button"
+                                                    style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
+                                                    className="btn btn-outline-primary" disabled={isCounting}
+                                                    onClick={() => resetOTP()}>
+                                                {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
+                                            </button>
+                                            <button type="submit"
+                                                    style={{width: '40%', marginLeft: '10%', marginRight: 'auto'}}
+                                                    className="btn btn-outline-primary" onClick={handleClick}>Xác Nhận
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Form>
+                        </Formik>
+                    </div>
+                </fieldset>
+            </div>
+            <Footer/>
+        </>
     );
 }
 
