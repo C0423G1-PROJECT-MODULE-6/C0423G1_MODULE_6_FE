@@ -42,7 +42,7 @@ export function Warehouse() {
                 <option value="price">Đơn giá</option>
                 <option value="quantity">Số lượng</option>
                 <option value="supplier">Nhà cung cấp</option>
-                <option value="totalPrice">Tổng giá</option>
+                <option value="totalPrice">Ngày nhập kho</option>
               </select>
             </div>
             <div className="col-auto me-2">

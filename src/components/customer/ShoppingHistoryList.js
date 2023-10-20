@@ -48,6 +48,13 @@ export function ShoppingHistoryList() {
         setRefresh(!refresh)
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    }
+
+
     const previousPage = () => {
         setPage(page - 1);
     }
@@ -88,12 +95,20 @@ export function ShoppingHistoryList() {
                                     (() => {
                                         const birthDate = new Date(customer.dateOfBirthCustomer);
                                         const currentDate = new Date();
-                                        const age = currentDate.getFullYear() - birthDate.getFullYear();
+                                        let age = currentDate.getFullYear() - birthDate.getFullYear();
+                                        // Kiểm tra nếu chưa qua sinh nhật trong năm hiện tại
+                                        if (
+                                            currentDate.getMonth() < birthDate.getMonth() ||
+                                            (currentDate.getMonth() === birthDate.getMonth() &&
+                                                currentDate.getDate() < birthDate.getDate())
+                                        ) {
+                                            age--;
+                                        }
 
                                         return (
                                             <>
                                                 <td>Tuổi:</td>
-                                                <td style={{ paddingLeft: "30%" }}>{age}</td>
+                                                <td style={{paddingLeft: "30%"}}>{age}</td>
                                             </>
                                         );
                                     })()
@@ -116,13 +131,13 @@ export function ShoppingHistoryList() {
                         <h2 className="mb-3">Chi tiết lịch sử mua hàng</h2>
                     </div>
                     <div className="col-12 d-flex justify-content-end my-3">
-                        <div className="col-auto d-flex justify-content-start" style={{marginRight:"64%"}}>
-                            <p className="m-0"> Số lượng: <span style={{color:"#0d6efd"}}>{records}</span> </p>
+                        <div className="col-auto d-flex justify-content-start" style={{marginRight: "69%"}}>
+                            <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
                         </div>
                         <div className="col-auto mx-2">
-                            <input className="form-control" type="search" placeholder="Tìm theo tên"
-                                   aria-label="Search" onChange={(name) => {
-                                setSearchName(name.target.value)
+                            <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
+                                   onKeyDown={handleKeyDown}
+                                   onChange={(name) => {setSearchName(name.target.value)
                             }}/>
                         </div>
                         <div className="col-auto">
@@ -131,33 +146,35 @@ export function ShoppingHistoryList() {
                             </button>
                         </div>
                     </div>
-                    <table className="border border-dark table table-hover table-layout">
-                        <thead>
-                        <tr>
-                            <th style={{background: "darkgrey", width:"10%"}}>#</th>
-                            <th style={{background: "darkgrey", width:"30%"}}>Ngày mua</th>
-                            <th style={{background: "darkgrey", width:"40%"}}>Sản phẩm mua</th>
-                            <th style={{background: "darkgrey", width:"20%"}}>Số tiền</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {historys.length !== 0 ? (
-                            historys.map((history, index) => {
-                                return (
-                                    <tr>
-                                        <td>{index + 1}</td>
-                                        <td>{new Date(history.dateOfOrder).toLocaleDateString('en-GB')}</td>
-                                        <td>{history.nameProduct}</td>
-                                        <td>{vnd.format(history.priceOrder)}</td>
+                    <div style={{minHeight: "220px"}}>
+                        <table className="border border-dark table table-hover table-layout">
+                            <thead>
+                            <tr>
+                                <th style={{background: "darkgrey", width: "10%"}}>#</th>
+                                <th style={{background: "darkgrey", width: "30%"}}>Ngày mua</th>
+                                <th style={{background: "darkgrey", width: "40%"}}>Sản phẩm mua</th>
+                                <th style={{background: "darkgrey", width: "20%"}}>Số tiền</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {historys.length !== 0 ? (
+                                historys.map((history, index) => {
+                                    return (
+                                        <tr>
+                                            <td>{index + 1}</td>
+                                            <td>{new Date(history.dateOfOrder).toLocaleDateString('en-GB')}</td>
+                                            <td>{history.nameProduct}</td>
+                                            <td>{vnd.format(history.priceOrder)}</td>
 
-                                    </tr>
-                                )
-                            })) : (<tr>
-                            <td colSpan={4} style={{textAlign: "center",color:"red"}}>Không tìm thấy!</td>
-                        </tr>)
-                        }
-                        </tbody>
-                    </table>
+                                        </tr>
+                                    )
+                                })) : (<tr>
+                                <td colSpan={4} style={{textAlign: "center", color: "red"}}>Không tìm thấy!</td>
+                            </tr>)
+                            }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div className="container mt-3">

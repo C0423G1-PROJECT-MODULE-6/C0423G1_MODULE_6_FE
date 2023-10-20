@@ -13,14 +13,7 @@ export function ImportProduct() {
   const navigate = useNavigate();
   const [supplierId, setSupplier] = useState(null)
   const [productId, setProduct] = useState()
-  // const getProduct = async (id) => {
-  //   const res = await findProductById(id)
-  //   setProduct(res);
-  // }
-  // const getSupplier = async (id) => {
-  //   const res = await findSupplierById(id)
-  //   setSupplier(res); 
-  // }
+  
   const findSupplier = async (id) => {
     const res = await findSupplierById(id);
     console.log("ré", res);

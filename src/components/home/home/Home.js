@@ -5,8 +5,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 // import required modules
-import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
-import { getListByName } from '../../../service/home/HomeService';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { getBestsellers, getListByName } from '../../../service/home/HomeService';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 
@@ -16,6 +16,7 @@ const Home = () => {
     const [macbooks, setMacbooks] = useState();
     const [ipads, setIpads] = useState();
     const [watches, setWatches] = useState();
+    const [bestsellers, setBestsellers] = useState();
 
 
     useEffect(() => {
@@ -23,6 +24,7 @@ const Home = () => {
         getMacbooks();
         getIpads();
         getWatchs();
+        getBestsellersOnHome();
     }, [])
 
 
@@ -43,7 +45,10 @@ const Home = () => {
         const data = await getListByName('watch', 'id', 'desc');
         setWatches(data);
     }
-
+    const getBestsellersOnHome = async () => {
+        const data = await getBestsellers();
+        setBestsellers(data);
+    }
 
 
 
@@ -53,6 +58,16 @@ const Home = () => {
                 <Header />
                 <div className='home-container'>
                     <div className='carousel-container'>
+                        <div className="carousel-swiper-button-prev">
+                            <div className="temp-tag">
+                                <i className='bx bxs-chevron-left'></i>
+                            </div>
+                        </div>
+                        <div className="carousel-swiper-button-next">
+                            <div className="temp-tag">
+                                <i className='bx bxs-chevron-right'></i>
+                            </div>
+                        </div>
                         <Swiper
                             autoplay={{
                                 delay: 3000,
@@ -63,21 +78,25 @@ const Home = () => {
                                 dynamicBullets: true,
                                 clickable: true,
                             }}
+                            navigation={{
+                                nextEl: ".carousel-swiper-button-next",
+                                prevEl: ".carousel-swiper-button-prev"
+                            }}
                             modules={[Pagination, Autoplay, Navigation]}
                             className="mySwiper"
                             loop={true}
                         >
                             <SwiperSlide>
-                                <img className="carousel-image" src="./images/carousel-ip.webp" alt="" />
+                                <a href='/list/iphone'><img className="carousel-image" src="./images/carousel-ip.webp" alt="" /></a>
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img className="carousel-image" src="./images/carousel-watch.webp" alt="" />
+                                <a href='/list/watch'> <img className="carousel-image" src="./images/carousel-watch.webp" alt="" /></a>
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img className="carousel-image" src="./images/carousel-sale.webp" alt="" />
+                                <a href='/list/iphone'><img className="carousel-image" src="./images/carousel-sale.webp" alt="" /></a>
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img className="carousel-image" src="./images/carousel-affordable-price.webp" alt="" />
+                                <a href='/list/macbook'><img className="carousel-image" src="./images/carousel-affordable-price.webp" alt="" /></a>
                             </SwiperSlide>
                         </Swiper>
                     </div>
@@ -113,77 +132,22 @@ const Home = () => {
                                 modules={[Pagination, Autoplay, Navigation]}
                                 className="mySwiper product-list"
                             >
+                                {bestsellers && bestsellers.map((item) => {
+                                    return (
+                                        <SwiperSlide key={item.id}>
+                                            <a className="bestseller-card" href={'/detail/' + item.type + '/' + item.id}>
+                                                <div className="bestseller-image">
+                                                    <img src={item.image} alt="" />
+                                                </div>
+                                                <h3 className="bestseller-name">{item.type != 'Watch' ? item.name + " " + item.capacity : item.name}</h3>
+                                                <h2 className="bestseller-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
+                                                <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                            </a>
+                                        </SwiperSlide>
+                                    )
+                                })}
 
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-1.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">IPhone 15 Pro Max Sieu Ben Bi</h3>
-                                        <h2 className="bestseller-price">19.000.000đ</h2>
-                                        <h4 className="line-through-price">21.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-2.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">IPhone 15 Pro Max </h3>
-                                        <h2 className="bestseller-price">29.000.000</h2>
-                                        <h4 className="line-through-price">30.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-3.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">Air Pod Pro </h3>
-                                        <h2 className="bestseller-price">19.000.000đ</h2>
-                                        <h4 className="line-through-price">20.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-4.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">Apple Watch Series 8 </h3>
-                                        <h2 className="bestseller-price">19.000.000đ</h2>
-                                        <h4 className="line-through-price">20.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-5.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">IPhone 15 Pro Max </h3>
-                                        <h2 className="bestseller-price">39.000.000đ</h2>
-                                        <h4 className="line-through-price">40.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-2.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">IPhone 14 Pro Max </h3>
-                                        <h2 className="bestseller-price">29.000.000đ</h2>
-                                        <h4 className="line-through-price">31.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
-                                <SwiperSlide >
-                                    <a className="bestseller-card" href=''>
-                                        <div className="bestseller-image">
-                                            <img src='./images/slider-4.webp' alt="" />
-                                        </div>
-                                        <h3 className="bestseller-name">Apple Watch Series 8 </h3>
-                                        <h2 className="bestseller-price">19.000.000đ</h2>
-                                        <h4 className="line-through-price">20.000.000đ</h4>
-                                    </a>
-                                </SwiperSlide>
+
                             </Swiper>
                         </div>
 
@@ -233,11 +197,11 @@ const Home = () => {
                         <Swiper
                             slidesPerView={4}
                             spaceBetween={40}
-                            loop={true}
                             autoplay={{
                                 delay: 3000,
                                 disableOnInteraction: false,
                             }}
+                            loop={false}
                             grabCursor={true}
                             navigation={{
                                 nextEl: ".iphone-swiper-button-next",
@@ -266,7 +230,7 @@ const Home = () => {
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             <div className="slide-image">
-                                                <img src={item.image} alt="" />
+                                                <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
                                             <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
@@ -296,11 +260,11 @@ const Home = () => {
                         <Swiper
                             slidesPerView={4}
                             spaceBetween={-20}
-                            // loop={true}
-                            autoplay={{
-                                delay: 3000,
-                                disableOnInteraction: false,
-                            }}
+                            loop={false}
+                            // autoplay={{
+                            //     delay: 3000,
+                            //     disableOnInteraction: false,
+                            // }}
                             grabCursor={true}
                             navigation={{
                                 nextEl: ".macbook-swiper-button-next",
@@ -329,7 +293,7 @@ const Home = () => {
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             <div className="slide-image">
-                                                <img src={item.image} alt="" />
+                                                <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
                                             <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
@@ -361,7 +325,7 @@ const Home = () => {
                         <Swiper
                             slidesPerView={4}
                             spaceBetween={-20}
-                            loop={true}
+                            loop={false}
                             autoplay={{
                                 delay: 3000,
                                 disableOnInteraction: false,
@@ -394,7 +358,7 @@ const Home = () => {
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             <div className="slide-image">
-                                                <img src={item.image} alt="" />
+                                                <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
                                             <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
@@ -425,7 +389,7 @@ const Home = () => {
                         <Swiper
                             slidesPerView={4}
                             spaceBetween={-20}
-                            loop={true}
+                            loop={false}
                             autoplay={{
                                 delay: 3000,
                                 disableOnInteraction: false,
@@ -458,9 +422,9 @@ const Home = () => {
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             <div className="slide-image">
-                                                <img src={item.image} alt="" />
+                                                <img className='product-avatar' src={item.image} alt="" />
                                             </div>
-                                            <h3 className="product-name">{item.name + " " + item.capacity}</h3>
+                                            <h3 className="product-name">{item.name}</h3>
                                             <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
                                             <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
                                         </a>
