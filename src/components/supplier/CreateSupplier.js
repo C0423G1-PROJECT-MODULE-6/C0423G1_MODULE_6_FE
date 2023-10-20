@@ -75,7 +75,7 @@ function CreateSupplier() {
                                 <div className="row p-2 mx-auto" style={{width: "90%"}}>
                                     <div className="col-4 p-2">
                                         <label htmlFor="nameSupplier">
-                                            Tên nhà cung cấp <span style={{color: "red"}}>*</span>{" "}
+                                            Tên nhà cung cấpp <span style={{color: "red"}}>*</span>{" "}
                                         </label>
                                     </div>
                                     <div className="col-8">

@@ -13,7 +13,7 @@ function ModalDelete({showModal, hideModal, confirm }) {
                 </Modal.Header>
                 <Modal.Body>Xóa nhận xóa nhân viên: <b>{showModal.info.employeeName}</b>
                             <br></br>
-                            Công việc: <b>{showModal.info.employeeRoleName}</b>
+                            Công việc: <b>{showModal.info.employeeTypeName}</b>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={hideModal}>

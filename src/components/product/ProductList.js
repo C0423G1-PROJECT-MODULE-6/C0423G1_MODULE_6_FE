@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {getAllType, getListProduct, removeProduct} from "../../service/product/ProductService";
 import {toast, ToastContainer} from "react-toastify";
 import HeaderAdmin from "../user/HeaderAdmin";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import './table_quan.css'
 
 export default function ProductList() {
@@ -15,6 +15,8 @@ export default function ProductList() {
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
+    const navigate=useNavigate();
+    const pattern = /[!@#$%^&*(),.?":{}|<>[\]/\\]/;
     const [productSelect, setProductSelect] = useState(
         {
             id:null,
@@ -26,12 +28,30 @@ export default function ProductList() {
         style: 'currency',
         currency: 'VND'
     })
+    const handleSearch=()=>{
+        if (pattern.test(value)){
+            toast("Không được nhập kí tự đặc biệt")
+        }
+        else {
+            setPage(0);
+            setProductSelect({});
+            list()
+        }
+
+    }
     const showModal = () => {
         if (productSelect.id == null) {
             toast("Vui lòng chọn sản phẩm");
         } else {
             setModal(true)
         }
+    }
+    const handleUpdate = () => {
+      if (productSelect.id==null){
+          toast("vui lòng chọn sản phẩm")
+      }else {
+          navigate(`/admin/product/update/${productSelect.id}`)
+      }
     }
     const confirmDelete = async () => {
         if (productSelect.id != null) {
@@ -57,7 +77,7 @@ export default function ProductList() {
     }
     useEffect(() => {
         list()
-    }, [page])
+    }, [page,modal])
     return (
         <>
             <HeaderAdmin/>
@@ -123,15 +143,18 @@ export default function ProductList() {
                             {choose === "name" && (
                                 <input name="name" id="name" className="form-control"
                                        onChange={(event => setValue(event.target.value))} type="search"
+                                       onKeyDown={(event => {
+                                           if (event.key==='Enter'){
+                                               handleSearch()
+                                           }
+                                       })}
                                        aria-label="Search"/>
                             )}
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
                                     onClick={() => {
-                                        setPage(0);
-                                        setProductSelect({});
-                                        list()
+                                       handleSearch()
                                     }}>Tìm kiếm
                             </button>
                         </div>
@@ -160,7 +183,8 @@ export default function ProductList() {
                                         name: p?.name
                                     })
                                 }else {
-                                    setProductSelect({id:null,name: ""})
+                                    setProductSelect({id:null,name: ""});
+                                    setModal(false);
                                 }
                             }}
                                  style={(productSelect.id===p?.id)?{background:'darkgrey',height:50}:{height: 50}}>
@@ -196,7 +220,7 @@ export default function ProductList() {
                             totalElements > 0 && (
                                 <>
                                     <a className="me-1">
-                                        <Link to={`/admin/product/update`} type="button" className="btn btn-outline-success">Cập nhật</Link>
+                                        <button onClick={()=>handleUpdate()} type="button" className="btn btn-outline-success">Cập nhật</button>
                                     </a>
                                     <button type="button" className="btn btn-outline-danger"
                                             data-bs-toggle={modal ? "modal" : ''}
@@ -211,6 +235,11 @@ export default function ProductList() {
                         <div className="col-auto float-end">
                             <ul className="pagination mb-0">
                                 <li className="page-item">
+                                    <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                                       onClick={() => setPage(0)} tabIndex="-1"
+                                       aria-disabled="true">Đầu</a>
+                                </li>
+                                <li className="page-item">
                                     <a className={`page-link ${page <= 0 ? "disabled" : ""}`}
                                        onClick={() => setPage(page - 1)} tabIndex="-1"
                                        aria-disabled="true">Trước</a>
@@ -222,6 +251,11 @@ export default function ProductList() {
                                     <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
                                        onClick={() => setPage(page + 1)}>Sau</a>
                                 </li>
+                                <li className="page-item">
+                                    <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
+                                       onClick={() => setPage(totalPages-1)}>Cuối</a>
+                                </li>
+
                             </ul>
                         </div>)}
 
@@ -245,7 +279,7 @@ export default function ProductList() {
                                         data-bs-dismiss="modal"
                                         onClick={() => confirmDelete()}>Xác nhận
                                 </button>
-                                <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy
+                                <button type="button" onClick={()=>setModal(false)} className="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy
                                 </button>
                             </div>
                         </div>

@@ -38,6 +38,7 @@ function ShowBill() {
     useEffect(() => {
         getAppUserId();
         findOrderBillNewest();
+        setPrint(0);
     }, []);
     useEffect(() => {
         userId && getAllCart();
@@ -57,7 +58,6 @@ function ShowBill() {
         const printStatus = e.target.checked ? 1 : 0;
         console.log(printStatus)
         setPrint(printStatus);
-
     };
 
     const handleSubmit =async () => {
@@ -70,7 +70,6 @@ function ShowBill() {
             navigate("/admin/order")
             toast("Bạn đã thanh toán thành công");
         }
-
     };
 
     return (
@@ -160,7 +159,7 @@ function ShowBill() {
                         className="btn btn-primary"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        Thanh toán
                     </button>
                 </div>
             )}

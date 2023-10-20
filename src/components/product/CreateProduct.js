@@ -8,6 +8,10 @@ import * as Yup from "yup";
 import {NavLink, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import {toast} from "react-toastify";
+import "../../css/product/CreateProduct.css"
+import HeaderAdmin from "../user/HeaderAdmin";
+import CKEditorComponent from "./CKEditorComponent";
+
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -83,7 +87,7 @@ function CreateProduct() {
         let listImgPath = [];
         try {
             const uploadPromises = imageUpload.map(async (image) => {
-                const imageRef = ref(storage, 'images/' + image.name);
+                const imageRef = ref(storage, 'product/' + image.name);
                 const snapshot = await uploadBytes(imageRef, image);
                 const url = await getDownloadURL(snapshot.ref);
                 return url;
@@ -107,7 +111,7 @@ function CreateProduct() {
             }
             await createProduct(product1, listImgPath);
             await navigate("/admin/product/list");
-            toast.success(`Thêm mới sản phẩm ${product1.name} thành công!`);
+            toast.success(`Thêm mới sản phẩm ${product1.nameProduct} thành công!`);
         } catch (error) {
             console.log(error);
             if (error.response.data) {
@@ -136,7 +140,8 @@ function CreateProduct() {
 
     return (
         <>
-            <div id="anhdao">
+            <HeaderAdmin/>
+            <div id="anhdao" className="pt-5">
                 <Formik
                     initialValues={{
                         nameProduct: "",
@@ -163,19 +168,19 @@ function CreateProduct() {
                             .required("Không được để trống tên sản phẩm!")
                             .max(70, "Tên sản phẩm quá dài, nhập tên không quá 70 ký tự!")
                             .min(5, "Vui lòng nhập tên hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
                         ,
                         screenProduct: Yup.string()
                             .required("Không được để trống màn hình sản phẩm!")
                             .max(50, "Thông tin màn hình quá dài, vui lòng nhập ít hơn 50 ký tự!")
                             .min(5, "Thông tin màn hình phải hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
                         ,
                         cameraProduct: Yup.string()
                             .required("Không để trống camera sảm phẩm!")
                             .max(100, "Thông tin camera quá dài, vui lòng nhập không quá 100 ký tự!")
-                            .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
+                            .min(4, "Thông tin camera sản phẩm dài hơn 4 ký tự!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
                         ,
                         descriptionProduct: Yup.string()
                             .min(0)
@@ -183,21 +188,21 @@ function CreateProduct() {
                         ,
                         selfieProduct: Yup.string()
                             .required("Vui lòng bổ sung thông tin selfie!")
-                            .min(5, "Thông tin selfie quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(3, "Thông tin selfie quá ngắn, vui lòng nhập hơn 3 ký tự!")
                             .max(100, "Thông tin selfie quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
                         ,
                         batteryProduct: Yup.string()
                             .required("Không được để trống thông tin pin!")
-                            .min(5, "Thông tin pin quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(4, "Thông tin pin quá ngắn, vui lòng nhập hơn 4 ký tự!")
                             .max(100, "Thông tin pin quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
                         ,
                         weightProduct: Yup.string()
                             .required("Không được để trống thông tin trọng lượng!")
-                            .min(5, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(2, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 2 ký tự!")
                             .max(100, "Thông tin trọng lượng quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                        .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
                         ,
                         priceProduct: Yup.number()
                             .typeError("Thông tin giá không đúng định dạng!")
@@ -213,22 +218,24 @@ function CreateProduct() {
                     <div className="row p-2 mt-3 container" style={{marginLeft: 110}}>
                         <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
                             <fieldset
-                                className="form-input-1 shadow"
+                                className="form-input-dao shadow"
                                 style={{width: 600, height: 480}}
                             >
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
-                                <div id="upload-img" className="mt-2">
+                                <div id="upload-img" className="mt-2 ">
                                     {imageUpload ? imageUpload.map((img) => {
                                         return (
                                             <img
+                                                alt=""
                                                 src={img}
                                                 ref={imgPreviewRef}
+                                                className="image-gap mx-2 mb-2 float-start"
                                                 style={{
-                                                    padding: "0",
-                                                    width: "400px",
-                                                    height: "300px",
+                                                    margin: "0px 8px 8px",
+                                                    width: "150px",
+                                                    height: "100px",
                                                     borderRadius: "10px",
                                                     objectFit: "cover",
                                                     border: "1px solid black"
@@ -240,7 +247,7 @@ function CreateProduct() {
                         </div>
                         <div className="d-flex justify-content-center col-6  float-end">
                             <Form>
-                                <fieldset className="form-input-1 shadow">
+                                <fieldset className="form-input-dao shadow">
                                     <legend className="float-none w-auto px-3">
                                         <h2>Thêm mới thông tin hàng hóa</h2>
                                     </legend>
@@ -248,122 +255,141 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Tên điện thoại<span style={{color: "red"}}>*</span>
+                                                    Tên sản phẩm<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="nameProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
-                                                              component="small">Error </ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Giá điện thoại<span style={{color: "red"}}>*</span>
+                                                    Giá <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     name="priceProduct"
                                                     type="number"
-                                                    style={{width: 270}}
+                                                    style={{width: 270 , height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Kích thước màn hình <span style={{color: "red"}}>*</span>
+                                                    Kích thước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="screenProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250 , height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{ height: "16px" }}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Pin điện thoại<span style={{color: "red"}}>*</span>
+                                                    Dung lượng pin<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="batteryProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Camera điện thoại <span style={{color: "red"}}>*</span>
+                                                    Camera sau<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="cameraProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Selfie <span style={{color: "red"}}>*</span>
+                                                    Camera trước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="selfieProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Trọng lượng điện thoại<span style={{color: "red"}}>*</span>
+                                                    Trọng lượng <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="weightProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
                                                     Số lượng <span style={{color: "red"}}>*</span>
                                                 </label>
-                                                <div
+                                                <Field
                                                     name="quantityProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="number"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
+                                                    readOnly
                                                 />
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage name="priceProduct" className="p-3 mb-2 text-danger"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Dung lượng điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Dung lượng <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="capacityDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn dung lượng điện thoại</option>
                                                     {
                                                         capacitys.map((capacity) => (
@@ -375,12 +401,12 @@ function CreateProduct() {
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Màu sắc điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Màu sắc <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="colorDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn màu sắc điện thoại</option>
                                                     {
                                                         colors.map((color) => (
@@ -391,15 +417,15 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-6">
+                                        <div className="row mt-2">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Cpu điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Cpu <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="cpuDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn cpu điện thoại</option>
                                                     {
                                                         cpus.map((cpu) => (
@@ -409,14 +435,14 @@ function CreateProduct() {
                                                     }
                                                 </Field>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Ram điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Ram <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="ramDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn Ram điện thoại</option>
                                                     {
                                                         rams.map((ram) => (
@@ -427,15 +453,15 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-6">
+                                        <div className="row mt-2">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Series điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Series <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="seriesDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn Series điện thoại</option>
                                                     {
                                                         series.map((seriess) => (
@@ -445,14 +471,14 @@ function CreateProduct() {
                                                     }
                                                 </Field>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Loại điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Loại sản phẩm<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="typeDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn loại điện thoại</option>
                                                     {
                                                         types.map((type) => (
@@ -483,10 +509,10 @@ function CreateProduct() {
                                         </div>
                                         <div>
                                             <Field
-                                                as="textarea"
-                                                className="form-control-1 mt-2 border border-dark"
+                                                className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
-                                                style={{width: 540, height: 90}}/>
+                                                component={CKEditorComponent}
+                                            />
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
