@@ -30,15 +30,18 @@ export function ImportProduct() {
     const handleDataByChooseSupplier = (data) => {
         findSupplier(data);
     }
-    const handleDataByChooseProduct = (data) => {
+    const handleDataByChooseProductQR = (data) => {
         const productObj = JSON.parse(data);
         console.log(productObj);
         console.log(productObj.id);
         findProduct(productObj.id)
     }
+    const handleDataByChooseProduct = (data) => {
+        findProduct(data)
+    }
 
     useEffect(() => {
-        handleDataByChooseProduct(param.product)
+        handleDataByChooseProductQR(param.product)
     }, [])
 
 
