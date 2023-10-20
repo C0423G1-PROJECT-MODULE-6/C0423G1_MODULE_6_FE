@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
-import { deleteSupplier, getList } from "../../service/supplier/SupplierService";
+import { deleteSupplier, getAllAddress, getList } from "../../service/supplier/SupplierService";
 import "../../css/supplier/supplier.css";
 import Modal from "react-bootstrap/Modal";
 import HeaderAdmin from "../user/HeaderAdmin";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { async } from "q";
+import { Field, Formik } from "formik";
+import { Form } from "react-bootstrap";
 
 function Supplier() {
     const navigate = useNavigate();
@@ -21,13 +24,23 @@ function Supplier() {
     const [showModal, setShowModal] = useState(false);
     const [typeSearch, setTypeSearch] = useState("");
     const [valueInput, setValueInput] = useState("");
+    const [listAddress, setListAddress] = useState([]);
+    const [supplierEdit, setSupplierEdit] = useState({ idSupplier: 0 });
+    useEffect(() => {
+        handleGetListAddress()
+    }, [typeSearch])
+    console.log(listAddress);
+    const handleGetListAddress = async () => {
+        const res = await getAllAddress();
+        setListAddress(res);
+    }
     useEffect(() => {
         getAll();
     }, [refresh])
 
     const handleSetTypeSearch = () => {
         const specialCharsRegex = /[!#$%^&*(),?":{}|<>_]/;
-        if(!specialCharsRegex.test(valueInput)){
+        if (!specialCharsRegex.test(valueInput)) {
             switch (typeSearch) {
                 case "Tên nhà cung cấp":
                     setSearchName(valueInput);
@@ -44,22 +57,25 @@ function Supplier() {
                     setEmailSearch("");
             }
             setRefresh(!refresh);
-        }else{
+        } else {
             setListSupplier([]);
         }
     }
-   
+
     const handleRowClick = (index, obj) => {
         if (activeRow === index) {
             setActiveRow(null);
             setSupplierDelete(null);
+            setSupplierEdit({ idSupplier: 0 });
             setRefresh(!refresh);
         } else {
             setActiveRow(index);
             setSupplierDelete(obj);
+            setSupplierEdit(obj);
             setRefresh(!refresh);
         }
     };
+    console.log(supplierEdit);
     const handleShowModal = () => {
         setShowModal(true);
         setRefresh(!refresh);
@@ -95,9 +111,9 @@ function Supplier() {
         if (listSupplier.length === 1 && totalPage !== 1) {
             setCurrentPage(currentPage - 1);
         }
-        if(result===204){
+        if (result === 204) {
             toast("Xóa thành công")
-        }else{
+        } else {
             toast.error("Lỗi không thể xóa đối tượng này")
         }
         handleCloseModal();
@@ -131,68 +147,80 @@ function Supplier() {
                 <div className="row my-3">
                     <div className="col-12 d-flex justify-content-end">
                         <div className="col-auto me-2">
-                            <select className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
+                            <select style={{width:"180px"}} className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
                                 <option selected value={""}>--Tìm kiếm theo--</option>
                                 <option>Tên nhà cung cấp</option>
                                 <option>Địa chỉ</option>
                                 <option>Email</option>
                             </select>
                         </div>
-                        <div className="col-auto me-2">
-                            <input className="form-control" type="search" aria-label="Search" onChange={(event) => setValueInput(event.target.value)} />
-                        </div>
+                        {typeSearch === "Địa chỉ" ?
+                            <div className="col-auto me-2">
+                                <select style={{width:"180px"}} className="form-control" onClick={(event) => setValueInput(event.target.value)}>
+                                    <option value={""}>---Chọn địa chỉ---</option>
+                                    {listAddress.map((address) => (
+                                        <option key={address.code}>{address.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            :
+                            <div style={{width:"180px"}} className="col-auto me-2">
+                                <input  className="form-control" type="search" aria-label="Search" onChange={(event) => setValueInput(event.target.value)} />
+                            </div>
+                        }
+
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button" onClick={() => handleSetTypeSearch()}>Tìm kiếm</button>
                         </div>
                     </div>
                 </div>
-                <div style={{minHeight:"400px"}}>
-                <table  className="border border-dark table table-hover">
+                <div style={{ minHeight: "400px" }}>
+                    <table className="border border-dark table table-hover">
 
-                    <thead style={{ background: 'grey' }} className="colorthead">
-                        <tr>
-                            <th style={{width:"5%"}}>
-                                #
-                            </th>
-                            <th  style={{width:"5%"}}>MS</th>
-                            <th  style={{width:"40%"}}>Tên nhà cung cấp</th>
-                            <th  style={{width:"20%"}}>Địa chỉ</th>
-                            <th  style={{width:"10%"}}>SĐT</th>
-                            <th  style={{width:"20%"}}>E-mail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {listSupplier
-                            && listSupplier.length != 0 ? listSupplier.map((supplier, index) =>
-
-                                <>
-                                    <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
-                                        onClick={() => handleRowClick(index, supplier)}
-                                    >
-                                        <td >{index +1}</td>
-                                        <td >{supplier.idSupplier}</td>
-                                        <td >{supplier.nameSupplier}</td>
-                                        <td >{supplier.addressSupplier}</td>
-                                        <td >{supplier.phoneNumberSupplier}</td>
-                                        <td >{supplier.emailSupplier}</td>
-                                    </tr>
-                                </>
-
-                            )
-                            : <tr>
-                                 <td colSpan="10" className="text-center"><h4>Không tìm thấy dữ liệu</h4></td>
+                        <thead style={{ background: 'grey' }} className="colorthead">
+                            <tr>
+                                <th style={{ width: "5%" }}>
+                                    #
+                                </th>
+                                <th style={{ width: "5%" }}>MS</th>
+                                <th style={{ width: "40%" }}>Tên nhà cung cấp</th>
+                                <th style={{ width: "20%" }}>Địa chỉ</th>
+                                <th style={{ width: "10%" }}>SĐT</th>
+                                <th style={{ width: "20%" }}>E-mail</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {listSupplier
+                                && listSupplier.length != 0 ? listSupplier.map((supplier, index) =>
+
+                                    <>
+                                        <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
+                                            onClick={() => handleRowClick(index, supplier)}
+                                        >
+                                            <td >{index + 1}</td>
+                                            <td >{supplier.idSupplier}</td>
+                                            <td >{supplier.nameSupplier}</td>
+                                            <td >{supplier.addressSupplier}</td>
+                                            <td >{supplier.phoneNumberSupplier}</td>
+                                            <td >{supplier.emailSupplier}</td>
+                                        </tr>
+                                    </>
+
+                                )
+                                : <tr>
+                                    <td colSpan="10" className="text-center"><h4>Không tìm thấy dữ liệu</h4></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
                         <button type="button" className="btn btn-outline-primary me-1" onClick={() => navigate('/admin/supplier/create')}>Thêm mới</button>
-                        <a className="me-1" href="NghiaNPX_EditSupplier.html" style={{ textDecoration: 'none' }}>
-                            <button type="button" className="btn btn-outline-success">Cập nhật</button>
-                        </a>
-                        <button className={`btn btn-outline-danger ${(activeRow === null) ? "disabled" : ""}`} title="Delete" onClick={() => handleShowModal()}  >
+                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/supplier/edit/${supplierEdit.idSupplier}`}  title="Chỉnh sửa">
+                            Cập nhật
+                            </Link>
+                        <button className={`btn btn-outline-danger ${(activeRow === null) ? "disabled" : ""}`} title="" onClick={() => handleShowModal()}  >
                             Xóa
                         </button>
                         <Modal show={showModal} onHide={handleCloseModal} >
