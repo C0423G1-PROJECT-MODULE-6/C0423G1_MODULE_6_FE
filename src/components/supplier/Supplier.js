@@ -5,9 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import HeaderAdmin from "../user/HeaderAdmin";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { async } from "q";
-import { Field, Formik } from "formik";
-import { Form } from "react-bootstrap";
+import Footer from "../home/common/Footer";
 
 function Supplier() {
     const navigate = useNavigate();
@@ -147,7 +145,7 @@ function Supplier() {
                 <div className="row my-3">
                     <div className="col-12 d-flex justify-content-end">
                         <div className="col-auto me-2">
-                            <select style={{width:"180px"}} className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
+                            <select style={{ width: "180px" }} className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
                                 <option selected value={""}>--Tìm kiếm theo--</option>
                                 <option>Tên nhà cung cấp</option>
                                 <option>Địa chỉ</option>
@@ -156,7 +154,7 @@ function Supplier() {
                         </div>
                         {typeSearch === "Địa chỉ" ?
                             <div className="col-auto me-2">
-                                <select style={{width:"180px"}} className="form-control" onClick={(event) => setValueInput(event.target.value)}>
+                                <select style={{ width: "180px" }} className="form-control" onClick={(event) => setValueInput(event.target.value)}>
                                     <option value={""}>---Chọn địa chỉ---</option>
                                     {listAddress.map((address) => (
                                         <option key={address.code}>{address.name}</option>
@@ -164,8 +162,8 @@ function Supplier() {
                                 </select>
                             </div>
                             :
-                            <div style={{width:"180px"}} className="col-auto me-2">
-                                <input  className="form-control" type="search" aria-label="Search" onChange={(event) => setValueInput(event.target.value)} />
+                            <div style={{ width: "180px" }} className="col-auto me-2">
+                                <input className="form-control" type="search" aria-label="Search" onChange={(event) => setValueInput(event.target.value)} />
                             </div>
                         }
 
@@ -216,10 +214,12 @@ function Supplier() {
                 </div>
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
-                        <button type="button" className="btn btn-outline-primary me-1" onClick={() => navigate('/admin/supplier/create')}>Thêm mới</button>
-                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/supplier/edit/${supplierEdit.idSupplier}`}  title="Chỉnh sửa">
+                        <Link className="me-1" to={`/admin/supplier/create`} style={{ textDecoration: 'none' }}>
+                            <button type="button" className="btn btn-outline-primary">Thêm mới</button>
+                        </Link>
+                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/supplier/edit/${supplierEdit.idSupplier}`} title="Chỉnh sửa">
                             Cập nhật
-                            </Link>
+                        </Link>
                         <button className={`btn btn-outline-danger ${(activeRow === null) ? "disabled" : ""}`} title="" onClick={() => handleShowModal()}  >
                             Xóa
                         </button>
@@ -242,6 +242,7 @@ function Supplier() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }
