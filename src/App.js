@@ -30,6 +30,7 @@ import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 import CreateSupplier from "./components/supplier/CreateSupplier";
 import {SaleHistory} from "./components/order/SaleHistory";
+import ScannerQR from "./components/scanner_qr/ScannerQR";
 
 
 
@@ -67,12 +68,13 @@ function App() {
                     <Route path="/admin/information/:id" element={<Information/>}></Route>
                     <Route path="/admin/*" element={<HomeAdmin/>}></Route>
                     <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
-                    <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
                     <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/customer" element={<CustomerList/>}/>
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
+                    <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
 
@@ -85,8 +87,7 @@ function App() {
                     <Route path="/admin/order/showBill" element={<ShowBill/>}/>
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
-
-
+                    <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                 </Route>
             </Routes>
         </>

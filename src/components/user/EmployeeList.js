@@ -9,7 +9,8 @@ import { getAppRoleList } from "../../service/user/AppRoleService";
 import ModalDelete from "./EmployeeDeleteModal";
 import "../../css/user/employee.css";
 import HeaderAdmin from "./HeaderAdmin";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
+import Footer from "../home/common/Footer";
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -34,7 +35,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
-
+  console.log(employee);
   //list
   const loadEmployeeList = async () => {
     try {
@@ -93,8 +94,8 @@ const EmployeeList = () => {
     });
   };
   const deleteConfirm = async (id) => {
-    if(id === 1){
-      toast.error("Không được xóa admin"); 
+    if (id === 1) {
+      toast.error("Không được xóa admin");
       hideModalDelete();
       return;
     }
@@ -169,53 +170,56 @@ const EmployeeList = () => {
             </div>
           </div>
         </div>
-        <table className="border border-dark table table-hover">
-          <thead>
-            <tr>
-              <th style={{ backgroundColor: "darkgray", width: "5%" }}>#</th>
-              <th style={{ backgroundColor: "darkgray", width: "25%" }}>
-                Họ và tên
-              </th>
-              <th style={{ backgroundColor: "darkgray", width: "10%" }}>
-                Ngày sinh
-              </th>
-              <th style={{ backgroundColor: "darkgray", width: "35%" }}>
-                Địa chỉ
-              </th>
-              <th style={{ backgroundColor: "darkgray", width: "15%" }}>
-                Công việc
-              </th>
-              <th style={{ backgroundColor: "darkgray", width: "10%" }}>
-                Số điện thoại
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeList.length === 0 ? (
+        <div style={{ minHeight: "220px" }}>
+          <table className="border border-dark table table-hover">
+            <thead>
               <tr>
-                <td colSpan={6} style={{ textAlign: "center", color: "red" }}>
-                  Không tìm thấy
-                </td>
+                <th style={{ backgroundColor: "darkgray", width: "5%" }}>#</th>
+                <th style={{ backgroundColor: "darkgray", width: "25%" }}>
+                  Họ và tên
+                </th>
+                <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                  Ngày sinh
+                </th>
+                <th style={{ backgroundColor: "darkgray", width: "35%" }}>
+                  Địa chỉ
+                </th>
+                <th style={{ backgroundColor: "darkgray", width: "15%" }}>
+                  Công việc
+                </th>
+                <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                  Số điện thoại
+                </th>
               </tr>
-            ) : (
-              employeeList.map((employee, index) => (
-                <tr
-                  key={employee.id}
-                  onClick={() => handleRowClick(employee)}
-                  className={selectedRow === employee.id ? "selectedphuoc" : ""}
-                >
-                  <td>{index + 1}</td>
-                  <td>{employee.employeeName}</td>
-                  <td>{employee.employeeBirthday}</td>
-                  <td>{employee.employeeAddress}</td>
-                  <td>{employee.employeeTypeName}</td>
-                  <td>{employee.employeePhone}</td>
+            </thead>
+            <tbody>
+              {employeeList.length === 0 ? (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: "center", color: "red" }}>
+                    Không tìm thấy
+                  </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-
+              ) : (
+                employeeList.map((employee, index) => (
+                  <tr
+                    key={employee.id}
+                    onClick={() => handleRowClick(employee)}
+                    className={
+                      selectedRow === employee.id ? "selectedphuoc" : ""
+                    }
+                  >
+                    <td>{index + 1}</td>
+                    <td>{employee.employeeName}</td>
+                    <td>{employee.employeeBirthday}</td>
+                    <td>{employee.employeeAddress}</td>
+                    <td>{employee.employeeTypeName}</td>
+                    <td>{employee.employeePhone}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
         {/* java script để chọn row */}
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
@@ -225,8 +229,13 @@ const EmployeeList = () => {
                 Thêm mới
               </button>
             </Link>
-            <Link to={"/admin/employee/edit"}>
-              <button type="button" className="btn btn-outline-success me-1">
+
+            <Link to={`/admin/employee/edit/${employee?.id}`}>
+              <button
+                type="button"
+                className="btn btn-outline-success me-1"
+                disabled={employee === null}
+              >
                 Cập nhật
               </button>
             </Link>
@@ -270,6 +279,7 @@ const EmployeeList = () => {
           </div>
         </div>
       </div>
+      <Footer></Footer>
       {/* Modal */}
       <ModalDelete
         showModal={modal}

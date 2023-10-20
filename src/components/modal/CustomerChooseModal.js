@@ -4,6 +4,7 @@ import {useNavigate} from "react-router";
 import "./modal_table.css";
 import {Field, Form, Formik, ErrorMessage} from "formik";
 import {getAllCustomerModal} from "../../service/customer/CustomerService";
+import {format, parseISO} from "date-fns";
 
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
@@ -40,7 +41,6 @@ const CustomerChooseModal = ({handleData}) => {
         setGender("");
     }
     const handleSubmitCustomer = async () => {
-        console.log(selectedCustomer);
         let submitModal = await document.getElementById("closeModal");
         submitModal.click()
         handleData(selectedCustomer.idCustomer);
@@ -54,11 +54,11 @@ const CustomerChooseModal = ({handleData}) => {
         const choose = +document.getElementById("chooseSearchCustomer").value;
         const value = document.getElementById("search").value;
         let valueGender = document.getElementById("valueGender");
-        // if (valueGender) {
-        //     valueGender = valueGender.value;
+        // if (valueGender.value === ""){
+        //
         // }
         if (choose === 0) {
-            setName(value);
+            setName(value.trim());
             setPhone("");
             setGender("");
             setPage(0);
@@ -68,10 +68,7 @@ const CustomerChooseModal = ({handleData}) => {
             })
         }
         if (choose === 1) {
-            console.log(name)
-            console.log(gender)
-            console.log(phone)
-            setName(value);
+            setName(value.trim());
             setGender(valueGender.value);
             setPhone("");
             setPage(0);
@@ -81,9 +78,6 @@ const CustomerChooseModal = ({handleData}) => {
             })
         }
         if (choose === 2) {
-            console.log(name)
-            console.log(gender)
-            console.log(phone)
             setName("");
             setGender("");
             setPhone(value);
@@ -94,6 +88,12 @@ const CustomerChooseModal = ({handleData}) => {
             })
         }
 
+    }
+    const handleKeyDownCustomer = (event) => {
+        console.log(event.key)
+        if (event.key=="Enter"){
+            handleSearch();
+        }
     }
 
     const nextPage = () => {
@@ -122,7 +122,7 @@ const CustomerChooseModal = ({handleData}) => {
                     <div className="modal-header">
                         <h1 className="modal-title fs-3">Chọn khách hàng có sẵn</h1>
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body" style={{height: "420px"}}>
                         <div className="pt-4">
                             <div className="row g-3 align-items-center justify-content-end" style={{marginRight: '3%'}}>
                                 <div className="col-auto">
@@ -143,7 +143,7 @@ const CustomerChooseModal = ({handleData}) => {
                                             id="valueGender">
                                         <option value={"0"}>Nữ</option>
                                         <option value={"1"}>Nam</option>
-                                        <option value={"2"}>Tất cả</option>
+                                        <option value={""}>Tất cả</option>
                                     </select>}
                                 </div>
                                 <div className="col-auto">
@@ -151,7 +151,8 @@ const CustomerChooseModal = ({handleData}) => {
                                     <input type="text" name="inputSearch" id="search"
                                            className="shadow form-control border-dark"
                                            aria-describedby="passwordHelpInline"
-                                           placeholder={(change === 2) ? "Nhập tên số điện thoại..." : "Nhập tên khách hàng"}
+                                           placeholder={(change === 2) ? "Nhập số điện thoại..." : "Nhập tên khách hàng..."}
+                                           onKeyDown={handleKeyDownCustomer}
                                     />
 
                                 </div>
@@ -195,9 +196,11 @@ const CustomerChooseModal = ({handleData}) => {
                                                     {(index + 1) + page * 5}
                                                 </td>
                                                 <td>{customer?.nameCustomer}</td>
-                                                <td>{customer?.phoneNumberCustomer}</td>
+                                                <td>{customer?.phoneNumberCustomer.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')}</td>
                                                 <td>{customer?.addressCustomer}</td>
-                                                <td>{customer?.dateOfBirthCustomer}</td>
+                                                <td>
+                                                    {format(parseISO(customer?.dateOfBirthCustomer), 'dd-MM-yyyy')}
+                                                </td>
                                                 <td>{customer?.emailCustomer}</td>
                                             </tr>))}
                                         </tbody> :
@@ -229,7 +232,7 @@ const CustomerChooseModal = ({handleData}) => {
                                         </button>
                                     )}
                                     <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
-                                            style={{width: '40%'}} id="closeModal" >
+                                            style={{width: '40%'}} id="closeModal">
                                         Trở về
                                     </button>
                                 </div>
@@ -240,7 +243,7 @@ const CustomerChooseModal = ({handleData}) => {
                                         <ul className="pagination">
                                             <li className="page-item">
                                                 <button className="page-link " onClick={() => previousPage()}
-                                                        href="#">Trước
+                                                        >Trước
                                                 </button>
                                             </li>
                                             <li className="page-item">
