@@ -7,8 +7,9 @@ import {
 import { Link } from "react-router-dom";
 import { getAppRoleList } from "../../service/user/AppRoleService";
 import ModalDelete from "./EmployeeDeleteModal";
-import '../../css/user/employee.css'
+import "../../css/user/employee.css";
 import HeaderAdmin from "./HeaderAdmin";
+import {toast} from "react-toastify"
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -24,6 +25,7 @@ const EmployeeList = () => {
     show: false,
     info: {},
   });
+
   //loadListJob
   const loadListJob = async () => {
     const data = await getAppRoleList();
@@ -42,15 +44,14 @@ const EmployeeList = () => {
         searchName,
         searchPhone
       );
-      if(result.content.length === 0){
-        setPage(page-1);
+      if (result.content.length === 0) {
+        setPage(page - 1);
       }
       setTotalPage(result.totalPages);
       setEmployeeList(result.content);
     } catch {
       setEmployeeList([]);
     }
-    // console.log(result);
   };
   useEffect(() => {
     loadEmployeeList();
@@ -70,10 +71,10 @@ const EmployeeList = () => {
 
   //delete
   const handleRowClick = (employee) => {
-    if(employee.id === selectedRow){
+    if (employee.id === selectedRow) {
       setSelectedRow(null);
       setEmployee(null);
-    }else{
+    } else {
       setSelectedRow(employee.id);
       setEmployee(employee);
     }
@@ -92,12 +93,18 @@ const EmployeeList = () => {
     });
   };
   const deleteConfirm = async (id) => {
+    if(id === 1){
+      toast.error("Không được xóa admin"); 
+      hideModalDelete();
+      return;
+    }
     if (selectedRow !== null) {
       await deleteEmployee(id);
       hideModalDelete();
       loadEmployeeList();
       setSelectedRow(null);
       setEmployee(null);
+      toast("xóa thành công");
     }
   };
 
@@ -163,14 +170,24 @@ const EmployeeList = () => {
           </div>
         </div>
         <table className="border border-dark table table-hover">
-          <thead style={{ backgroundColor: "darkgray" }}>
+          <thead>
             <tr>
-              <th>#</th>
-              <th>Họ và tên</th>
-              <th>Ngày sinh</th>
-              <th>Địa chỉ</th>
-              <th>Công việc</th>
-              <th>Số điện thoại</th>
+              <th style={{ backgroundColor: "darkgray", width: "5%" }}>#</th>
+              <th style={{ backgroundColor: "darkgray", width: "25%" }}>
+                Họ và tên
+              </th>
+              <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                Ngày sinh
+              </th>
+              <th style={{ backgroundColor: "darkgray", width: "35%" }}>
+                Địa chỉ
+              </th>
+              <th style={{ backgroundColor: "darkgray", width: "15%" }}>
+                Công việc
+              </th>
+              <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                Số điện thoại
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -198,16 +215,17 @@ const EmployeeList = () => {
             )}
           </tbody>
         </table>
+
         {/* java script để chọn row */}
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/employee/create"}>
+            <Link to={"/admin/employee/create"}>
               <button type="button" className="btn btn-outline-primary me-1">
                 Thêm mới
               </button>
             </Link>
-            <Link to={"/employee/edit"}>
+            <Link to={"/admin/employee/edit"}>
               <button type="button" className="btn btn-outline-success me-1">
                 Cập nhật
               </button>
@@ -225,7 +243,12 @@ const EmployeeList = () => {
             <nav aria-label="Page navigation">
               <ul className="pagination">
                 <li className="page-item">
-                  <button onClick={() => previousPage()} className={`page-link ${page <= 0 ? "disabled" :""}`}>Trước</button>
+                  <button
+                    onClick={() => previousPage()}
+                    className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                  >
+                    Trước
+                  </button>
                 </li>
                 <li className="page-item" aria-current="page">
                   <a className="page-link" href="#">
@@ -233,7 +256,14 @@ const EmployeeList = () => {
                   </a>
                 </li>
                 <li className="page-item">
-                  <button onClick={() => nextPage()} className={`page-link ${page >= (totalPage - 1) ? "disabled" : ""}`}>Sau</button>
+                  <button
+                    onClick={() => nextPage()}
+                    className={`page-link ${
+                      page >= totalPage - 1 ? "disabled" : ""
+                    }`}
+                  >
+                    Sau
+                  </button>
                 </li>
               </ul>
             </nav>
