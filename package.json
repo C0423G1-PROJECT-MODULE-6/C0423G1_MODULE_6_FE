@@ -43,8 +43,7 @@
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "xregexp": "^5.1.1",
-    "yup": "^1.2.0",
-    "ckeditor4-react": "^4.3.0"
+    "yup": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
