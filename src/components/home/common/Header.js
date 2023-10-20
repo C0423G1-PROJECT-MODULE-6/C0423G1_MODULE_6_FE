@@ -21,10 +21,16 @@ const Header = () => {
     }
     const handleOnKeyDown = (event) => {
         if (event.key === 'Enter') {
+            if (nameTarget == '') {
+                navigate('/list/ ');
+            }
             navigate(`/list/${nameTarget}`);
         }
     }
     const handleSearch = () => {
+        if (nameTarget == '') {
+            navigate('/list/ ');
+        }
         navigate(`/list/${nameTarget}`);
     }
     const handleListenInput = (event) => {

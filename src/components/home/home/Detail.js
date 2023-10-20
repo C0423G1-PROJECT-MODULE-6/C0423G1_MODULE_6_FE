@@ -122,7 +122,7 @@ const Detail = () => {
 
                         <Swiper
                             onSwiper={setThumbsSwiper}
-                            spaceBetween={10}
+                            spaceBetween={5}
                             slidesPerView={4}
                             freeMode={true}
                             watchSlidesProgress={true}
@@ -168,26 +168,8 @@ const Detail = () => {
 
                         </div>
                         <div className="sale-event">
-                            <div className="sale-event-top">
-                                <p className="sale-event-title">Khuyến mãi</p>
-                                <p className="sub-sale-event-title">
-                                    Giá và khuyến mãi dự kiến áp dụng đến 23:00 | 31/10
-                                </p>
-                            </div>
-                            <ul>
-                                <li>
-                                    <p>
-                                        Thu cũ Đổi mới: Giảm đến 2 triệu (Tuỳ model máy cũ, Không kèm
-                                        thanh toán qua cổng online, mua kèm)
-                                    </p>
-                                </li>
-                                <li>
-                                    <p>Vòng quay may mắn: Giảm 100.000đ - 500.000đ</p>
-                                </li>
-                                <li>
-                                    <p>Hoàn tiền nếu ở đâu rẻ hơn</p>
-                                </li>
-                            </ul>
+                            <img src='https://toanhocbactrungnam.vn/uploads/news/2019_11/1573006985.png' />
+                            <p className='qr'>Quét mã QR</p>
                         </div>
                     </div>
                 </div >
