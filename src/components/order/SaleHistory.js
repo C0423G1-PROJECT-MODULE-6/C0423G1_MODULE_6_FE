@@ -65,7 +65,7 @@ export function SaleHistory() {
                             </select>
                         </div>
                         <div className="col-auto me-2">
-                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm theo tên khách hàng"
+                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm tên khách hàng"
                                    onChange={(name) => (setSearchName(name.target.value))}/>
                         </div>
                         <div className="col-auto">
