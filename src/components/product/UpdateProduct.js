@@ -2,15 +2,30 @@ import {useEffect, useRef, useState} from "react";
 import * as productService from "../../service/product/ProductService";
 import {storage} from "../../firebase/Firebase";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {createProduct} from "../../service/product/ProductService";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import {toast} from "react-toastify";
+import "../../css/product/CreateProduct.css"
+import HeaderAdmin from "../user/HeaderAdmin";
+import {v4} from "uuid";
+import CKEditorComponent from "./CKEditorComponent";
+
+function randomString(length) {
+    const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+    }
+    return result;
+}
 
 function UpdateProduct() {
     const navigate = useNavigate();
+    const [product, setProduct] = useState();
     const [capacitys, setCapacity] = useState([]);
     const [colors, setColor] = useState([]);
     const [cpus, setCpu] = useState([]);
@@ -22,28 +37,143 @@ function UpdateProduct() {
     const [imageUpload, setImageUpload] = useState([]);
     const params = useParams();
 
+    const getListCapacity = async () => {
+        const result = await productService.getAllCapacity();
+        setCapacity(result);
+    }
+
+    const getListColor = async () => {
+        const result = await productService.getAllColor();
+        setColor(result);
+    }
+
+    const getListCpu = async () => {
+        const result = await productService.getAllCpu();
+        setCpu(result);
+    }
+
+    const getListRam = async () => {
+        const result = await productService.getAllRam();
+        setRam(result);
+    }
+
+    const getListSeries = async () => {
+        const result = await productService.getAllSeries();
+        setSeries(result);
+    }
+
+    const getListType = async () => {
+        const result = await productService.getAllType();
+        setType(result);
+    }
+
+    const loadProductDetail = async (id) => {
+        try {
+            const result = await productService.getProductId(id)
+            if (result == null) {
+                navigate("/admin/product/list")
+                toast("Không tìm thấy sản phẩm!")
+            }
+            setProduct(result);
+            setImageUpload(result.imageDtoList)
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
 
+    useEffect(() => {
+        getListCapacity();
+        getListColor();
+        getListCpu();
+        getListRam();
+        getListSeries();
+        getListType();
+    }, [])
+
+    useEffect(() => {
+        loadProductDetail(params.id);
+    }, [params.id]);
+    const add = async (product, setErrors) => {
+        let listImgPath = imageUpload.filter((pre) => typeof pre === "string");
+        let listFileImg = imageUpload.filter((pre) => typeof pre !== "string");
+        try {
+
+            const uploadPromises = listFileImg.map(async (image) => {
+                const imageRef = ref(storage, `product/${image.name + v4() + randomString(10)}`);
+                const snapshot = await uploadBytes(imageRef, image);
+                const url = await getDownloadURL(snapshot.ref);
+                return url;
+            });
+
+            const downloadUrls = await Promise.all(uploadPromises);
+            listImgPath = [...listImgPath, ...downloadUrls]
+
+        } catch (error) {
+            console.error("Lỗi khi tải lên ảnh:", error);
+        }
+        try {
+            const product1 = {
+                ...product,
+                idProduct: params.id,
+                capacityDto: (typeof product?.capacityDto == "string") ? JSON.parse(product?.capacityDto) : product?.capacityDto,
+                colorDto: (typeof product?.capacityDto == "string") ? JSON.parse(product?.colorDto) : product?.colorDto,
+                cpuDto: (typeof product?.cpuDto == "string") ? JSON.parse(product?.cpuDto) : product?.cpuDto,
+                ramDto: (typeof product?.ramDto == "string") ? JSON.parse(product?.ramDto) : product?.ramDto,
+                seriesDto: (typeof product?.seriesDto == "string") ? JSON.parse(product?.seriesDto) : product?.seriesDto,
+                typeDto: (typeof product?.typeDto == "string") ? JSON.parse(product?.typeDto) : product?.typeDto,
+                imageDtoList: listImgPath
+            }
+            await productService.updateProduct(params.id, product1);
+            await navigate("/admin/product/list");
+            toast.success(`Cập nhật sản phẩm ${product1.nameProduct} thành công!`);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    const removeImg = (index) => {
+        setImageUpload((pre) => pre.filter((e, i) => i !== index));
+    }
+    const handleInputChange = (event) => {
+        const file = event.target.files[0];
+        console.log(file)
+        if (file.size > 3000000) {
+            toast("Dung lượng ảnh tối đa 3MB")
+            return;
+        }
+        setImageUpload((prev) => [...prev, file]);
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            imgPreviewRef.current.src = reader.result;
+            imgPreviewRef.current.style.display = "block";
+        });
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+    if (!product) return null;
     return (
         <>
-            <div id="anhdao">
+            <HeaderAdmin/>
+            <div id="anhdao" className="pt-5">
                 <Formik
                     initialValues={{
-                        nameProduct: "",
-                        screenProduct: "",
-                        cameraProduct: "",
-                        descriptionProduct: "",
-                        selfieProduct: "",
-                        batteryProduct: "",
-                        weightProduct: "",
-                        priceProduct: "",
-                        quantityProduct: 0,
-                        capacityDto: "",
-                        colorDto: "",
-                        cpuDto: "",
-                        ramDto: "",
-                        seriesDto: "",
-                        typeDto: "",
+                        nameProduct: product?.nameProduct,
+                        screenProduct: product?.screenProduct,
+                        cameraProduct: product?.cameraProduct,
+                        descriptionProduct: product?.descriptionProduct,
+                        selfieProduct: product?.selfieProduct,
+                        batteryProduct: product?.batteryProduct,
+                        weightProduct: product?.weightProduct,
+                        priceProduct: product?.priceProduct,
+                        quantityProduct: product?.quantityProduct,
+                        capacityDto: product?.capacityDto,
+                        colorDto: product?.colorDto,
+                        cpuDto: product?.cpuDto,
+                        ramDto: product?.ramDto,
+                        seriesDto: product?.seriesDto,
+                        typeDto: product?.typeDto,
                         imageDto: {
                             name: "",
                         }
@@ -96,33 +226,42 @@ function UpdateProduct() {
                             .max(300000000, "Giá không quá 300.000.000")
                     })}
                     onSubmit={(values, {setSubmitting, setErrors}) => {
-                        setSubmitting(false)
+                        setSubmitting(true)
                         add(values, setErrors);
                     }}>
 
                     <div className="row p-2 mt-3 container" style={{marginLeft: 110}}>
                         <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
                             <fieldset
-                                className="form-input-1 shadow"
+                                className="form-input-dao shadow"
                                 style={{width: 600, height: 480}}
                             >
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
-                                <div id="upload-img" className="mt-2">
-                                    {imageUpload ? imageUpload.map((img) => {
+                                <div id="upload-img" className="mt-2 ">
+                                    {imageUpload ? imageUpload.map((img, index) => {
                                         return (
-                                            <img
-                                                src={img}
-                                                ref={imgPreviewRef}
-                                                style={{
-                                                    padding: "0",
-                                                    width: "400px",
-                                                    height: "300px",
-                                                    borderRadius: "10px",
-                                                    objectFit: "cover",
-                                                    border: "1px solid black"
-                                                }}/>
+                                            <div className="float-start ">
+                                                <div className=" h-100 d-flex justify-content-end w-100 pe-2">
+                                                    <div onClick={() => removeImg(index)}>X</div>
+                                                </div>
+                                                <img
+                                                    alt=""
+                                                    src={img}
+                                                    ref={imgPreviewRef}
+                                                    className="image-gap mx-2 mb-2
+                                                    "
+                                                    style={{
+                                                        margin: "0px 8px 8px",
+                                                        width: "150px",
+                                                        height: "100px",
+                                                        borderRadius: "10px",
+                                                        objectFit: "cover",
+                                                        border: "1px solid black"
+                                                    }}/>
+
+                                            </div>
                                         )
                                     }) : null}
                                 </div>
@@ -130,65 +269,73 @@ function UpdateProduct() {
                         </div>
                         <div className="d-flex justify-content-center col-6  float-end">
                             <Form>
-                                <fieldset className="form-input-1 shadow">
+                                <fieldset className="form-input-dao shadow">
                                     <legend className="float-none w-auto px-3">
-                                        <h2>Thêm mới thông tin hàng hóa</h2>
+                                        <h2>Chỉnh sửa thông tin hàng hóa</h2>
                                     </legend>
                                     <div className="row p-2">
                                         <div className="row">
-                                            <div className="col-6">
+                                            <div className="col-6 ">
                                                 <label>
                                                     Tên điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="nameProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
-                                                              component="small">Error </ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
                                                     Giá điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     name="priceProduct"
                                                     type="number"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
+                                                <label className="mt-2">
                                                     Kích thước màn hình <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="screenProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{ height: "16px" }}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
-                                                <label>
+                                                <label className="mt-2">
                                                     Pin điện thoại<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="batteryProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -198,12 +345,14 @@ function UpdateProduct() {
                                                 </label>
                                                 <Field
                                                     name="cameraProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
@@ -211,12 +360,14 @@ function UpdateProduct() {
                                                 </label>
                                                 <Field
                                                     name="selfieProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 270}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -226,23 +377,30 @@ function UpdateProduct() {
                                                 </label>
                                                 <Field
                                                     name="weightProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250}}
                                                 />
-                                                <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
-                                                              component="small">Error</ErrorMessage>
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                             <div className="col-6">
                                                 <label>
                                                     Số lượng <span style={{color: "red"}}>*</span>
                                                 </label>
-                                                <div
+                                                <Field
                                                     name="quantityProduct"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     type="number"
                                                     style={{width: 270}}
+                                                    readOnly
                                                 />
+                                                <div style={{height: "16px"}}>
+                                                    <ErrorMessage name="priceProduct" className="p-3 mb-2 text-danger"
+                                                                  component="small"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="row">
@@ -251,7 +409,7 @@ function UpdateProduct() {
                                                     Dung lượng điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="capacityDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn dung lượng điện thoại</option>
@@ -268,7 +426,7 @@ function UpdateProduct() {
                                                     Màu sắc điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="colorDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn màu sắc điện thoại</option>
@@ -287,7 +445,7 @@ function UpdateProduct() {
                                                     Cpu điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="cpuDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn cpu điện thoại</option>
@@ -304,7 +462,7 @@ function UpdateProduct() {
                                                     Ram điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="ramDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn Ram điện thoại</option>
@@ -323,7 +481,7 @@ function UpdateProduct() {
                                                     Series điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="seriesDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn Series điện thoại</option>
@@ -340,7 +498,7 @@ function UpdateProduct() {
                                                     Loại điện thoại<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="typeDto"
-                                                    className="form-control-1 mt-2 border border-dark"
+                                                    className="form-control-dao mt-2 border border-dark"
                                                     as="select"
                                                     style={{width: 250}}>
                                                     <option value="" disabled>Chọn loại điện thoại</option>
@@ -373,10 +531,11 @@ function UpdateProduct() {
                                         </div>
                                         <div>
                                             <Field
-                                                as="textarea"
-                                                className="form-control-1 mt-2 border border-dark"
+                                                className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
-                                                style={{width: 540, height: 90}}/>
+                                                component={CKEditorComponent}
+                                                // style={{width: 540, height: 90}}
+                                            />
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
@@ -403,7 +562,7 @@ function UpdateProduct() {
                 </Formik>
             </div>
         </>
-    )
+)
 
 }
 
