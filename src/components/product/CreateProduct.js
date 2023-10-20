@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as productService from "../../service/product/ProductService";
 import {storage} from "../../firebase/Firebase";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import CKEditorComponent from "./CKEditorComponent";
+import "../../css/user/spinner.css"
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ function CreateProduct() {
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
     const [imageUpload, setImageUpload] = useState([]);
+    // const [loading, setLoading] = useState(false);
 
     // const getImage = async () => {
     //     const result = await productService.getImageProduct();
@@ -85,13 +87,14 @@ function CreateProduct() {
     const add = async (product, setErrors) => {
         let listImgPath = [];
         try {
+            // setLoading(true);
             const uploadPromises = imageUpload.map(async (image) => {
                 const imageRef = ref(storage, 'product/' + image.name);
                 const snapshot = await uploadBytes(imageRef, image);
                 const url = await getDownloadURL(snapshot.ref);
                 return url;
             });
-
+            // setLoading(false);
             const downloadUrls = await Promise.all(uploadPromises);
             listImgPath = [...downloadUrls]
         } catch (error) {
@@ -109,14 +112,13 @@ function CreateProduct() {
                 imageDtoList: listImgPath
             }
             await createProduct(product1, listImgPath);
-            await navigate("/admin/product/list");
+             navigate("/admin/product/list");
         } catch (error) {
             console.log(error);
             if (error.response.data) {
                 setErrors(error.response.data);
             }
         }
-
     }
 
     const handleInputChange = (event) => {
@@ -126,7 +128,6 @@ function CreateProduct() {
 
         const newImages = Array.from(files).filter((file) => {
             if (imageUpload.map((img) => img.name).includes(file.name)) {
-                // Ảnh đã tồn tại trong danh sách imageUpload
                 toast(`Ảnh "${file.name}" đã được chọn trước đó.`);
                 return false;
             }
@@ -295,7 +296,7 @@ function CreateProduct() {
                                                     name="priceProduct"
                                                     type="number"
                                                     id={"2"}
-                                                    style={{width: 270 , height: 27.6}}
+                                                    style={{width: 270, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
@@ -313,7 +314,7 @@ function CreateProduct() {
                                                     name="screenProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250 , height: 27.6}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
                                                 <div>
                                                     <ErrorMessage className="p-3 mb-3 text-danger" name="screenProduct"
@@ -401,7 +402,8 @@ function CreateProduct() {
                                                     readOnly
                                                 />
                                                 <div style={{height: "16px"}}>
-                                                    <ErrorMessage name="quantityProduct" className="p-3 mb-2 text-danger"
+                                                    <ErrorMessage name="quantityProduct"
+                                                                  className="p-3 mb-2 text-danger"
                                                                   component="small"/>
                                                 </div>
                                             </div>
@@ -556,10 +558,6 @@ function CreateProduct() {
                                                     className="btn btn-outline-primary float-end mx-3 mt-2 shadow">
                                                 Lưu
                                             </button>
-                                            {/*<button type="submit" onClick={}*/}
-                                            {/*        className="btn btn-outline-primary float-end mx-3 mt-2 shadow">*/}
-                                            {/*    Hoàn tác*/}
-                                            {/*</button>*/}
                                         </div>
                                         <div className="col-8 mt-5">
                                             <div className="float-end">
@@ -574,6 +572,11 @@ function CreateProduct() {
 
                 </Formik>
             </div>
+            {/*<div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>*/}
+            {/*    <div className="spinner-container">*/}
+            {/*        <RingLoader color="#000000"/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </>
     )
 
