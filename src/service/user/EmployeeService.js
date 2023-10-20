@@ -27,8 +27,9 @@ export const getNewEmployee = async () => {
     return res
 }
 export const getEmployee = async (id) => {
+    console.log(id);
     const res = await axios.get(`http://localhost:8080/api/admin/employee/${id}`);
-    return res
+    return res.data
 }
 export const updateEmployee = async (employee) => {
     const res = await axios.patch(`http://localhost:8080/api/admin/employee/update/${employee.id}`, employee);

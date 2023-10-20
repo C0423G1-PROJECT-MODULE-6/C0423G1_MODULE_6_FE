@@ -21,7 +21,7 @@ export const findProductById = async (id) => {
         console.log("Find:", res);
         return res.data;
     }catch(e){
-        alert("nôtk")
+        console.log(e);
     }
 }
 export const findSupplierById = async (id) => {
