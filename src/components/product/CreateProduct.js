@@ -12,7 +12,6 @@ import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import CKEditorComponent from "./CKEditorComponent";
 
-
 function CreateProduct() {
     const navigate = useNavigate();
     const [capacitys, setCapacity] = useState([]);
@@ -111,7 +110,6 @@ function CreateProduct() {
             }
             await createProduct(product1, listImgPath);
             await navigate("/admin/product/list");
-            toast.success(`Thêm mới sản phẩm ${product1.nameProduct} thành công!`);
         } catch (error) {
             console.log(error);
             if (error.response.data) {
@@ -122,20 +120,39 @@ function CreateProduct() {
     }
 
     const handleInputChange = (event) => {
-        const file = event.target.files[0];
-        if (file.size > 3000000) {
-            toast("Dung lượng ảnh tối đa 3MB")
-            return;
-        }
-        setImageUpload((prev) => [...prev, file]);
-        const reader = new FileReader();
-        reader.addEventListener("load", function () {
-            imgPreviewRef.current.src = reader.result;
-            imgPreviewRef.current.style.display = "block";
+        const files = event.target.files;
+        const maxImageCount = 5;
+        const allowedFormats = ["image/png", "image/gif", "image/jpeg"];
+
+        const newImages = Array.from(files).filter((file) => {
+            if (imageUpload.map((img) => img.name).includes(file.name)) {
+                // Ảnh đã tồn tại trong danh sách imageUpload
+                toast(`Ảnh "${file.name}" đã được chọn trước đó.`);
+                return false;
+            }
+
+            if (imageUpload.length >= maxImageCount) {
+                toast(`Vui lòng không chọn quá ${maxImageCount} ảnh.`);
+                return false;
+            }
+
+            if (!allowedFormats.includes(file.type)) {
+                toast("Vui lòng chọn chỉ các tệp hình ảnh (JPEG, PNG, hoặc GIF).");
+                return false;
+            }
+
+            return true;
         });
-        if (file) {
+
+        newImages.forEach((file) => {
+            setImageUpload((prev) => [...prev, file]);
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+                imgPreviewRef.current.src = reader.result;
+                imgPreviewRef.current.style.display = "block";
+            });
             reader.readAsDataURL(file);
-        }
+        });
     };
 
     return (
@@ -165,49 +182,49 @@ function CreateProduct() {
                     }}
                     validationSchema={Yup.object({
                         nameProduct: Yup.string()
-                            .required("Không được để trống tên sản phẩm!")
-                            .max(70, "Tên sản phẩm quá dài, nhập tên không quá 70 ký tự!")
-                            .min(5, "Vui lòng nhập tên hơn 5 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt!")
+                            .required("Không để trống tên sản phẩm.")
+                            .max(70, "Nhập tên không quá 70 ký tự.")
+                            .min(5, "Vui lòng nhập tên hơn 5 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt.")
                         ,
                         screenProduct: Yup.string()
-                            .required("Không được để trống màn hình sản phẩm!")
-                            .max(50, "Thông tin màn hình quá dài, vui lòng nhập ít hơn 50 ký tự!")
-                            .min(5, "Thông tin màn hình phải hơn 5 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin màn hình khng chứa ký tự đặc biệt!")
+                            .required("Không để trống màn hình sản phẩm.")
+                            .max(50, "Vui lòng nhập ít hơn 50 ký tự.")
+                            .min(5, "Thông tin màn hình phải hơn 5 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         cameraProduct: Yup.string()
-                            .required("Không để trống camera sảm phẩm!")
-                            .max(100, "Thông tin camera quá dài, vui lòng nhập không quá 100 ký tự!")
-                            .min(4, "Thông tin camera sản phẩm dài hơn 4 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
+                            .required("Không để trống camera sảm phẩm.")
+                            .max(100, "Vui lòng nhập không quá 100 ký tự.")
+                            .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         descriptionProduct: Yup.string()
                             .min(0)
-                            .max(1000000, "Thông tin chi tiết sản phẩm quá dài, vui lòng nhập dưới 1.000.000 ký tự!")
+                            .max(1000000, "Thông tin chi tiết sản phẩm quá dài, vui lòng nhập dưới 1.000.000 ký tự.")
                         ,
                         selfieProduct: Yup.string()
-                            .required("Vui lòng bổ sung thông tin selfie!")
-                            .min(3, "Thông tin selfie quá ngắn, vui lòng nhập hơn 3 ký tự!")
-                            .max(100, "Thông tin selfie quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
+                            .required("Vui lòng bổ sung thông tin selfie.")
+                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         batteryProduct: Yup.string()
-                            .required("Không được để trống thông tin pin!")
-                            .min(4, "Thông tin pin quá ngắn, vui lòng nhập hơn 4 ký tự!")
-                            .max(100, "Thông tin pin quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
+                            .required("Không để trống thông tin pin.")
+                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         weightProduct: Yup.string()
-                            .required("Không được để trống thông tin trọng lượng!")
-                            .min(2, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 2 ký tự!")
-                            .max(100, "Thông tin trọng lượng quá dài, vui lòng nhập ít hơn 100 ký tự!")
-                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
+                            .required("Không để trống thông tin trọng lượng.")
+                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
+                            .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không đúng định dạng.")
                         ,
                         priceProduct: Yup.number()
-                            .typeError("Thông tin giá không đúng định dạng!")
-                            .required("Vui lòng bổ sung thông tin giá!")
-                            .min(0, "Giá không được là số âm!")
+                            .typeError("Thông tin giá không đúng định dạng.")
+                            .required("Vui lòng bổ sung thông tin giá.")
+                            .min(0, "Giá không được là số âm.")
                             .max(300000000, "Giá không quá 300.000.000")
                     })}
                     onSubmit={(values, {setSubmitting, setErrors}) => {
@@ -254,13 +271,14 @@ function CreateProduct() {
                                     <div className="row p-2">
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"1"}>
                                                     Tên sản phẩm<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="nameProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
+                                                    id={"1"}
                                                     style={{width: 250, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
@@ -269,13 +287,14 @@ function CreateProduct() {
                                                 </div>
                                             </div>
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"2"}>
                                                     Giá <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     className="form-control-dao mt-2 border border-dark"
                                                     name="priceProduct"
                                                     type="number"
+                                                    id={"2"}
                                                     style={{width: 270 , height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
@@ -286,31 +305,33 @@ function CreateProduct() {
                                         </div>
                                         <div className="row">
                                             <div className="col-6 mt-2">
-                                                <label>
+                                                <label htmlFor={"3"}>
                                                     Kích thước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"3"}
                                                     name="screenProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250 , height: 27.6}}
                                                 />
-                                                <div style={{ height: "16px" }}>
-                                                    <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
+                                                <div>
+                                                    <ErrorMessage className="p-3 mb-3 text-danger" name="screenProduct"
                                                                   component="small"/>
                                                 </div>
                                             </div>
                                             <div className="col-6 mt-2">
-                                                <label>
+                                                <label htmlFor={"4"}>
                                                     Dung lượng pin<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"4"}
                                                     name="batteryProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 270, height: 27.6}}
                                                 />
-                                                <div style={{height: "16px"}}>
+                                                <div>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
                                                                   component="small"/>
                                                 </div>
@@ -318,10 +339,11 @@ function CreateProduct() {
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"5"}>
                                                     Camera sau<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"5"}
                                                     name="cameraProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
@@ -333,10 +355,11 @@ function CreateProduct() {
                                                 </div>
                                             </div>
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"6"}>
                                                     Camera trước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"6"}
                                                     name="selfieProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
@@ -350,25 +373,27 @@ function CreateProduct() {
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"7"}>
                                                     Trọng lượng <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"7"}
                                                     name="weightProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
                                                     style={{width: 250, height: 27.6}}
                                                 />
-                                                <div style={{height: "16px"}}>
+                                                <div>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
                                                                   component="small"/>
                                                 </div>
                                             </div>
                                             <div className="col-6">
-                                                <label>
+                                                <label htmlFor={"8"}>
                                                     Số lượng <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
+                                                    id={"8"}
                                                     name="quantityProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="number"
@@ -376,16 +401,17 @@ function CreateProduct() {
                                                     readOnly
                                                 />
                                                 <div style={{height: "16px"}}>
-                                                    <ErrorMessage name="priceProduct" className="p-3 mb-2 text-danger"
+                                                    <ErrorMessage name="quantityProduct" className="p-3 mb-2 text-danger"
                                                                   component="small"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-6">
-                                                <label>
-                                                    Dung lượng <span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"9"}>
+                                                    Dung lượng </label>
                                                 <Field
+                                                    id={"9"}
                                                     name="capacityDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -400,9 +426,10 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                             <div className="col-6">
-                                                <label>
-                                                    Màu sắc <span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"10"}>
+                                                    Màu sắc </label>
                                                 <Field
+                                                    id={"10"}
                                                     name="colorDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -419,9 +446,10 @@ function CreateProduct() {
                                         </div>
                                         <div className="row mt-2">
                                             <div className="col-6 mt-2">
-                                                <label>
-                                                    Cpu <span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"11"}>
+                                                    Cpu </label>
                                                 <Field
+                                                    id={"11"}
                                                     name="cpuDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -436,9 +464,10 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                             <div className="col-6 mt-2">
-                                                <label>
-                                                    Ram <span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"12"}>
+                                                    Ram </label>
                                                 <Field
+                                                    id={"12"}
                                                     name="ramDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -455,9 +484,10 @@ function CreateProduct() {
                                         </div>
                                         <div className="row mt-2">
                                             <div className="col-6 mt-2">
-                                                <label>
-                                                    Series <span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"13"}>
+                                                    Series </label>
                                                 <Field
+                                                    id={"13"}
                                                     name="seriesDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -472,9 +502,10 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                             <div className="col-6 mt-2">
-                                                <label>
-                                                    Loại sản phẩm<span style={{color: "red"}}>*</span></label>
+                                                <label htmlFor={"14"}>
+                                                    Loại sản phẩm </label>
                                                 <Field
+                                                    di={"14"}
                                                     name="typeDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
@@ -505,10 +536,11 @@ function CreateProduct() {
                                                 multiple=""/>
                                         </div>
                                         <div className="mt-2">
-                                            <label>Mô tả thêm </label>
+                                            <label htmlFor={"15"}>Mô tả thêm </label>
                                         </div>
                                         <div>
                                             <Field
+                                                id={"15"}
                                                 className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
                                                 component={CKEditorComponent}
@@ -524,6 +556,10 @@ function CreateProduct() {
                                                     className="btn btn-outline-primary float-end mx-3 mt-2 shadow">
                                                 Lưu
                                             </button>
+                                            {/*<button type="submit" onClick={}*/}
+                                            {/*        className="btn btn-outline-primary float-end mx-3 mt-2 shadow">*/}
+                                            {/*    Hoàn tác*/}
+                                            {/*</button>*/}
                                         </div>
                                         <div className="col-8 mt-5">
                                             <div className="float-end">
