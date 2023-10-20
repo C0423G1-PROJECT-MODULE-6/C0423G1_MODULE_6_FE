@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
 import * as orderService from "../../service/order/OrderService"
+import {toast} from "react-toastify";
 function BillNotPayConfirm(props) {
     let {orderBill,handleClose,handleData} = props;
     const handleOldBill = async () => {
         const oldOrder =await orderService.getOrderNotPayByChoose(orderBill.customer.idCustomer,1,1);
-        console.log(oldOrder)
         handleData(oldOrder.customer);
         handleClose();
+        toast("Bạn đã giữ lại bill cũ")
     };
     const handleCreateNewBill = async () => {
         const newOrder = await orderService.getOrderNotPayByChoose(orderBill.customer.idCustomer,1,2);
-        console.log(newOrder)
         handleData(newOrder.customer);
         handleClose();
+        toast("Bạn đã xóa bill cũ")
     };
     return (
         <>
