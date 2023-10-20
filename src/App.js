@@ -1,4 +1,3 @@
-
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from "react-router-dom";
 import Order from "./components/order/Order";
@@ -25,13 +24,12 @@ import {ImportProduct} from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
 import CreateProduct from "./components/product/CreateProduct";
-
-
 import Home from './components/home/home/Home';
 import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 import CreateSupplier from "./components/supplier/CreateSupplier";
 import {SaleHistory} from "./components/order/SaleHistory";
+
 
 
 

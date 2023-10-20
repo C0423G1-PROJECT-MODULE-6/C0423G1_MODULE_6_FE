@@ -8,6 +8,7 @@ import * as UserService from '../../service/user/UserService';
 import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css';
 import * as Yup from "yup";
+import Footer from "../home/common/Footer";
 
 function Information() {
 
@@ -31,6 +32,8 @@ function Information() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [validationPass, setValidationPass] = useState(true);
+    const [validationPassMax50, setValidationPassMax50] = useState(true);
 
 
 
@@ -47,6 +50,16 @@ function Information() {
             setPasswordsMatch(true);
         } else {
             setPasswordsMatch(false);
+        }
+        if (event.target.value.length < 6) {
+            setValidationPass(false);
+        } else {
+            setValidationPass(true);
+        }
+        if (event.target.value.length > 50) {
+            setValidationPassMax50(false);
+        } else {
+            setValidationPassMax50(true);
         }
     };
 
@@ -70,8 +83,16 @@ function Information() {
     }, []);
 
     const handleToggleInputs = () => {
+        setInput1Disabled(true);
+        setPasswordsMatch(false);
+        setOTPVisible(false);
+        setDefaultPass();
+    }
+
+    const changeToggleInputs = () => {
         setInput1Disabled(!input1Disabled);
         setPasswordsMatch(false);
+        setOTPVisible(false);
         setDefaultPass();
     }
 
@@ -133,7 +154,6 @@ function Information() {
     }
 
     const changePass = async (data) => {
-        setInput1Disabled(true);
         setLoading(true);
         let initOtp = {
             ...data,
@@ -147,6 +167,7 @@ function Information() {
             }
             const res = await UserService.changePass(data);
             if (res.status === 200) {
+                setInput1Disabled(true);
                 showOTP();
                 toast("OTP đã được gửi qua mail của bạn");
             } else {
@@ -182,25 +203,33 @@ function Information() {
 
     const auth = async (data) => {
         setLoading(true);
-        let initOtp = {
-            ...data,
-            userName: infoUser.userName,
-            password: newPassword,
-            otp: otp
-        }
-        const res = await AuthService.confirmRegister(initOtp);
-        if (res.status === 200) {
-            toast("Đổi mật khẩu thành công");
-            await getInfoUser(params.id);
-            hiddenOTP();
-            setDefaultPass();
-            handleToggleInputs();
-            setInput1Disabled(true);
-        } else {
+        try {
+            let initOtp = {
+                ...data,
+                userName: infoUser.userName,
+                password: newPassword,
+                otp: otp
+            }
+            const res = await AuthService.confirmRegister(initOtp);
+            console.log(res)
+            if (res.status === 200) {
+                toast("Đổi mật khẩu thành công");
+                await getInfoUser(params.id);
+                hiddenOTP();
+                setDefaultPass();
+                handleToggleInputs();
+                setInput1Disabled(true);
+            } else {
+                showResetOTP();
+                toast.error("Xác nhận OTP thất bại");
+            }
+            setLoading(false);
+        } catch (e) {
+            toast.error("Xác nhận OTP thất bại");
             showResetOTP();
-            toast.error("Xác nhận OTP thất bại")
+            setLoading(false);
         }
-        setLoading(false);
+
     }
 
     const today = new Date();
@@ -300,20 +329,20 @@ function Information() {
                             password: "",
                             newPasswordConfirmation: ""
                         }}
-                        onSubmit={(values) => {
-                            changePass(values);
-                        }}
                         validationSchema={Yup.object({
-                            password: Yup.string().trim()
+                            password: Yup.string()
                                 .min(6, "Không đủ ký tự cho phép (6 ký tự)")
                                 .max(50, "Quá ký tự cho phép (50 ký tự)"),
-                            newPassword: Yup.string().trim()
+                            newPassword: Yup.string()
                                 .min(6, "Không đủ ký tự cho phép (6 ký tự)")
                                 .max(50, "Quá ký tự cho phép (50 ký tự)"),
-                            newPasswordConfirmation: Yup.string().trim()
+                            newPasswordConfirmation: Yup.string()
                                 .min(6, "Không đủ ký tự cho phép (6 ký tự)")
                                 .max(50, "Quá ký tự cho phép (50 ký tự)"),
                         })}
+                        onSubmit={(values) => {
+                            changePass(values);
+                        }}
                     >
                         <Form>
                             <h1 style={{textAlign: 'center'}}>Thay Đổi Mật Khẩu</h1>
@@ -330,6 +359,8 @@ function Information() {
                                 <label htmlFor="newPassword" className="form-label">Mật Khẩu Mới</label>
                                 <Field type="password" className="form-control" name="newPassword"
                                        onChange={handleNewPasswordChange} value={newPassword} disabled={input1Disabled} />
+                                <span style={{color: "red", display: validationPass ? "none" : "flex"}}>Không đủ ký tự cho phép (6 ký tự)</span>
+                                <span style={{color: "red", display: validationPassMax50 ? "none" : "flex"}}>Quá ký tự cho phép (50 ký tự)</span>
                                 <ErrorMessage name="newPassword" component="span" style={{color: "red"}}></ErrorMessage>
                             </div>
                             <div className="mb-3">
@@ -353,12 +384,12 @@ function Information() {
                                     <button type="button"
                                             style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
                                             className="btn btn-outline-primary"
-                                            onClick={handleToggleInputs}>
+                                            onClick={changeToggleInputs}>
                                         {!input1Disabled ? `Huỷ` : 'Đổi mật khẩu'}
                                     </button>
                                     <button type="submit"
                                             style={{width: '40%', marginLeft: '10%', marginRight: 'auto', display: input1Disabled ? 'none' : 'block'}}
-                                            className="btn btn-outline-primary" disabled={!passwordsMatch}>Lưu
+                                            className="btn btn-outline-primary" disabled={!passwordsMatch || !validationPass || !validationPassMax50}>Lưu
                                     </button>
                                 </div>
                             </div>
@@ -392,7 +423,13 @@ function Information() {
                                         marginRight: 'auto',
                                         display: isOTPReset ? 'none' : 'block'
                                     }}>
-                                        <button type="submit" style={{width: '100%'}}
+                                        <button type="button"
+                                                style={{width: '45%', marginLeft: 'auto', marginRight: '10%'}}
+                                                className="btn btn-outline-primary"
+                                                onClick={handleToggleInputs}>
+                                            Huỷ
+                                        </button>
+                                        <button type="submit" style={{width: '45%'}}
                                                 className="btn btn-outline-primary" id="subOtp">Xác Nhận
                                         </button>
                                     </div>
@@ -402,14 +439,20 @@ function Information() {
                                         marginRight: '5%'
                                     }}>
                                         <button type="button"
-                                                style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
-                                                className="btn btn-outline-primary" id="subOtp" disabled={isCounting}
+                                                style={{width: '30%'}}
+                                                className="btn btn-outline-primary mx-2"
+                                                onClick={handleToggleInputs}>
+                                           Huỷ
+                                        </button>
+                                        <button type="button"
+                                                style={{width: '30%'}}
+                                                className="btn btn-outline-primary mx-2" id="subOtp" disabled={isCounting}
                                                 onClick={() => resetOTP()}>
                                             {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
                                         </button>
                                         <button type="submit"
-                                                style={{width: '40%', marginLeft: '10%', marginRight: 'auto'}}
-                                                className="btn btn-outline-primary" id="subOtp">Xác Nhận
+                                                style={{width: '30%'}}
+                                                className="btn btn-outline-primary mx-2" id="subOtp">Xác Nhận
                                         </button>
                                     </div>
                                 </div>
@@ -418,6 +461,7 @@ function Information() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }
