@@ -24,7 +24,6 @@ const EmployeeList = () => {
     show: false,
     info: {},
   });
-  console.log(listJob);
   //loadListJob
   const loadListJob = async () => {
     const data = await getAppRoleList();
@@ -71,8 +70,13 @@ const EmployeeList = () => {
 
   //delete
   const handleRowClick = (employee) => {
-    setSelectedRow(employee.id);
-    setEmployee(employee);
+    if(employee.id === selectedRow){
+      setSelectedRow(null);
+      setEmployee(null);
+    }else{
+      setSelectedRow(employee.id);
+      setEmployee(employee);
+    }
   };
 
   const showModalDelete = (employee) => {
@@ -104,7 +108,6 @@ const EmployeeList = () => {
     const searchPhone = document.getElementById("searchPhone").value;
     setSearchPhone(searchPhone);
     const searchJob = document.getElementById("searchJob").value;
-    console.log(searchJob);
     setSearchJob(searchJob);
     setPage(0);
   };
@@ -182,7 +185,7 @@ const EmployeeList = () => {
                 <tr
                   key={employee.id}
                   onClick={() => handleRowClick(employee)}
-                  className={selectedRow === employee.id ? "selected" : ""}
+                  className={selectedRow === employee.id ? "selectedphuoc" : ""}
                 >
                   <td>{index + 1}</td>
                   <td>{employee.employeeName}</td>
@@ -200,18 +203,18 @@ const EmployeeList = () => {
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
             <Link to={"/employee/create"}>
-              <button type="button" className="btn btn-outline-primary mx-1">
+              <button type="button" className="btn btn-outline-primary me-1">
                 Thêm mới
               </button>
             </Link>
             <Link to={"/employee/edit"}>
-              <button type="button" className="btn btn-outline-success mx-1">
+              <button type="button" className="btn btn-outline-success me-1">
                 Cập nhật
               </button>
             </Link>
             <button
               type="button"
-              className="btn btn-outline-danger mx-1"
+              className="btn btn-outline-danger me-1"
               onClick={() => (employee !== null) & showModalDelete(employee)}
               disabled={employee === null}
             >
@@ -222,16 +225,7 @@ const EmployeeList = () => {
             <nav aria-label="Page navigation">
               <ul className="pagination">
                 <li className="page-item">
-                  <a
-                    className="page-link"
-                    tabIndex={-1}
-                    aria-disabled="true"
-                    href="#"
-                    onClick={() => previousPage()}
-                    style={{ display: page === 0 ? "none" : "block" }}
-                  >
-                    Trước
-                  </a>
+                  <button onClick={() => previousPage()} className={`page-link ${page <= 0 ? "disabled" :""}`}>Trước</button>
                 </li>
                 <li className="page-item" aria-current="page">
                   <a className="page-link" href="#">
@@ -239,18 +233,7 @@ const EmployeeList = () => {
                   </a>
                 </li>
                 <li className="page-item">
-                  <a
-                    className="page-link"
-                    tabIndex={-1}
-                    aria-disabled="true"
-                    href="#"
-                    onClick={() => nextPage()}
-                    style={{
-                      display: page === totalPage - 1 ? "none" : "block",
-                    }}
-                  >
-                    Sau
-                  </a>
+                  <button onClick={() => nextPage()} className={`page-link ${page >= (totalPage - 1) ? "disabled" : ""}`}>Sau</button>
                 </li>
               </ul>
             </nav>
