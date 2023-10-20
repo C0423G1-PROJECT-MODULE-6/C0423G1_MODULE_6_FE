@@ -33,7 +33,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
-
+console.log(employee);
   //list
   const loadEmployeeList = async () => {
     try {
@@ -48,6 +48,7 @@ const EmployeeList = () => {
       }
       setTotalPage(result.totalPages);
       setEmployeeList(result.content);
+
     } catch {
       setEmployeeList([]);
     }
@@ -199,12 +200,12 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/employee/create"}>
+            <Link to={"/admin/employee/create"}>
               <button type="button" className="btn btn-outline-primary mx-1">
                 Thêm mới
               </button>
             </Link>
-            <Link to={"/employee/edit"}>
+            <Link to={`/admin/employee/edit/${employee?.id}`}>
               <button type="button" className="btn btn-outline-success mx-1">
                 Cập nhật
               </button>
