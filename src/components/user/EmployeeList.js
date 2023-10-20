@@ -33,7 +33,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
-
+console.log(employee);
   //list
   const loadEmployeeList = async () => {
     try {
@@ -48,6 +48,7 @@ const EmployeeList = () => {
       }
       setTotalPage(result.totalPages);
       setEmployeeList(result.content);
+
     } catch {
       setEmployeeList([]);
     }
@@ -204,7 +205,7 @@ const EmployeeList = () => {
                 Thêm mới
               </button>
             </Link>
-            <Link to={"/admin/employee/edit"}>
+            <Link to={`/admin/employee/edit/${employee?.id}`}>
               <button type="button" className="btn btn-outline-success mx-1">
                 Cập nhật
               </button>
