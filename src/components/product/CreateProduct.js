@@ -179,7 +179,7 @@ function CreateProduct() {
                         cameraProduct: Yup.string()
                             .required("Không để trống camera sảm phẩm!")
                             .max(100, "Thông tin camera quá dài, vui lòng nhập không quá 100 ký tự!")
-                            .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự!")
+                            .min(4, "Thông tin camera sản phẩm dài hơn 4 ký tự!")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin camera không chứa ký tự đặc biệt!")
                         ,
                         descriptionProduct: Yup.string()
@@ -188,19 +188,19 @@ function CreateProduct() {
                         ,
                         selfieProduct: Yup.string()
                             .required("Vui lòng bổ sung thông tin selfie!")
-                            .min(5, "Thông tin selfie quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(3, "Thông tin selfie quá ngắn, vui lòng nhập hơn 3 ký tự!")
                             .max(100, "Thông tin selfie quá dài, vui lòng nhập ít hơn 100 ký tự!")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin selfie không chứa ký tự đặc biệt!")
                         ,
                         batteryProduct: Yup.string()
                             .required("Không được để trống thông tin pin!")
-                            .min(5, "Thông tin pin quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(4, "Thông tin pin quá ngắn, vui lòng nhập hơn 4 ký tự!")
                             .max(100, "Thông tin pin quá dài, vui lòng nhập ít hơn 100 ký tự!")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin pin không chứa ký tự đặc biệt!")
                         ,
                         weightProduct: Yup.string()
                             .required("Không được để trống thông tin trọng lượng!")
-                            .min(5, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 5 ký tự!")
+                            .min(2, "Thông tin trọng lượng quá ngắn, vui lòng nhập hơn 2 ký tự!")
                             .max(100, "Thông tin trọng lượng quá dài, vui lòng nhập ít hơn 100 ký tự!")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin trọng lượng không đúng định dạng!")
                         ,
@@ -255,13 +255,13 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Tên điện thoại<span style={{color: "red"}}>*</span>
+                                                    Tên sản phẩm<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="nameProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="nameProduct"
@@ -270,13 +270,13 @@ function CreateProduct() {
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Giá điện thoại<span style={{color: "red"}}>*</span>
+                                                    Giá <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     className="form-control-dao mt-2 border border-dark"
                                                     name="priceProduct"
                                                     type="number"
-                                                    style={{width: 270}}
+                                                    style={{width: 270 , height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
@@ -287,13 +287,13 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6 mt-2">
                                                 <label>
-                                                    Kích thước màn hình <span style={{color: "red"}}>*</span>
+                                                    Kích thước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="screenProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250 , height: 27.6}}
                                                 />
                                                 <div style={{ height: "16px" }}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="screenProduct"
@@ -302,13 +302,13 @@ function CreateProduct() {
                                             </div>
                                             <div className="col-6 mt-2">
                                                 <label>
-                                                    Pin điện thoại<span style={{color: "red"}}>*</span>
+                                                    Dung lượng pin<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="batteryProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="batteryProduct"
@@ -319,13 +319,13 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Camera điện thoại <span style={{color: "red"}}>*</span>
+                                                    Camera sau<span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="cameraProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="cameraProduct"
@@ -334,13 +334,13 @@ function CreateProduct() {
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Selfie <span style={{color: "red"}}>*</span>
+                                                    Camera trước <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="selfieProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="selfieProduct"
@@ -351,13 +351,13 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Trọng lượng điện thoại<span style={{color: "red"}}>*</span>
+                                                    Trọng lượng <span style={{color: "red"}}>*</span>
                                                 </label>
                                                 <Field
                                                     name="weightProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="text"
-                                                    style={{width: 250}}
+                                                    style={{width: 250, height: 27.6}}
                                                 />
                                                 <div style={{height: "16px"}}>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="weightProduct"
@@ -372,7 +372,7 @@ function CreateProduct() {
                                                     name="quantityProduct"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     type="number"
-                                                    style={{width: 270}}
+                                                    style={{width: 270, height: 27.6}}
                                                     readOnly
                                                 />
                                                 <div style={{height: "16px"}}>
@@ -384,12 +384,12 @@ function CreateProduct() {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label>
-                                                    Dung lượng điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Dung lượng <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="capacityDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn dung lượng điện thoại</option>
                                                     {
                                                         capacitys.map((capacity) => (
@@ -401,12 +401,12 @@ function CreateProduct() {
                                             </div>
                                             <div className="col-6">
                                                 <label>
-                                                    Màu sắc điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Màu sắc <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="colorDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn màu sắc điện thoại</option>
                                                     {
                                                         colors.map((color) => (
@@ -417,15 +417,15 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-6">
+                                        <div className="row mt-2">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Cpu điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Cpu <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="cpuDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn cpu điện thoại</option>
                                                     {
                                                         cpus.map((cpu) => (
@@ -435,14 +435,14 @@ function CreateProduct() {
                                                     }
                                                 </Field>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Ram điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Ram <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="ramDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn Ram điện thoại</option>
                                                     {
                                                         rams.map((ram) => (
@@ -453,15 +453,15 @@ function CreateProduct() {
                                                 </Field>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-6">
+                                        <div className="row mt-2">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Series điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Series <span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="seriesDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 250, height: 27.6}}>
                                                     <option value="" disabled>Chọn Series điện thoại</option>
                                                     {
                                                         series.map((seriess) => (
@@ -471,14 +471,14 @@ function CreateProduct() {
                                                     }
                                                 </Field>
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-6 mt-2">
                                                 <label>
-                                                    Loại điện thoại<span style={{color: "red"}}>*</span></label>
+                                                    Loại sản phẩm<span style={{color: "red"}}>*</span></label>
                                                 <Field
                                                     name="typeDto"
                                                     className="form-control-dao mt-2 border border-dark"
                                                     as="select"
-                                                    style={{width: 250}}>
+                                                    style={{width: 270, height: 27.6}}>
                                                     <option value="" disabled>Chọn loại điện thoại</option>
                                                     {
                                                         types.map((type) => (
@@ -512,7 +512,6 @@ function CreateProduct() {
                                                 className="form-control-dao mt-2 border border-dark"
                                                 name="descriptionProduct"
                                                 component={CKEditorComponent}
-                                                // style={{width: 540, height: 90}}
                                             />
                                         </div>
                                         <div className="col-4 p-2 mt-3">
