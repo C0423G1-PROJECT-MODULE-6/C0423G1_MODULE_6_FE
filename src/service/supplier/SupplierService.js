@@ -24,7 +24,7 @@ export const getAllAddress = async () => {
         const res = await axios.get(`/api/p/`);
         return res.data;
     } catch (e) {
-        alert("Yêu cầu địa chỉ thất bại!")
+        alert("Yêu cầu địa chỉ thất bại!")
     }
 }
 
@@ -35,5 +35,25 @@ export const createNewSupplier = async (supplier) => {
         return res;
     } catch (e) {
         alert("Yêu cầu thất bại!")
+    }
+}
+
+export const findSupplierById = async (id) =>{
+    try {
+        const res = await axios.get(`http://localhost:8080/api/admin/supplier/${id}`);
+        console.log(res)
+        return res.data;
+    } catch (e) {
+        alert("Yêu cầu tìm kiếm supplier thất bại!")
+    }
+}
+
+export const editSupplier = async (data) =>{
+    try {
+        const res = await axios.patch(`http://localhost:8080/api/admin/supplier/edit/${data.idSupplier}`,data);
+        console.log(res)
+        return res;
+    } catch (e) {
+        alert("Yêu cầu chỉnh sửa thất bại!")
     }
 }
