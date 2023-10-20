@@ -27,10 +27,10 @@ function CreateEmployee(props) {
                     try {
                         await crateEmployee({
                             ...employee,
-                            image: url,
+                            employeeImage: url,
                         })
                             .then(() => {
-                                navigate("/employee");
+                                navigate("/admin/employee");
                             })
                             .then(() => {
                                 Swal.fire({
@@ -54,9 +54,9 @@ function CreateEmployee(props) {
             try {
                 await crateEmployee({
                     ...employee,
-                    image: "https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/02/avatar-trang-y-nghia.jpeg?fit=512%2C20000&quality=95&ssl=1"
+                    employeeImage: "https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/02/avatar-trang-y-nghia.jpeg?fit=512%2C20000&quality=95&ssl=1"
                 }).then(() => {
-                    navigate("/employee");
+                    navigate("/admin/employee");
                 })
                     .then(() => {
                         Swal.fire({
@@ -244,7 +244,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field
-                                                    disable
+                                                    readOnly
                                                     className="form-control border border-dark mt-2"
                                                     name="employeeCode"
                                                     type="text" />
@@ -478,7 +478,7 @@ function CreateEmployee(props) {
                                         <div className="row">
                                             {/* button  */}
                                             <div className="col-3 p-2 mt-3">
-                                                <Link to={"/employee"}>
+                                                <Link to={"/admin/employee"}>
                                                     <button className="btn btn-outline-secondary float-end mx-1 mt-2 shadow">
                                                         Trở về
                                                     </button>
