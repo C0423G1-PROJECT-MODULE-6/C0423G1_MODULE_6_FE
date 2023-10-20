@@ -32,6 +32,7 @@ import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 import CreateSupplier from "./components/supplier/CreateSupplier";
 import {SaleHistory} from "./components/order/SaleHistory";
+import ScannerQR from "./components/scanner_qr/ScannerQR";
 
 
 function App() {
@@ -74,7 +75,7 @@ function App() {
                     <Route path="/admin/customer" element={<CustomerList/>}/>
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
-                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
+                    <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
 
                     <Route path="/admin/supplier/create" element={<CreateSupplier/>}/>
@@ -86,8 +87,7 @@ function App() {
                     <Route path="/admin/order/showBill" element={<ShowBill/>}/>
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
-
-
+                    <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                 </Route>
             </Routes>
         </>
