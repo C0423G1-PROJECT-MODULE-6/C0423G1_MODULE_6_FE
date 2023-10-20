@@ -1,0 +1,17 @@
+.form-input-dao {
+    width: 600px;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 20px;
+}
+.form-input-dao {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+.form-control-dao {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    height: auto;
+}

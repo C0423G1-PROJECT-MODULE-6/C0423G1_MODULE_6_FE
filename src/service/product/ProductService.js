@@ -22,7 +22,7 @@ export const getImageProduct = async () => {
 export const updateProduct = async (id, product) => {
     try {
         const result = await axios.patch(`http://localhost:8080/api/admin/product/${id}`, product)
-        return result.data.content;
+        return result.data;
     } catch (error) {
         console.log(error);
     }
@@ -30,7 +30,7 @@ export const updateProduct = async (id, product) => {
 
 export const getProductId = async (id) => {
     try {
-        const result = await axios.patch(`http://localhost:8080/api/admin/product/${id}`)
+        const result = await axios.get(`http://localhost:8080/api/admin/product/${id}`)
         return result.data;
     } catch (error) {
         console.log(error)
@@ -73,7 +73,7 @@ export const getAllSeries = async () => {
 
 export const getAllType = async () => {
     const result = await axios.get(`http://localhost:8080/api/admin/type/list`)
-    console.log(result)
+    // console.log(result)
     return result.data;
 }
 export const removeProduct = async (id) => {
@@ -89,5 +89,6 @@ export const removeProduct = async (id) => {
  */
 export const getPageProductModal = async (choose,page,value) => {
     const result = await axios.get(`http://localhost:8080/api/admin/product/list?choose=${choose}&page=${page}&value=${value}`)
+    console.log(result)
     return result;
 }
