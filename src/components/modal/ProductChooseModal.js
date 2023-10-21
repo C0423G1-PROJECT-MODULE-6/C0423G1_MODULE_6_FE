@@ -74,11 +74,11 @@ const ProductChooseModal = ({data1, handleData}) => {
                         autoClose: 8000
                     });
                 }
-                if (result?.status === 200) {
-                    toast.success(result.data, {
-                        autoClose: 8000
-                    });
-                }
+                // if (result?.status === 200) {
+                //     toast.success(result.data, {
+                //         autoClose: 8000
+                //     });
+                // }
                 let submitModal = await document.getElementById("closeModalProduct");
                 // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
@@ -421,17 +421,18 @@ const ProductChooseModal = ({data1, handleData}) => {
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => previousPage()}
+                                                <button className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => previousPage()}
                                                         >Trước
                                                 </button>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link "
-                                                >{page + 1} / {totalPage}</button>
+                                                <div className="page-link "
+                                                >{page + 1} / {totalPage}</div>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()} >Sau
-                                                </button>
+                                                    <button className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} onClick={() => nextPage()} >Sau
+                                                    </button>
+
                                             </li>
                                         </ul>
                                     </nav>
