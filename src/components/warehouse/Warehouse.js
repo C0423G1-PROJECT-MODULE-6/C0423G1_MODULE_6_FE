@@ -42,7 +42,7 @@ export function Warehouse() {
                 <option value="price">Đơn giá</option>
                 <option value="quantity">Số lượng</option>
                 <option value="supplier">Nhà cung cấp</option>
-                <option value="totalPrice">Tổng giá</option>
+                <option value="inputDate">Ngày nhập kho</option>
               </select>
             </div>
             <div className="col-auto me-2">
@@ -125,7 +125,7 @@ export function Warehouse() {
         </table>
         <div className="row d-flex justify-content-around my-3">
           <div className="col float-start">
-            <Link className="me-1  " to="/admin/warehouse/import" style={{ textDecoration: 'none' }}>
+            <Link className="me-1  " to="/admin/warehouse/import/0" style={{ textDecoration: 'none' }}>
               <button type="button" className="btn btn-outline-primary">Nhập sản phẩm</button>
             </Link>
           </div>

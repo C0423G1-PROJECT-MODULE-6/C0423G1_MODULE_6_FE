@@ -37,27 +37,27 @@ const CustomerCreateModal = ({handleData}) => {
             }
             validationSchema={Yup.object({
                 nameCustomer: Yup.string()
-                    .max(50, "Tên khách hàng tối đa 50 ký tự")
-                    .min(3, "Tên khách hàng tối thiểu 3 ký tự").required("Không bỏ trống trường này"),
+                    .max(100, "Tên khách hàng tối đa 100 ký tự!")
+                    .min(3, "Tên khách hàng tối thiểu 3 ký tự .").required("Không bỏ trống trường này.").matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/,"Nhập sai định dạng tên."),
                 dateOfBirthCustomer: Yup.string().required(
-                    "Không bỏ trống trường này."
+                    "Không bỏ trống trường này ."
                 ).test("birthday",
-                    "Ngày sinh không được vượt quá thời gian thực tế.",
-                    validateBirth).matches(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, "Không đúng định dạng vd:12-02-2000"),
+                    "Ngày sinh không được vượt quá thời gian thực tế .",
+                    validateBirth).matches(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, "Không đúng định dạng vd:12-02-2000."),
                 addressCustomer: Yup.string()
                     .required("Không bỏ trống trường này.")
                     .max(100, "Địa chỉ tối đa 100 ký tự ").min(5, "Địa chỉ tối thiểu 5 ký tự."),
                 phoneNumberCustomer: Yup.string()
-                    .required("Không bỏ trống trường này")
+                    .required("Không bỏ trống trường này .")
                     .max(11, "Số điện thoại tối đa 11 ký tự.")
-                    .min(10, "Số điện tối thiểu 10 ký tự.").matches(/^(0[3|5|7|8|9])([0-9]{8})\b$/
-                        , "Nhập sai định dạng vd: 0339779768"),
+                    .min(10, "Số điện tối thiểu 10 ký tự .").matches(/^(0[3|5|7|8|9])([0-9]{8})\b$/
+                        , "Nhập sai định dạng vd: 0339779768 ."),
                 emailCustomer: Yup.string()
-                    .required("Không bỏ trống trường này").min(12, "Email tối thiểu 12 ký tự")
+                    .required("Không bỏ trống trường này!").min(12, "Email tối thiểu 12 ký tự.")
                     .matches(
                         /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-                        "Nhập sai định dạng vd:nguyenvanan@gmail.com"
-                    ).max(50, "Email tối đa 50 ký tự"),
+                        "Nhập sai định dạng vd:nguyenvanan@gmail.com ."
+                    ).max(50, "Email tối đa 50 ký tự ."),
             })}
             onSubmit={(values, {setErrors}) => {
                 console.log("1");
@@ -193,12 +193,16 @@ const CustomerCreateModal = ({handleData}) => {
                                         <div style={{marginLeft: '9%'}}>
                                             <button className="btn btn-outline-primary shadow"
                                                     id="submitModal"
-                                                    style={{marginRight: '1rem', width: '45%'}} type="submit">
+                                                    style={{marginRight: '1rem', width: '30%'}} type="submit">
                                                 Lưu
+                                            </button>
+                                            <button className="btn btn-outline-secondary shadow"
+                                                    style={{marginRight: '1rem',width: '30%'}} type="reset">
+                                                Làm mới
                                             </button>
                                             <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
                                                     id="closeModalCreate"
-                                                    style={{width: '45%'}} type="button">
+                                                    style={{width: '30%'}} type="button">
                                                 Trở về
                                             </button>
                                         </div>
