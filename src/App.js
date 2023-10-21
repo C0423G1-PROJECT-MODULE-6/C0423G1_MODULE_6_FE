@@ -1,26 +1,26 @@
 import 'react-toastify/dist/ReactToastify.css';
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Order from "./components/order/Order";
 import Information from "./components/user/Information";
 import HomeAdmin from "./components/user/HomeAdmin";
-import {axiosClient} from "./service/user/AxiosClient";
+import { axiosClient } from "./service/user/AxiosClient";
 import Authentication from "./components/user/Authentication";
 import Error403 from "./components/user/Error403";
 import Error401 from "./components/user/Error401";
-import {EnumAppUserRole} from "./components/user/EnumAppUserRole";
+import { EnumAppUserRole } from "./components/user/EnumAppUserRole";
 import EmployeeList from './components/user/EmployeeList';
 import EditEmployee from './components/user/EditEmployee';
 import React from "react";
-import {ToastContainer} from "react-toastify";
-import {ShoppingHistoryList} from "./components/customer/ShoppingHistoryList";
-import {CustomerList} from "./components/customer/CustomerList";
+import { ToastContainer } from "react-toastify";
+import { ShoppingHistoryList } from "./components/customer/ShoppingHistoryList";
+import { CustomerList } from "./components/customer/CustomerList";
 import LoginForm from "./components/user/LoginForm";
 import CreateEmployee from './components/user/CreateEmployee';
 import ShowBill from "./components/order/ShowBill";
 import PrintPDF from "./components/order/PrintPDF";
 import ProductList from "./components/product/ProductList";
-import {Warehouse} from './components/warehouse/Warehouse';
-import {ImportProduct} from './components/warehouse/ImportProduct';
+import { Warehouse } from './components/warehouse/Warehouse';
+import { ImportProduct } from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
 import CreateProduct from "./components/product/CreateProduct";
@@ -29,8 +29,10 @@ import Home from './components/home/home/Home';
 import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 import CreateSupplier from "./components/supplier/CreateSupplier";
+import HeaderAdmin from './components/user/HeaderAdmin';
 import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
+
 
 
 
@@ -39,18 +41,18 @@ function App() {
     return (
         <>
             <ToastContainer></ToastContainer>
-
+            <HeaderAdmin></HeaderAdmin>
             <Routes>
 
-                <Route path="*" element={<Home/>}></Route>
-                <Route path="/401" element={<Error401/>}/>
-                <Route path="/403" element={<Error403/>}/>
-                <Route path="/login" element={<LoginForm/>}/>
-                <Route path='/home' element={<Home/>}/>
-                <Route path="/list/:type" element={<List/>}/>
-                <Route path="/admin/product/update/:id" element={<UpdateProduct/>}/>
-                <Route path="/admin/product/list" element={<ProductList/>}/>
-                <Route path="/detail/:type/:id" element={<Detail/>}/>
+                <Route path="*" element={<Home />}></Route>
+                <Route path="/401" element={<Error401 />} />
+                <Route path="/403" element={<Error403 />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path='/home' element={<Home />} />
+                <Route path="/list/:type" element={<List />} />
+                <Route path="/admin/product/update/:id" element={<UpdateProduct />} />
+                <Route path="/admin/product/list" element={<ProductList />} />
+                <Route path="/detail/:type/:id" element={<Detail />} />
 
 
                 <Route
@@ -65,10 +67,12 @@ function App() {
                         />
                     }
                 >
-                    <Route path="/admin/information/:id" element={<Information/>}></Route>
-                    <Route path="/admin/*" element={<HomeAdmin/>}></Route>
+                    <Route path="/admin/information/:id" element={<Information />}></Route>
+                    <Route path="/admin/*" element={<HomeAdmin />}></Route>
                     <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
                     <Route path='/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
+
+
                     <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/customer" element={<CustomerList/>}/>
@@ -78,9 +82,10 @@ function App() {
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>
 
-                    <Route path="/admin/supplier/create" element={<CreateSupplier/>}/>
-                    <Route path="/admin/product/list" element={<ProductList/>}/>
-                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/supplier/create" element={<CreateSupplier />} />
+                    <Route path="/admin/product/list" element={<ProductList />} />
+                    <Route path="/admin/product/create" element={<CreateProduct />} />
+
 
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                     <Route path="/admin/order" element={<Order/>}/>
@@ -88,6 +93,7 @@ function App() {
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
+
                 </Route>
             </Routes>
         </>

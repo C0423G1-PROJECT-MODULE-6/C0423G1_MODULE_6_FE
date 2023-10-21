@@ -1,21 +1,21 @@
 import axios from "axios";
 
-export const getEmployeeList = async (page,searchJob, searchName,searchPhone) =>{
-    try{
-        
+export const getEmployeeList = async (page, searchJob, searchName, searchPhone) => {
+    try {
+
         const respon = await axios.get(`http://localhost:8080/api/admin/employee/list?page=${page}&searchJob=${searchJob}&searchName=${searchName}&searchPhone=${searchPhone}`);
         return respon.data;
-    } catch(e){
+    } catch (e) {
         console.log(e);
     }
 }
 export const deleteEmployee = async (id) => {
-    try{
+    try {
         await axios.delete(`http://localhost:8080/api/admin/employee/delete/${id}`);
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
-    
+
 }
 // CaoNV
 export const crateEmployee = async (employeeDto) => {
@@ -27,8 +27,10 @@ export const getNewEmployee = async () => {
     return res
 }
 export const getEmployee = async (id) => {
-    console.log(id);
+
     const res = await axios.get(`http://localhost:8080/api/admin/employee/${id}`);
+
+    console.log(res);
     return res.data
 }
 export const updateEmployee = async (employee) => {
