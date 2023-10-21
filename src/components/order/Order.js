@@ -244,7 +244,6 @@ function Order() {
                                                         value={customer ? customer.emailCustomer : ""}
                                                         disabled
                                                     />
-
                                                 </div>
                                                 <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
                                                 <Field name="idUser" type="hidden" value={1}/>
