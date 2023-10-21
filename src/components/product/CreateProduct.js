@@ -11,7 +11,6 @@ import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import CKEditorComponent from "./CKEditorComponent";
-import "../../css/user/spinner.css"
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -24,7 +23,6 @@ function CreateProduct() {
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
     const [imageUpload, setImageUpload] = useState([]);
-    // const [loading, setLoading] = useState(false);
 
     // const getImage = async () => {
     //     const result = await productService.getImageProduct();
@@ -87,14 +85,12 @@ function CreateProduct() {
     const add = async (product, setErrors) => {
         let listImgPath = [];
         try {
-            // setLoading(true);
             const uploadPromises = imageUpload.map(async (image) => {
                 const imageRef = ref(storage, 'product/' + image.name);
                 const snapshot = await uploadBytes(imageRef, image);
                 const url = await getDownloadURL(snapshot.ref);
                 return url;
             });
-            // setLoading(false);
             const downloadUrls = await Promise.all(uploadPromises);
             listImgPath = [...downloadUrls]
         } catch (error) {
@@ -112,12 +108,10 @@ function CreateProduct() {
                 imageDtoList: listImgPath
             }
             await createProduct(product1, listImgPath);
-             navigate("/admin/product/list");
+            await navigate("/admin/product/list");
+            await toast(`Thêm mới sản phẩm ${product.nameProduct} thành công!`)
         } catch (error) {
             console.log(error);
-            if (error.response.data) {
-                setErrors(error.response.data);
-            }
         }
     }
 
@@ -184,20 +178,20 @@ function CreateProduct() {
                     validationSchema={Yup.object({
                         nameProduct: Yup.string()
                             .required("Không để trống tên sản phẩm.")
-                            .max(70, "Nhập tên không quá 70 ký tự.")
-                            .min(5, "Vui lòng nhập tên hơn 5 ký tự.")
+                            .max(100, "Nhập tên không quá 70 ký tự.")
+                            .min(3, "Vui lòng nhập tên hơn 5 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Tên sản phẩm không chứa ký tự đặc biệt.")
                         ,
                         screenProduct: Yup.string()
                             .required("Không để trống màn hình sản phẩm.")
-                            .max(50, "Vui lòng nhập ít hơn 50 ký tự.")
-                            .min(5, "Thông tin màn hình phải hơn 5 ký tự.")
+                            .max(100, "Vui lòng nhập ít hơn 50 ký tự.")
+                            .min(3, "Thông tin màn hình phải hơn 5 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         cameraProduct: Yup.string()
                             .required("Không để trống camera sảm phẩm.")
                             .max(100, "Vui lòng nhập không quá 100 ký tự.")
-                            .min(5, "Thông tin camera sản phẩm dài hơn 5 ký tự.")
+                            .min(3, "Thông tin camera sản phẩm dài hơn 5 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         descriptionProduct: Yup.string()
@@ -206,19 +200,19 @@ function CreateProduct() {
                         ,
                         selfieProduct: Yup.string()
                             .required("Vui lòng bổ sung thông tin selfie.")
-                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .min(3, "Vui lòng nhập hơn 5 ký tự.")
                             .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         batteryProduct: Yup.string()
                             .required("Không để trống thông tin pin.")
-                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .min(3, "Vui lòng nhập hơn 5 ký tự.")
                             .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không chứa ký tự đặc biệt.")
                         ,
                         weightProduct: Yup.string()
                             .required("Không để trống thông tin trọng lượng.")
-                            .min(5, "Vui lòng nhập hơn 5 ký tự.")
+                            .min(3, "Vui lòng nhập hơn 5 ký tự.")
                             .max(100, "Vui lòng nhập ít hơn 100 ký tự.")
                             .matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/, "Thông tin không đúng định dạng.")
                         ,
@@ -237,8 +231,7 @@ function CreateProduct() {
                         <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
                             <fieldset
                                 className="form-input-dao shadow"
-                                style={{width: 600, height: 480}}
-                            >
+                                style={{width: 600, height: 480}}>
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
@@ -572,11 +565,6 @@ function CreateProduct() {
 
                 </Formik>
             </div>
-            {/*<div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>*/}
-            {/*    <div className="spinner-container">*/}
-            {/*        <RingLoader color="#000000"/>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </>
     )
 
