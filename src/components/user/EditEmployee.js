@@ -108,7 +108,7 @@ function EditEmployee(props) {
         document.title = "RetroCare - Chỉnh sửa thông tin nhân viên";
         loadEmployee(param.id);
         displayRole();
-        
+
     }, [param.id])
 
     const loadEmployee = async (id) => {
@@ -140,7 +140,6 @@ function EditEmployee(props) {
                     employeeAddress: employee?.employeeAddress,
                     employeePhone: employee?.employeePhone,
                     userName: employee?.userName,
-                    employeeImage: employee?.employeeImage,
                     employeeStartDate: employee?.employeeStartDate,
                     employeeBirthday: employee?.employeeBirthday,
                     employeeIdCard: employee?.employeeIdCard,
@@ -208,7 +207,7 @@ function EditEmployee(props) {
                                             padding: 20,
                                             width: "90%"
                                         }}
-                                        src={employee.employeeImage}
+                                        src={employee?.employeeImage}
                                         ref={imgPreviewRef}
                                     />
 
