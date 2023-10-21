@@ -74,11 +74,11 @@ const ProductChooseModal = ({data1, handleData}) => {
                         autoClose: 8000
                     });
                 }
-                if (result?.status === 200) {
-                    toast.success(result.data, {
-                        autoClose: 8000
-                    });
-                }
+                // if (result?.status === 200) {
+                //     toast.success(result.data, {
+                //         autoClose: 8000
+                //     });
+                // }
                 let submitModal = await document.getElementById("closeModalProduct");
                 // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
