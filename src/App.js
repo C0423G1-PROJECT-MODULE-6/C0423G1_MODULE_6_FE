@@ -32,6 +32,7 @@ import CreateSupplier from "./components/supplier/CreateSupplier";
 import HeaderAdmin from './components/user/HeaderAdmin';
 import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
+import ScannerOderQR from "./components/scanner_qr/ScannerOderQR";
 
 
 
@@ -59,10 +60,7 @@ function App() {
                     element={
                         <Authentication
                             allowedRoles={[
-                                EnumAppUserRole.ROLE_ADMIN,
-                                EnumAppUserRole.ROLE_SALE,
-                                EnumAppUserRole.ROLE_BUSINESS,
-                                EnumAppUserRole.ROLE_WAREHOUSE,
+                                EnumAppUserRole.ROLE_ADMIN
                             ]}
                         />
                     }
@@ -93,8 +91,41 @@ function App() {
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
+                    <Route path="/admin/home" element={<HomeAdmin/>}/>
+                    <Route path="/admin/scanner-qr-order" element={<ScannerOderQR/>}/>
+                </Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_SALE
+                            ]}
+                        />
+                    }
+                >
 
                 </Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_BUSINESS
+                            ]}
+                        />
+                    }
+                ></Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_WAREHOUSE
+                            ]}
+                        />
+                    }
+                ></Route>
             </Routes>
         </>
     );

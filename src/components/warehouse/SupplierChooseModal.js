@@ -95,7 +95,7 @@ const SupplierChooseModal = ({ handleData }) => {
                                 <div className="col-auto">
                                     <select name='optionSearch' onChange={(even) => setTypeSearch(even.target.value)}
                                         className="form-select shadow border-dark">
-                                            <option value="">-----</option>
+                                            <option value="">---Tìm kiếm theo---</option>
                                         <option value="supplier">Tên nhà cung cấp</option>
                                         <option value="address">Địa chỉ</option>
                                         <option value="email">Email</option>
@@ -111,7 +111,7 @@ const SupplierChooseModal = ({ handleData }) => {
                                     <button className="btn btn-outline-primary text-center shadow" onClick={()=>handleSetTypeSearch()}>Tìm kiếm</button>
                                 </div>
                             </div>
-                            <div className="mx-auto p-3" style={{ width: '95%' }} id="TinDT">
+                            <div className="mx-auto p-3" style={{minHeight: "350px"}} id="TinDT">
                                 <table className=" shadow w-100 " >
                                     <thead style={{ fontSize: 'large', backgroundColor: 'darkgrey' }}>
                                         <tr>
@@ -139,19 +139,18 @@ const SupplierChooseModal = ({ handleData }) => {
                                                     height: 50
                                                 } : { height: 50 }}
                                                 >
-                                                    <td className="text-center">
+                                                    <td style={{width: "5%"}} className="text-center">
                                                         {(index + 1) + page * 5}
                                                     </td>
-                                                    <td>{supplier?.nameSupplier}</td>
-                                                    <td>{supplier?.addressSupplier}</td>
-                                                    <td>{supplier?.phoneNumberSupplier}</td>
-                                                    <td>{supplier?.emailSupplier}</td>
+                                                    <td style={{width: "30%"}}>{supplier?.nameSupplier}</td>
+                                                    <td style={{width: "25%"}}>{supplier?.addressSupplier}</td>
+                                                    <td style={{width: "15%"}}>{supplier?.phoneNumberSupplier}</td>
+                                                    <td style={{width: "25%"}}>{supplier?.emailSupplier}</td>
                                                 </tr>))}
                                         </tbody> :
                                         <tbody>
                                             <tr style={{ height: '150px' }}>
-                                                <td style={{ fontSize: '30px', textAlign: 'center' }} colSpan="6">Không có dữ
-                                                    liệu
+                                                <td style={{ fontSize: '30px',color:"red", textAlign: 'center' }} colSpan="6">Không tìm thấy kết quả
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -187,14 +186,17 @@ const SupplierChooseModal = ({ handleData }) => {
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => previousPage()}
-                                                    href="#">Trước
+                                                <button className={`page-link`}
+                                                style={{ display: page <= 0 ? "none" : "inline-block" }}
+                                                 onClick={() => previousPage()}>Trước
                                                 </button>
+                                                
                                             </li>
                                             <li className="page-item"><button className="page-link "
                                             >{page + 1} / {totalPage}</button></li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()} href="#">Sau
+                                                <button className="page-link " onClick={() => nextPage()}
+                                                style={{ visibility: page >= totalPage - 1 ? "hidden" : "visible" }}>Sau
                                                 </button>
                                             </li>
                                         </ul>
