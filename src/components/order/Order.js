@@ -428,7 +428,7 @@ function Order() {
             </Formik>
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
             <CustomerCreateModal handleData={handleDataByCreateCustomer} />
-            <ProductChooseModal data1={0} handleData={handleDataByChooseProduct}/>
+            <ProductChooseModal data1={0} idCustomer={customer.idCustomer} handleData={handleDataByChooseProduct}/>
         </>
     );
 }

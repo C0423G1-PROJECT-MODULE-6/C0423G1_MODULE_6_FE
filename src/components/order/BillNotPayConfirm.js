@@ -70,7 +70,7 @@ function BillNotPayConfirm(props) {
             }
         }else {
             handleClose();
-            console.error("Không có đơn hàng để xử lý");
+            console.error("Không có đơn hàng để xử lý.");
         }
     };
     return (
