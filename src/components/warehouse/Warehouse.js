@@ -89,43 +89,43 @@ export function Warehouse() {
             </div>
           </div>
         </div>
-        <div style={{minHeight: "560px"}} id="QuanND">
-        <table className="shadow w-100">
-          <thead>
-            <tr style={{background: "darkgrey"}}>
-              <th style={{background: "darkgrey"}}>#</th>
-              <th style={{background: "darkgrey"}}>Ngày</th>
-              <th style={{background: "darkgrey"}}>Tên hàng</th>
-              <th style={{background: "darkgrey"}}>Tên nhà cung cấp</th>
-              <th style={{background: "darkgrey"}}>Số lượng</th>
-              <th style={{background: "darkgrey"}}>Đơn giá</th>
-              <th style={{background: "darkgrey"}}>Thành tiền</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              warehouse.map((w, index) => (
-                <tr key={w.id} style={{height:50}}>
-                  <td style={{width: "5%"}}>{(index + 1) + page *10}</td>
-                  <td style={{width: "15%"}}>{w.inputDate}</td>
-                  <td style={{width: "20%"}}>{w.nameProduct}</td>
-                  <td style={{width: "20%"}}>{w.nameSupplier}</td>
-                  <td style={{width: "10%"}}>{w.quantity}</td>
-                  <td style={{width: "15%"}}>{vnd.format(w.priceProduct)}</td>
-                  <td style={{width: "15%"}}>{vnd.format(w.totalPrice)}</td>
-                </tr>
-              ))
-            }
-            {!totalElements && (
-              <tr>
-                <td colSpan={8}>
-                  <p style={{ textAlign: "center", color: "red" }}>Không tìm thấy</p>
-                </td>
+        <div style={{ minHeight: "455px" }} id="QuanND">
+          <table className="shadow w-100">
+            <thead>
+              <tr style={{ background: "darkgrey" }}>
+                <th style={{ background: "darkgrey" }}>#</th>
+                <th style={{ background: "darkgrey" }}>Ngày</th>
+                <th style={{ background: "darkgrey" }}>Tên hàng</th>
+                <th style={{ background: "darkgrey" }}>Tên nhà cung cấp</th>
+                <th style={{ background: "darkgrey" }}>Số lượng</th>
+                <th style={{ background: "darkgrey" }}>Đơn giá</th>
+                <th style={{ background: "darkgrey" }}>Thành tiền</th>
               </tr>
+            </thead>
+            <tbody>
+              {
+                warehouse.map((w, index) => (
+                  <tr key={w.id} style={{ height: 40 }}>
+                    <td style={{ width: "4%" }}>{(index + 1) + page * 10}</td>
+                    <td style={{ width: "8%" }}>{w.inputDate}</td>
+                    <td style={{ width: "27%" }}>{w.nameProduct}</td>
+                    <td style={{ width: "33%" }}>{w.nameSupplier}</td>
+                    <td style={{ width: "8%" }}>{w.quantity}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.priceProduct)}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.totalPrice)}</td>
+                  </tr>
+                ))
+              }
+              {!totalElements && (
+                <tr>
+                  <td colSpan={8}>
+                    <p style={{ textAlign: "center", color: "red" }}>Không tìm thấy</p>
+                  </td>
+                </tr>
 
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
         </div>
         <div className="row d-flex justify-content-around my-3">
           <div className="col float-start">
@@ -137,20 +137,32 @@ export function Warehouse() {
             <div className="col-auto float-end">
               <ul className="pagination mb-0">
                 <li className="page-item">
-                  <a className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => setPage(page - 1)} tabIndex="-1"
+                  <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                    onClick={() => setPage(0)} tabIndex="-1"
+                    aria-disabled="true">Đầu</a>
+                </li>
+                <li className="page-item">
+                  <a className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                    onClick={() => setPage(page - 1)} tabIndex="-1"
                     aria-disabled="true">Trước</a>
                 </li>
                 <li className="page-item" aria-current="page">
                   <a className="page-link" href="#">{page + 1}/{totalPages}</a>
                 </li>
                 <li className="page-item">
-                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`} onClick={() => setPage(page + 1)}>Sau</a>
+                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
+                    onClick={() => setPage(page + 1)}>Sau</a>
                 </li>
+                <li className="page-item">
+                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
+                    onClick={() => setPage(totalPages - 1)}>Cuối</a>
+                </li>
+
               </ul>
             </div>)}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   )
 }
