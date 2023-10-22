@@ -42,7 +42,6 @@ function App() {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <HeaderAdmin></HeaderAdmin>
             <Routes>
 
                 <Route path="*" element={<Home />}></Route>
