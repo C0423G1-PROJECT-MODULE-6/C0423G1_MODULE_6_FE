@@ -58,7 +58,7 @@ function Order() {
         findCustomerByid(data);
     }
     const handleDataByChooseProduct = (data) => {
-        getAllCart();
+        getAllCart(data);
     }
     const handleDataByCreateCustomer = (data) => {
         findCustomerByid(data);
