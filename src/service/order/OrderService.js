@@ -22,10 +22,10 @@ export const acceptToPay = async (print, orderBill) => {
 };
 
 
-export const findOrderBillNewest = async () => {
+export const findOrderBillNewest = async (idCustomer) => {
     try{
         const res = await axios
-            .get(`http://localhost:8080/api/admin/order/payment/showBillNewest`)
+            .get(`http://localhost:8080/api/admin/order/payment/showBillNewest/${idCustomer}`)
         return res.data;
     }catch (e){
         alert("Access Denied");

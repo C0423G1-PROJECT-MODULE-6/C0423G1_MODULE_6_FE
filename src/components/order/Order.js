@@ -59,8 +59,6 @@ function Order() {
         findCustomerByid(data);
     }
     const updateCustomerConfirm = (data) => {
-        console.log(data)
-        console.log(data.idCustomer)
         setCustomer(data)
     }
 
@@ -138,12 +136,12 @@ function Order() {
         }else {
             value = {
                 ...value,
-                idCustomerOrder : customer.idCustomer,
-                idUser: userId
+                idCustomerOrder :customer && customer.idCustomer,
+                idUser:userId && userId
             }
             const res = await orderService.getBillNotPay(value);
             if (res.status === 200){
-                navigate("/admin/order/showBill");
+                navigate(`/admin/order/showBill/${res.data.customer.idCustomer}`);
             }
         }
     };
@@ -262,7 +260,7 @@ function Order() {
                                                     />
                                                 </div>
                                                 <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
-                                                <Field name="idUser" type="hidden" value={1}/>
+                                                <Field name="idUser" type="hidden" value={{userId}}/>
                                             </div>
                                             <div className="col-8 mb-2">
                                                 <input
@@ -536,7 +534,7 @@ function Order() {
 
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
             <CustomerCreateModal handleData={handleDataByCreateCustomer} />
-            <ProductChooseModal data1={0} idCustomer={customer.idCustomer} handleData={handleDataByChooseProduct}/>
+            <ProductChooseModal data1={0} idCustomer={customer && customer.idCustomer} handleData={handleDataByChooseProduct}/>
         </>
     );
 }
