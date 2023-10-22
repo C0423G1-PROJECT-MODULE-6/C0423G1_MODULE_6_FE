@@ -10,6 +10,7 @@ import * as Yup from "yup"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
 import * as UserService from "../../service/user/UserService";
+import {toast} from "react-toastify";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -175,8 +176,7 @@ function Order() {
                                     border: '1px solid black',
                                     height: 'auto',
                                     width: '80%',
-                                    padding: '20px'
-                                }}>
+                                    padding: '20px'}}>
                                     <legend className="float-none w-auto px-1">Thông tin khách hàng</legend>
                                     <div className="d-flex justify-content-center">
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1"
@@ -214,7 +214,6 @@ function Order() {
                                                             />
                                                         </div>
                                                     )}
-
                                                 </div>
 
                                                 <div className="col-4 p-2">
@@ -227,26 +226,48 @@ function Order() {
                                                         value={customer ? customer.phoneNumberCustomer : ""}
                                                         disabled
                                                     />
+                                                </div>
+                                                <div className="col-4 p-2">
+                                                    <label>Địa chỉ</label>
+                                                </div>
 
-                                            <div className="col-8 mb-2">
-                                                <input
-                                                    className="form-control mt-2 border border-dark"
-                                                    type="text"
-                                                    value={customer ? customer.nameCustomer : ""}
-                                                    readOnly
-                                                />
-                                                {/*{customer ? null : (*/}
-                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
-                                                {/*        <ErrorMessage*/}
-                                                {/*            className="text-danger"*/}
-                                                {/*            name="idCustomerOrder"*/}
-                                                {/*            component="small"*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*)}*/}
+                                                <div className="col-8 mb-2">
+                                                    <input
+                                                        className="form-control mt-2 border border-dark"
+                                                        type="text"
+                                                        value={customer ? customer.addressCustomer : ""}
+                                                        disabled
+                                                    />
+                                                    {customer ? null : (
+                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                            <ErrorMessage
+                                                                className="text-danger"
+                                                                name="idCustomerOrder"
+                                                                component="small"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="col-4 p-2">
+                                                    <label>Ngày sinh</label>
+                                                </div>
 
-                                            </div>
-
+                                                <div className="col-8 mb-2">
+                                                    <input
+                                                        className="form-control mt-2 border border-dark"
+                                                        type="text"
+                                                        value={customer ? customer.dateOfBirthCustomer : ""}
+                                                        disabled
+                                                    />
+                                                    {customer ? null : (
+                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                            <ErrorMessage
+                                                                className="text-danger"
+                                                                name="idCustomerOrder"
+                                                                component="small"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="col-4 p-2">
                                                     <label>Email</label>
@@ -262,48 +283,13 @@ function Order() {
                                                 <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
                                                 <Field name="idUser" type="hidden" value={{userId}}/>
                                             </div>
-                                            <div className="col-8 mb-2">
-                                                <input
-                                                    className="form-control mt-2 border border-dark"
-                                                    type="text"
-                                                    value={customer ? customer.dateOfBirthCustomer : ""}
-                                                    readOnly
-                                                />
-                                                {/*{customer ? null : (*/}
-                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
-                                                {/*        <ErrorMessage*/}
-                                                {/*            className="text-danger"*/}
-                                                {/*            name="idCustomerOrder"*/}
-                                                {/*            component="small"*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*)}*/}
-                                            </div>
-                                            <div className="col-4 p-2">
-                                                <label>Email</label>
-                                            </div>
-                                            <div className="col-8 mb-2">
-                                                <input
-                                                    className="form-control mt-2 border border-dark"
-                                                    type="email"
-                                                    value={customer ? customer.emailCustomer : ""}
-                                                    readOnly
-                                                />
-                                                {/*{customer ? null : (*/}
-                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
-                                                {/*        <ErrorMessage*/}
-                                                {/*            className="text-danger"*/}
-                                                {/*            name="idCustomerOrder"*/}
-                                                {/*            component="small"*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*)}*/}
-                                            </div>
-                                            <Field name="idCustomerOrder" type="hidden"
-                                                   value={customer ? customer.idCustomer : ""}/>
-                                            <Field name="idUser" type="hidden" value={1}/>
                                         </div>
-                                    </div>
+                                        ) : (
+                                            <div className="text-center">
+                                        <br/>
+                                        <b>----Hãy chọn hoặc thêm mới khách hàng----</b>
+                                            </div>)
+                                    }
                                 </fieldset>
                             </div>
                             <div style={{marginBottom: '5%'}}>
@@ -399,77 +385,19 @@ function Order() {
                                                                         </button>
                                                                     </td>
                                                                 </tr>
-
                                                             ))
                                                         ) :
                                                         (<tr>
                                                             <td className="text-center" colSpan="6">
                                                                 <b>----Trống----</b>
                                                             </td>
-                                                            <td className="col-2">
-                                                                <div className="input-group">
-                                                                    <button
-                                                                        className="btn btn-danger"
-                                                                        type="button"
-                                                                        disabled={quantity[index] <= 1}
-                                                                        onClick={() => decreaseValue(index)}
-                                                                    >
-                                                                        -
-                                                                    </button>
-                                                                    <input
-                                                                        type="number"
-                                                                        className="form-control text-center"
-                                                                        value={quantity[index]}
-                                                                        onChange={(e) => {
-                                                                            const newQuantities = [...quantity];
-                                                                            const quantityOfChosen = parseInt(e.target.value);
-                                                                            quantityOfChosen <= cart.quantityProduct && (newQuantities[index] = quantityOfChosen);
-                                                                            quantityOfChosen > cart.quantityProduct && (newQuantities[index] = cart.quantityProduct);
-                                                                            quantityOfChosen <= 0 && (newQuantities[index] = 1);
-                                                                            setQuantity(newQuantities);
-                                                                            updateCurrentQuantity(newQuantities[index], cart.idProduct, 1);
-                                                                        }}
-                                                                    />
-                                                                    <button
-                                                                        className="btn btn-success"
-                                                                        type="button"
-                                                                        disabled={quantity[index] >= cart.quantityProduct}
-                                                                        onClick={() => increaseValue(index)}
-                                                                    >
-                                                                        +
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                            <td className="col-2 text-center text-danger">
-                                                                {(cart.priceProduct * quantity[index])
-                                                                    .toLocaleString('vi-VN', {
-                                                                        style: 'currency',
-                                                                        currency: 'VND'
-                                                                    })}
-                                                            </td>
-                                                            <td className="col-2 text-center">
-                                                                <button
-                                                                    className="btn btn-danger"
-                                                                    type="button"
-                                                                    onClick={() => handleDeleteProduct(cart.idProduct, userId)}
-                                                                >
-                                                                    <i className="fa fa-times"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-
-                                                    ))
-                                                ) :
-                                                (<tr>
-                                                    <td className="text-center" colSpan="6">
-                                                        <b>Trống</b>
-                                                    </td>
                                                 </tr>)
-                                            }
-                                            </tbody>
-                                        </table>
+                                                    }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </fieldset>
                             </div>
                             <div className="row" style={{width: '70%', margin: '1% auto 0 auto'}}>
