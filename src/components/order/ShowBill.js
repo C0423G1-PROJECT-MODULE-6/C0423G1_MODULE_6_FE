@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as orderService from "../../service/order/OrderService";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {useParams} from "react-router";
 
 function ShowBill() {
     const [orderBill, setOrderBill] = useState(null);
@@ -10,11 +11,12 @@ function ShowBill() {
     const [print, setPrint] = useState(false);
     const navigate = useNavigate();
     const [customer, setCustomer] = useState(null);
+    const param = useParams();
 
-
+    console.log(param.id)
 
     const findOrderBillNewest = async () => {
-        const res = await orderService.findOrderBillNewest();
+        const res = await orderService.findOrderBillNewest(param.id);
         setOrderBill(res);
         setCustomer(res.customer);
     };
