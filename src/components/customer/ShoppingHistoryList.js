@@ -4,6 +4,7 @@ import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
 import {toast} from "react-toastify";
+import Footer from "../home/common/Footer";
 
 export function ShoppingHistoryList() {
     const param = useParams();
@@ -46,9 +47,9 @@ export function ShoppingHistoryList() {
     }, [page, refresh]);
 
     const handleSearch = () => {
-        if (pattern.test(searchName)){
+        if (pattern.test(searchName)) {
             toast("Không nhập ký tự đặc biệt");
-        }else {
+        } else {
             setPage(0);
             setRefresh(!refresh)
         }
@@ -143,8 +144,9 @@ export function ShoppingHistoryList() {
                         <div className="col-auto mx-2">
                             <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
                                    onKeyDown={handleKeyDown}
-                                   onChange={(name) => {setSearchName(name.target.value)
-                            }}/>
+                                   onChange={(name) => {
+                                       setSearchName(name.target.value)
+                                   }}/>
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
@@ -183,7 +185,7 @@ export function ShoppingHistoryList() {
                     </div>
                 </div>
 
-                <div className="container mt-3">
+                <div className="container mt-3 mb-5">
                     <div className="row">
                         <div className="col-auto ms-auto">
                             <nav style={{display: "flex"}} aria-label="Page navigation">
@@ -208,7 +210,7 @@ export function ShoppingHistoryList() {
                                     </li>
                                     <li className="page-item">
                                         <a className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} href="#"
-                                           onClick={() => setPage(totalPage-1)}>Cuối</a>
+                                           onClick={() => setPage(totalPage - 1)}>Cuối</a>
                                     </li>
                                 </ul>
                                 <Link to="/admin/business/customer">
@@ -220,7 +222,7 @@ export function ShoppingHistoryList() {
                     </div>
                 </div>
             </div>
-
+            <Footer/>
         </>
     )
 }
