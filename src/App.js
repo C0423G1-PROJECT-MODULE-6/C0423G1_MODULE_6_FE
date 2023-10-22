@@ -33,6 +33,9 @@ import HeaderAdmin from './components/user/HeaderAdmin';
 import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
 import ScannerOderQR from "./components/scanner_qr/ScannerOderQR";
+import EditSupplier from "./components/supplier/EditSupplier";
+
+
 
 
 function App() {
@@ -69,7 +72,7 @@ function App() {
                     <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
                     <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}></Route>
 
-                    
+
                     <Route path="/admin/order/:id" element={<Order/>}/>
                     <Route path="/admin/business/customer" element={<CustomerList/>}/>
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
@@ -77,13 +80,11 @@ function App() {
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
-                    <Route path="/admin/supplier" element={<Supplier/>}/>
-
-                    <Route path="/admin/supplier/create" element={<CreateSupplier/>}/>
+                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
+                    <Route path="/admin/business/supplier/create" element={<CreateSupplier/>}/>
+                    <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
                     <Route path="/admin/product/list" element={<ProductList/>}/>
                     <Route path="/admin/product/create" element={<CreateProduct/>}/>
-
-
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
@@ -91,7 +92,7 @@ function App() {
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                     <Route path="/admin/home" element={<HomeAdmin/>}/>
-                    <Route path="/admin/scanner-qr-order/:id" element={<ScannerOderQR/>}/>
+                    <Route path="/admin/scanner-qr-order" element={<ScannerOderQR/>}/>
                 </Route>
 
                 <Route
