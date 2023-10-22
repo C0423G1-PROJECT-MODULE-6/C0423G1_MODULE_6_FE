@@ -69,11 +69,11 @@ function App() {
                 >
                     <Route path="/admin/information/:id" element={<Information />}></Route>
                     <Route path="/admin/*" element={<HomeAdmin />}></Route>
-                    <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
-                    <Route path='/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
 
-
-                    <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path='/admin/admin/employee/list' element={<EmployeeList></EmployeeList>}></Route>
+                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    
                     <Route path="/admin/order" element={<Order/>}/>
                     <Route path="/admin/customer" element={<CustomerList/>}/>
                     <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
