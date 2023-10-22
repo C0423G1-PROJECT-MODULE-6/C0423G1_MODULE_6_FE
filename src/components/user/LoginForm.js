@@ -7,6 +7,7 @@ import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css'
 import '../../css/user/login.css'
 import Footer from "../home/common/Footer";
+import {Helmet} from "react-helmet";
 
 
 
@@ -144,9 +145,11 @@ function LoginForm() {
 
     return (
         <>
-            {/*<body className="custom-background-HaiBH">*/}
-
-
+            <div>
+                <Helmet>
+                    <body className="custom-background-HaiBH" />
+                </Helmet>
+            </div>
             <div style={{width: '30%', margin: '0% auto 0% auto', padding: '8% 0 8% 0'}}>
             {/*<div className="centered-div-HaiBH">*/}
                 <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
