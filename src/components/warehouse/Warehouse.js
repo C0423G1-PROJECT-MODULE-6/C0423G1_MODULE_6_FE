@@ -3,6 +3,7 @@ import { getAllWarehouse } from "../../service/warehouse/WarehouseService"
 import { Link } from "react-router-dom"
 import HeaderAdmin from "../user/HeaderAdmin"
 import "../product/table_quan.css"
+import Footer from "../home/common/Footer"
 
 export function Warehouse() {
   const [warehouse, setWarehouse] = useState([])
@@ -88,7 +89,7 @@ export function Warehouse() {
             </div>
           </div>
         </div>
-        <div style={{minHeight: "300px"}} id="QuanND">
+        <div style={{minHeight: "560px"}} id="QuanND">
         <table className="shadow w-100">
           <thead>
             <tr style={{background: "darkgrey"}}>
@@ -105,7 +106,7 @@ export function Warehouse() {
             {
               warehouse.map((w, index) => (
                 <tr key={w.id} style={{height:50}}>
-                  <td style={{width: "5%"}}>{index + 1}</td>
+                  <td style={{width: "5%"}}>{(index + 1) + page *10}</td>
                   <td style={{width: "15%"}}>{w.inputDate}</td>
                   <td style={{width: "20%"}}>{w.nameProduct}</td>
                   <td style={{width: "20%"}}>{w.nameSupplier}</td>
@@ -149,6 +150,7 @@ export function Warehouse() {
             </div>)}
         </div>
       </div>
+      <Footer/>
     </>
   )
 }

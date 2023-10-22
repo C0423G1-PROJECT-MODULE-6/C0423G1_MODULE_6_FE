@@ -8,8 +8,6 @@ import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import SupplierChooseModal from "./SupplierChooseModal";
 import HeaderAdmin from "../user/HeaderAdmin";
-import ScanQr from "../scanner_qr/ScannerQR";
-import data from "bootstrap/js/src/dom/data";
 
 export function ImportProduct() {
   const param = useParams()
@@ -19,12 +17,12 @@ export function ImportProduct() {
 
   const findSupplier = async (id) => {
     const res = await findSupplierById(id);
-    console.log("ré", res);
+    console.log("res", res);
     setSupplier(res)
   }
   const findProduct = async (id) => {
     const res = await findProductById(id);
-    console.log("ré", res);
+    console.log("res", res);
     setProduct(res)
   }
   const handleDataByChooseSupplier = (data) => {
@@ -58,7 +56,7 @@ export function ImportProduct() {
       navigate("/admin/warehouse");
       toast("Nhập thêm sản phẩm thành công!");
     } catch (error) {
-      console.log(error);
+      console.log("error:",error);
       if (error.response?.data) {
         setErrors(error.response.data);
       }
@@ -76,7 +74,6 @@ export function ImportProduct() {
       <Formik
         initialValues={{
           quantity: 1,
-          image: "",
           supplierId: supplierId ? supplierId.idSupplier : null,
           productId: productId ? productId.id : null
         }}
@@ -85,8 +82,7 @@ export function ImportProduct() {
             .integer("Vui lòng nhập số nguyên dương")
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
-            .max(2000, "Không được nhập quá 2000 sản phẩm"),
-          // img: Yup.string().required(),
+            .max(2000, "Không được nhập quá 2000 sản phẩm")
           // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
           // productId: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
@@ -144,9 +140,7 @@ export function ImportProduct() {
                     <img
                       alt=""
                       src={productId?.image}
-                      // className="Phap-image-gap mx-2 mb-2"
                       style={{
-                        // margin: "0px 8px 8px",
                         width: "170px",
                         height: "200px",
                         borderRadius: "10px",
@@ -156,7 +150,7 @@ export function ImportProduct() {
                     ): (
                       <img
                         alt=""
-                        src="https://i.pinimg.com/564x/e8/03/d1/e803d189c1a961c2b404641ea477128c.jpg" // Thay đổi đường dẫn đến ảnh mặc định
+                        src="https://i.pinimg.com/564x/e8/03/d1/e803d189c1a961c2b404641ea477128c.jpg"
                         style={{
                           width: "170px",
                           height: "200px",
@@ -212,7 +206,7 @@ export function ImportProduct() {
 
         </Form>
       </Formik>
-      {/* <ProductChooseModal data1={handleDataByChooseProduct} /> */}
+      
       <ProductChooseModal data1={1} handleData={handleDataByChooseProduct} />
       <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
