@@ -1,14 +1,12 @@
 import React, {useEffect, useState, useRef} from 'react';
 import "./modal_table.css";
-import * as productService from "../../service/product/ProductService";
-import * as appUserService from "../../service/user/AuthService";
-import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
-import * as UserService from "../../service/user/UserService";
+import * as productService from "../../service/product/ProductService"
+import * as cartService from "../../service/cart/CartService";
 import * as customerService from '../../service/customer/CustomerService';
 import Swal from "sweetalert2";
 import {toast} from "react-toastify";
 
-const ProductChooseModal = ({data1, handleData}) => {
+const ProductChooseModal = ({data1,idCustomer,handleData}) => {
 
     const modalRef = useRef(null); // Tạo một ref để truy cập modal
     const [productList, setProductList] = useState([]);
@@ -18,38 +16,20 @@ const ProductChooseModal = ({data1, handleData}) => {
     const [choose, setChoose] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    // const [userAppName, setUserAppName] = useState("");
     const [userId, setUserId] = useState("");
     const [selectedProduct, setSelectedProduct] = useState({
         id: null,
         name: ""
     });
     let [arraySelect, setArraySelect] = useState([]);
-    //---------------Get id User--------------------
 
-    const getUserId = async () => {
-        const isLoggedIn = infoAppUserByJwtToken();
-        if (isLoggedIn) {
-            const id = await getIdByUserName(isLoggedIn.sub);
-
-            setUserId(id.data);
-            // const nameUser = await UserService.findById(id.data);
-            // setUserAppName(nameUser.data.employeeName)
-        }
-    };
-    // const closeModal = () => {
-    //     if (modalRef.current) {
-    //         modalRef.current.click();
-    //     }
-    // };
     const handleSubmit = async () => {
 
         if (data1 === 1) {
             handleData(selectedProduct.id);
             let submitModal = await document.getElementById("closeModalProduct");
             submitModal.click();
-            // submitModal.setAttribute("data-bs-dismiss", "modal");
-            // submitModal.removeAttribute("data-bs-dismiss");
+
         }
         if (data1 === 0) {
             if (arraySelect.length === 0) {
@@ -63,7 +43,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                 });
             }
             for (let i = 0; i < arraySelect.length; i++) {
-                const result = await customerService.createCart(userId, arraySelect[i]);
+                const result = await customerService.createCart(idCustomer, arraySelect[i]);
                 if (result?.status === 204) {
                     toast.error(result.data, {
                         autoClose: 8000
@@ -74,13 +54,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                         autoClose: 8000
                     });
                 }
-                // if (result?.status === 200) {
-                //     toast.success(result.data, {
-                //         autoClose: 8000
-                //     });
-                // }
                 let submitModal = await document.getElementById("closeModalProduct");
-                // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
                 setArraySelect([]);
                 handleData(selectedProduct.id);
@@ -89,16 +63,16 @@ const ProductChooseModal = ({data1, handleData}) => {
 
         }
 
-
-        //     //-----Pass the product id through the sales page----
-        // //    ----create cart-------
-        // closeModal();
     };
     //------------------------------------------------List & Search---------------------------
     const loadProductList = async (choose, page, searchValue) => {
-        const result = await productService.getPageProductModal(choose, page, searchValue);
+        let result;
+        if (data1 ===0){
+             result = await cartService.getPageProductModalWareHouse(choose, page, searchValue);
+        }else {
+             result = await productService.getPageProductModal(choose, page, searchValue);
+        }
         const listType = await productService.getAllType();
-        getUserId();
         setTypeProduct(listType);
         if (result?.status === 200) {
             setProductList(result?.data.content);
@@ -176,11 +150,8 @@ const ProductChooseModal = ({data1, handleData}) => {
             setPage(0);
         }
     }
-    // const handleReset = () => {
-    //     setPage(0);
-    //     setChange("name");
-    //     setSearchName("");
-    // }
+
+
     useEffect(() => {
         loadProductList(choose, page, searchName);
     }, [choose, page, searchName, arraySelect]);
