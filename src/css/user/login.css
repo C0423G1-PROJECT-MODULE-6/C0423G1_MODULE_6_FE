@@ -8,9 +8,9 @@
 }
 
 .transparent-div-HaiBH {
-    background-color: rgba(255, 255, 255, 0.5);
+    /*background-color: rgba(255, 255, 255, 0.1);*/
     /*background-color: rgba(255, 255, 255, 0.5);*/
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(5px);
     padding-bottom: 10px; /* Khoảng cách bên trong phần tử */
     padding-top: 10px; /* Khoảng cách bên trong phần tử */
     border: 1px solid #ccc; /* Viền phần tử */

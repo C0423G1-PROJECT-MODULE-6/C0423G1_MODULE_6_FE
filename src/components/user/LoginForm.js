@@ -148,7 +148,7 @@ function LoginForm() {
                     <body className="custom-background-HaiBH"/>
                 </Helmet>
             </div>
-            <div style={{width: '35%', height: '30%', margin: '0% auto 0% auto', padding: '18% 0 20% 0'}}>
+            <div style={{width: '35%', height: '30%', margin: '0% auto 0% auto', padding: '17.9% 0 18.5% 0'}}>
 
                 <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                     <div className="spinner-container">
@@ -156,7 +156,7 @@ function LoginForm() {
                     </div>
                 </div>
 
-                <div className="transparent-div-HaiBH card" style={{backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
+                <div className="transparent-div-HaiBH card" style={{backgroundColor: 'rgba(192, 192, 192, 0.4)'}}>
                     <div className="card-header">
                         <h2 style={{color: "white", textAlign: 'center'}} className="custom-label-HaiBH">Chương Trình
                             Quản Lý Cửa Hàng - C4ZONE</h2>
@@ -184,7 +184,7 @@ function LoginForm() {
                                                id="exampleInputPassword1"
                                                name="password" style={{color: 'white'}}/>
                                     </div>
-                                    <div className="mt-4" style={{display: isOTPVisible ? 'none' : 'block'}}>
+                                    <div className="mt-4 pt-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
                                         <div style={{width: '40%', marginLeft: 'auto', marginRight: 'auto'}}>
                                             <button type="submit" style={{width: '100%'}}
                                                     className="btn btn-dark" onClick={handleClick}>Login
