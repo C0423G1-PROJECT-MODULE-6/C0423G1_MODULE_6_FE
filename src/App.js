@@ -89,7 +89,7 @@ function App() {
 
                     <Route path="/admin/salesreport" element={<SalesReport/>}/>
                     <Route path="/admin/order" element={<Order/>}/>
-                    <Route path="/admin/order/showBill" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
