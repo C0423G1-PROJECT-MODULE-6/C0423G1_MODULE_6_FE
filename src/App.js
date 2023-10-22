@@ -112,10 +112,9 @@ function App() {
                         />
                     }
                 >
-                    <Route path="/admin/order" element={<Order/>}/>
-                    <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
-                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
-                    <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
+                    <Route path="/admin/sale/order" element={<Order/>}/>
+                    <Route path="/admin/sale/order/showBill/:id" element={<ShowBill/>}/>
+                    <Route path="/admin/sale/order/showBill/print" element={<PrintPDF/>}/>
                 </Route>
 
                 <Route
@@ -132,6 +131,7 @@ function App() {
                     <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
                     <Route path="/admin/business/customer" element={<CustomerList/>}/>
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
                 </Route>
 
                 <Route
