@@ -96,7 +96,6 @@ function HomeAdmin() {
     };
 
 
-
     const cardBodyStyle = {
         flex: '1 1 auto',
         padding: 'var(--bs-card-spacer-y) var(--bs-card-spacer-x)',
@@ -142,7 +141,7 @@ function HomeAdmin() {
                         <Bar data={barChartData} options={options}/>
                     </div>
                     <div className="col-md-4">
-                        <Doughnut data={donutChartData} />
+                        <Doughnut data={donutChartData}/>
                     </div>
                 </div>
             </div>

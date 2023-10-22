@@ -3,7 +3,7 @@ import * as AuthService from "../../service/user/AuthService";
 import {toast} from "react-toastify";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import HeaderAdmin from "./HeaderAdmin";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import * as UserService from '../../service/user/UserService';
 import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css';
@@ -11,6 +11,8 @@ import * as Yup from "yup";
 import Footer from "../home/common/Footer";
 
 function Information() {
+
+    const navigate = useNavigate();
 
     const userInit = {
         username: "",
@@ -34,6 +36,8 @@ function Information() {
     const [loading, setLoading] = useState(false);
     const [validationPass, setValidationPass] = useState(true);
     const [validationPassMax50, setValidationPassMax50] = useState(true);
+    const [key, setKey] = useState(true);
+
 
 
 
@@ -80,7 +84,7 @@ function Information() {
 
     useEffect(() => {
         getInfoUser(params.id);
-    }, []);
+    }, [loading]);
 
     const handleToggleInputs = () => {
         setInput1Disabled(true);
@@ -182,16 +186,23 @@ function Information() {
     }
 
     const changeInfo = async (data) => {
-        setLoading(true);
-        const res = await UserService.edit(data);
-        setInfoUser(data);
-        if (res.status === 200) {
-            toast("Thông tin cá nhân đã được cập nhật");
-            handleToggleInputsInfo();
-        } else {
+        try {
+            setLoading(true);
+            const res = await UserService.edit(data);
+            setInfoUser(data);
+            if (res.status === 200) {
+                toast("Thông tin cá nhân đã được cập nhật");
+                handleToggleInputsInfo();
+                setKey(!key);
+            } else {
+                toast.error("Cập nhật thất bại");
+            }
+            setLoading(false);
+        } catch (e) {
             toast.error("Cập nhật thất bại");
+            setLoading(false);
         }
-        setLoading(false);
+
     }
 
     const setDefaultPass = () => {
@@ -219,6 +230,10 @@ function Information() {
                 setDefaultPass();
                 handleToggleInputs();
                 setInput1Disabled(true);
+
+                localStorage.removeItem("JWT");
+                navigate("/login");
+                toast("Vui lòng đăng nhập lại");
             } else {
                 showResetOTP();
                 toast.error("Xác nhận OTP thất bại");
@@ -239,7 +254,7 @@ function Information() {
 
     return (infoUser != null &&
         <>
-            <HeaderAdmin/>
+            <HeaderAdmin key={!key}/>
             <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                 <div className="spinner-container">
                     <RingLoader color="#000000" />
@@ -254,22 +269,22 @@ function Information() {
                         }}
                         validationSchema={Yup.object({
                             employeeName: Yup.string().trim()
-                                .required("Vui lòng nhập tên")
-                                .max(100, "Quá ký tự cho phép (100 ký tự)"),
+                                .required("Vui lòng nhập tên.")
+                                .max(100, "Quá ký tự cho phép (100 ký tự)."),
                             employeePhone: Yup.string().trim()
                                 .required("Vui lòng nhập số điện thoại")
-                                .matches(/^(?:\+84|0)(90|91|94)\d{7}$/, "Phone number invalid"),
+                                .matches(/^(?:\+84|0)(90|91|94)\d{7}$/, "Số điện thoại không có thực."),
                             employeeBirthday: Yup.date()
                                 .required("Vui lòng nhập ngày sinh")
-                                .max(eighteenYearsAgo, "Nhân viên chưa đủ 18 tuổi"),
+                                .max(eighteenYearsAgo, "Nhân viên chưa đủ 18 tuổi."),
                             email: Yup.string().trim()
                                 .required("Vui lòng bổ sung email khách hàng")
-                                .matches(/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, "Bạn nhập sai định dạng email")
-                                .min(12, "Email không đủ ký tự cho phép (12 ký tự)")
-                                .max(50, "Email vượt quá ký tự cho phép (50 ký tự)"),
+                                .matches(/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, "Bạn nhập sai định dạng email.")
+                                .min(12, "Email không đủ ký tự cho phép (12 ký tự).")
+                                .max(50, "Email vượt quá ký tự cho phép (50 ký tự)."),
                             employeeAddress: Yup.string().trim()
                                 .required("Vui lòng nhập địa chỉ")
-                                .max(100, "Địa chỉ quá ký tự cho phép (100 ký tự)")
+                                .max(100, "Địa chỉ quá ký tự cho phép (100 ký tự).")
                         })}
                     >
                         <Form>
@@ -338,14 +353,14 @@ function Information() {
                         }}
                         validationSchema={Yup.object({
                             password: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
                             newPassword: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
                             newPasswordConfirmation: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự)")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)"),
+                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
                         })}
                         onSubmit={(values) => {
                             changePass(values);
@@ -386,7 +401,7 @@ function Information() {
                                             {passwordsMatch || confirmPassword === "" ? (
                                                 <p style={{color: "green"}}></p>
                                             ) : (
-                                                <p style={{ color: "red" }}>Mật khẩu không trùng khớp</p>
+                                                <p style={{ color: "red" }}>Mật khẩu không trùng khớp.</p>
                                             )}
                                         </div>
                                         <div className="mt-4" id="showDiv" style={{display: isOTPVisible ? 'none' : 'block'}}>
