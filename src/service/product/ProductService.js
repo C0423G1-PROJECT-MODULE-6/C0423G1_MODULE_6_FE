@@ -89,6 +89,5 @@ export const removeProduct = async (id) => {
  */
 export const getPageProductModal = async (choose,page,value) => {
     const result = await axios.get(`http://localhost:8080/api/admin/product/list?choose=${choose}&page=${page}&value=${value}`)
-    console.log(result)
     return result;
 }
