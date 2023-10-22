@@ -148,7 +148,7 @@ function LoginForm() {
                     <body className="custom-background-HaiBH"/>
                 </Helmet>
             </div>
-            <div style={{width: '40%', height: '30%', margin: '0% auto 0% auto', padding: '11.9% 0 12.5% 0'}}>
+            <div style={{width: '40%', height: '30%', margin: '0% auto 0% auto', padding: '4% 0 15% 0'}}>
 
                 <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                     <div className="spinner-container">
