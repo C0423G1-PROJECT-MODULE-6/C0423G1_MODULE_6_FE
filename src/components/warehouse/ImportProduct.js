@@ -82,6 +82,7 @@ export function ImportProduct() {
         }}
         validationSchema={Yup.object({
           quantity: Yup.number()
+            .integer("Vui lòng nhập số nguyên dương")
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
             .max(2000, "Không được nhập quá 2000 sản phẩm"),
@@ -117,7 +118,7 @@ export function ImportProduct() {
               <div>
                 <div className="row p-2 mx-auto" style={{ width: '90%' }}>
                   <div className="col-4 p-2">
-                    <label>Tên sản phẩm</label>
+                    <label>Tên sản phẩm <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-6 mb-2">
                     <Field className="form-control mt-2 border border-dark" value={productId?.name}
@@ -126,7 +127,7 @@ export function ImportProduct() {
                       component="span"></ErrorMessage>
                   </div>
                   <div className="col-4 p-2">
-                    <label>Đơn giá</label>
+                    <label>Đơn giá <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-6 mb-2">
                     <Field className="form-control mt-2 border border-dark" value={productId?.price}
@@ -135,37 +136,51 @@ export function ImportProduct() {
                   </div>
                   <div className="col-4 p-2">
                     <label htmlFor="file-upload">
-                      Hình ảnh
+                      Hình ảnh <span style={{ color: "red" }}>*</span>
                     </label>
                   </div>
                   <div className="col-6 mb-2">
+                    {productId?.image ? (
                     <img
                       alt=""
                       src={productId?.image}
-                      className="image-gap mx-2 mb-2"
+                      // className="Phap-image-gap mx-2 mb-2"
                       style={{
-                        margin: "0px 8px 8px",
+                        // margin: "0px 8px 8px",
                         width: "170px",
                         height: "200px",
                         borderRadius: "10px",
                         objectFit: "cover",
                         border: "1px solid black"
-                      }} />                    <ErrorMessage className="text-danger" name="img" component="span"></ErrorMessage>
+                      }} />
+                    ): (
+                      <img
+                        alt=""
+                        src="https://i.pinimg.com/564x/e8/03/d1/e803d189c1a961c2b404641ea477128c.jpg" // Thay đổi đường dẫn đến ảnh mặc định
+                        style={{
+                          width: "170px",
+                          height: "200px",
+                          borderRadius: "10px",
+                          objectFit: "cover",
+                          border: "1px solid black"
+                        }}
+                      />
+                    )}
                   </div>
                   <div className="col-4 p-2">
-                    <label>Số lượng</label>
+                    <label htmlFor="quantity">Số lượng <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-6">
                     <Field className="form-control mt-2 border border-dark" name="quantity"
-                      type="number" />
+                      type="number" id="quantity" />
                     <ErrorMessage className="text-danger" name="quantity"
                       component="span"></ErrorMessage>
                   </div>
                   <div className="col-4 p-2">
-                    <label>Nhà cung cấp </label>
+                    <label>Nhà cung cấp <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-4 mb-2">
-                    <Field className="form-control mt-2 border border-dark"
+                    <Field className="form-control mt-2 border border-dark" placeholder="Chọn nhà cung cấp"
                       value={supplierId?.nameSupplier} name="supplier" type="text" readOnly />
                     <ErrorMessage className="text-danger" name="supplierId"
                       component="span"></ErrorMessage>
@@ -184,6 +199,11 @@ export function ImportProduct() {
                     <Link to="/admin/warehouse"
                       className="btn btn-outline-primary d-flex justify-content-center"
                       style={{ width: '20%', marginTop: 10, marginLeft: 10 }}>Trở về</Link>
+                  </div>
+                  <div className="col-12 mt-2">
+                    <div className="float-end">
+                      <small className="text-danger">(*)</small> Thông tin bắt buộc
+                    </div>
                   </div>
                 </div>
               </div>

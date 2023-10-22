@@ -19,7 +19,6 @@ const CustomerChooseModal = ({handleData}) => {
         idCustomer: null,
         nameCustomer: ""
     });
-    // const [optionSearch, setOptionSearch] = useState();
     const loadCustomerList = async (page, name, phone, gender) => {
         const result = await getAllCustomerModal(page, name, phone, gender);
         if (result?.status === 200) {
@@ -32,7 +31,6 @@ const CustomerChooseModal = ({handleData}) => {
     const handleOptionSearchChange = (e) => {
         const {value} = e.target;
         setChange(+value);
-        // loadCustomerList();
     }
     const handleReset = () => {
         setPage(0);

@@ -126,6 +126,7 @@ function UpdateProduct() {
             }
             await productService.updateProduct(params.id, product1);
             await navigate("/admin/product/list");
+            await toast(`Cập nhật sản phẩm ${product.nameProduct} thành công.`)
         } catch (error) {
             console.log(error);
         }
@@ -142,7 +143,6 @@ function UpdateProduct() {
 
         const newImages = Array.from(files).filter((file) => {
             if (imageUpload.map((img) => img.name).includes(file.name)) {
-                // Ảnh đã tồn tại trong danh sách imageUpload
                 toast(`Ảnh "${file.name}" đã được chọn trước đó.`);
                 return false;
             }
@@ -272,8 +272,7 @@ function UpdateProduct() {
                                                     alt=""
                                                     src={img}
                                                     ref={imgPreviewRef}
-                                                    className="image-gap mx-2 mb-2
-                                                    "
+                                                    className="image-gap mx-2 mb-2"
                                                     style={{
                                                         margin: "0px 8px 8px",
                                                         width: "150px",

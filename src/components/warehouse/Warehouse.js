@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getAllWarehouse } from "../../service/warehouse/WarehouseService"
 import { Link } from "react-router-dom"
 import HeaderAdmin from "../user/HeaderAdmin"
+import "../product/table_quan.css"
 
 export function Warehouse() {
   const [warehouse, setWarehouse] = useState([])
@@ -87,29 +88,30 @@ export function Warehouse() {
             </div>
           </div>
         </div>
-        <table className="border border-dark table table-hover">
-          <thead style={{ background: 'darkgrey' }}>
-            <tr>
-              <th>#</th>
-              <th>Ngày</th>
-              <th>Tên hàng</th>
-              <th>Tên nhà cung cấp</th>
-              <th>Số lượng nhập</th>
-              <th>Đơn giá</th>
-              <th>Thành tiền</th>
+        <div style={{minHeight: "300px"}} id="QuanND">
+        <table className="shadow w-100">
+          <thead>
+            <tr style={{background: "darkgrey"}}>
+              <th style={{background: "darkgrey"}}>#</th>
+              <th style={{background: "darkgrey"}}>Ngày</th>
+              <th style={{background: "darkgrey"}}>Tên hàng</th>
+              <th style={{background: "darkgrey"}}>Tên nhà cung cấp</th>
+              <th style={{background: "darkgrey"}}>Số lượng</th>
+              <th style={{background: "darkgrey"}}>Đơn giá</th>
+              <th style={{background: "darkgrey"}}>Thành tiền</th>
             </tr>
           </thead>
           <tbody>
             {
               warehouse.map((w, index) => (
-                <tr key={w.id}>
-                  <td>{index + 1}</td>
-                  <td>{w.inputDate}</td>
-                  <td>{w.nameProduct}</td>
-                  <td>{w.nameSupplier}</td>
-                  <td>{w.quantity}</td>
-                  <td>{vnd.format(w.priceProduct)}</td>
-                  <td>{vnd.format(w.totalPrice)}</td>
+                <tr key={w.id} style={{height:50}}>
+                  <td style={{width: "5%"}}>{index + 1}</td>
+                  <td style={{width: "15%"}}>{w.inputDate}</td>
+                  <td style={{width: "20%"}}>{w.nameProduct}</td>
+                  <td style={{width: "20%"}}>{w.nameSupplier}</td>
+                  <td style={{width: "10%"}}>{w.quantity}</td>
+                  <td style={{width: "15%"}}>{vnd.format(w.priceProduct)}</td>
+                  <td style={{width: "15%"}}>{vnd.format(w.totalPrice)}</td>
                 </tr>
               ))
             }
@@ -123,6 +125,7 @@ export function Warehouse() {
             )}
           </tbody>
         </table>
+        </div>
         <div className="row d-flex justify-content-around my-3">
           <div className="col float-start">
             <Link className="me-1  " to="/admin/warehouse/import/0" style={{ textDecoration: 'none' }}>
