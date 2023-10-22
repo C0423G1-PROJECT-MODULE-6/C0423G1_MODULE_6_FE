@@ -149,7 +149,7 @@ function LoginForm() {
                         <body className="custom-background-HaiBH"/>
                     </Helmet>
                 </div>
-                <div style={{width: '35%', height: '30%', margin: '0% auto 0% auto', padding: '17.9% 0 18.5% 0'}}>
+                <div style={{width: '40%', height: '30%', margin: '0% auto 0% auto', padding: '11.9% 0 12.5% 0'}}>
 
                     <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                         <div className="spinner-container">
@@ -159,11 +159,17 @@ function LoginForm() {
 
                     <div className="transparent-div-HaiBH card" style={{backgroundColor: 'rgba(192, 192, 192, 0.0)', border: "0 solid"}}>
                         <div className="card-header">
-                            <h2 style={{color: "white", textAlign: 'center'}} className="custom-label-HaiBH">Chương
-                                Trình
-                                Quản Lý Cửa Hàng - C4ZONE</h2>
+
+                            <img
+                                src="https://firebasestorage.googleapis.com/v0/b/c4zone-da49c.appspot.com/o/logoplus.png?alt=media&token=8abd0661-05bf-4fc3-804f-60ab9482b75f&_gl=1*pc8atb*_ga*OTEwMjg5ODY2LjE2OTM3NjU2MzY.*_ga_CW55HF8NVT*MTY5NzU5ODI2OS44LjEuMTY5NzU5ODM1Ni41Mi4wLjA" // Đường dẫn đến hình ảnh logo của bạn
+                                alt="Home"
+                                width="100%"
+                            />
+                            <h2 style={{color: "white", textAlign: 'center'}} className="custom-label-HaiBH">
+                                Hệ Thống Quản Lý Cửa Hàng
+                            </h2>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body" style={{width: "70%", marginLeft: "auto", marginRight: "auto"}}>
                             <div style={{margin: '3%', color: 'white'}}>
                                 <Formik
                                     initialValues={initAccount}
