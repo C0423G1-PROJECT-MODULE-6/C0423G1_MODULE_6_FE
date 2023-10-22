@@ -236,7 +236,8 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                 <button
                                     className=" btn btn-outline-secondary shadow"
                                     style={{width: "14%"}}
-                                    onClick={() => setArraySelect([])}
+                                    onClick={data1 !==1 ? () => setArraySelect([]):()=> setSelectedProduct(  {id: null,
+                                        name: ""})}
                                 >
                                     Hủy
                                 </button>
