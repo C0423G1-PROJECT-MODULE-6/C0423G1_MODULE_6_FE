@@ -39,8 +39,6 @@ function Information() {
     const [key, setKey] = useState(true);
 
 
-
-
     const handleOtpChange = (event) => {
         setOtp(event.target.value);
     };
@@ -257,7 +255,9 @@ function Information() {
             <HeaderAdmin key={!key}/>
             <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                 <div className="spinner-container">
-                    <RingLoader color="#000000" />
+                    <div className="ring-loader">
+                        <RingLoader color="#000000"/>
+                    </div>
                 </div>
             </div>
             <div style={{width: '90%', margin: '5% auto 5% auto'}} className="row">
@@ -268,143 +268,167 @@ function Information() {
                             changeInfo(values);
                         }}
                         validationSchema={Yup.object({
-                            employeeName: Yup.string().trim()
+                            employeeName: Yup.string().trim()//
                                 .required("Vui lòng nhập tên.")
-                                .max(100, "Quá ký tự cho phép (100 ký tự)."),
-                            employeePhone: Yup.string().trim()
-                                .required("Vui lòng nhập số điện thoại")
+                                .matches(/^[\p{L}\s]+$/u, "Tên chỉ chứa định dạng chữ.")
+                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
+                            employeePhone: Yup.string().trim()//
+                                .required("Vui lòng nhập số điện thoại.")
                                 .matches(/^(?:\+84|0)(90|91|94)\d{7}$/, "Số điện thoại không có thực."),
-                            employeeBirthday: Yup.date()
-                                .required("Vui lòng nhập ngày sinh")
+                            employeeBirthday: Yup.date()//
+                                .required("Vui lòng nhập ngày sinh.")
                                 .max(eighteenYearsAgo, "Nhân viên chưa đủ 18 tuổi."),
-                            email: Yup.string().trim()
+                            email: Yup.string().trim()//
                                 .required("Vui lòng bổ sung email khách hàng")
                                 .matches(/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/, "Bạn nhập sai định dạng email.")
                                 .min(12, "Email không đủ ký tự cho phép (12 ký tự).")
                                 .max(50, "Email vượt quá ký tự cho phép (50 ký tự)."),
-                            employeeAddress: Yup.string().trim()
+                            employeeAddress: Yup.string().trim()//
                                 .required("Vui lòng nhập địa chỉ")
-                                .max(100, "Địa chỉ quá ký tự cho phép (100 ký tự).")
+                                .max(250, "Địa chỉ quá ký tự cho phép (250 ký tự).")
                         })}
-                    >
-                        <Form>
-                            <div className="container">
-                                    <div className="card">
-                                        <div className="card-header">
-                                            <h1 style={{textAlign: 'center'}}>Thông Tin Cá Nhân</h1>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className="mb-3">
-                                                <label htmlFor="name" className="form-label">Họ Và Tên</label>
-                                                <Field type="text" className="form-control" id="name" name="employeeName" disabled={input2Disabled}/>
-                                                <ErrorMessage name="employeeName" component="span" style={{color: "red"}}></ErrorMessage>
-                                            </div>
-                                            <div className="mb-3">
-                                                <label htmlFor="email" className="form-label">Email</label>
-                                                <Field type="email" className="form-control" id="email" name="email" disabled={input2Disabled}/>
-                                                <ErrorMessage name="email" component="span" style={{color: "red"}}></ErrorMessage>
-                                            </div>
-                                            <div className="mb-3">
-                                                <label htmlFor="dateOfBirth" className="form-label">Ngày Sinh</label>
-                                                <Field type="date" className="form-control" id="dateOfBirth" name="employeeBirthday" disabled={input2Disabled}/>
-                                                <ErrorMessage name="employeeBirthday" component="span" style={{color: "red"}}></ErrorMessage>
-                                            </div>
-                                            <div className="mb-3">
-                                                <label htmlFor="phoneNumber" className="form-label">Số Điện Thoại</label>
-                                                <Field type="text" className="form-control" id="phoneNumber" name="employeePhone" disabled={input2Disabled}/>
-                                                <ErrorMessage name="employeePhone" component="span" style={{color: "red"}}></ErrorMessage>
-                                            </div>
-                                            <div className="mb-3">
-                                                <label htmlFor="address" className="form-label">Địa Chỉ</label>
-                                                <Field type="text" className="form-control" id="address" name="employeeAddress" disabled={input2Disabled}/>
-                                                <ErrorMessage name="employeeAddress" component="span" style={{color: "red"}}></ErrorMessage>
-                                            </div>
-                                            <div className="mb-3 mt-4">
-                                                    <div className="row" style={{
-                                                        marginLeft: '5%',
-                                                        marginRight: '5%'
-                                                    }}>
-                                                        <button type="button"
-                                                                style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
-                                                                className="btn btn-outline-primary"
-                                                                onClick={handleToggleInputsInfo}>
-                                                            {!input2Disabled ? `Huỷ` : 'Đổi thông tin'}
-                                                        </button>
-                                                        <button type="submit"
-                                                                style={{width: '40%', marginLeft: '10%', marginRight: 'auto', display: input2Disabled ? 'none' : 'block'}}
-                                                                className="btn btn-outline-primary">Lưu
-                                                        </button>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                        </Form>
-                    </Formik>
-                </div>
-                <div className="col-6" style={{padding: '2%'}}>
-                    <Formik
-                        initialValues={{
-                            id: infoUser.id,
-                            userName: infoUser.userName,
-                            newPassword: "",
-                            password: "",
-                            newPasswordConfirmation: ""
-                        }}
-                        validationSchema={Yup.object({
-                            password: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
-                            newPassword: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
-                            newPasswordConfirmation: Yup.string()
-                                .min(6, "Không đủ ký tự cho phép (6 ký tự).")
-                                .max(50, "Quá ký tự cho phép (50 ký tự)."),
-                        })}
-                        onSubmit={(values) => {
-                            changePass(values);
-                        }}
                     >
                         <Form>
                             <div className="container">
                                 <div className="card">
                                     <div className="card-header">
-                                        <h1 style={{textAlign: 'center'}}>Thay Đổi Mật Khẩu</h1>
+                                        <h1 style={{textAlign: 'center'}}>Thông Tin Cá Nhân</h1>
                                     </div>
                                     <div className="card-body">
-
-
+                                        <div className="mb-3">
+                                            <label htmlFor="name" className="form-label">Họ Và Tên</label>
+                                            <Field type="text" className="form-control" id="name" name="employeeName"
+                                                   disabled={input2Disabled}/>
+                                            <ErrorMessage name="employeeName" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="email" className="form-label">Email</label>
+                                            <Field type="email" className="form-control" id="email" name="email"
+                                                   disabled={input2Disabled}/>
+                                            <ErrorMessage name="email" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="dateOfBirth" className="form-label">Ngày Sinh</label>
+                                            <Field type="date" className="form-control" id="dateOfBirth"
+                                                   name="employeeBirthday" disabled={input2Disabled}/>
+                                            <ErrorMessage name="employeeBirthday" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="phoneNumber" className="form-label">Số Điện Thoại</label>
+                                            <Field type="text" className="form-control" id="phoneNumber"
+                                                   name="employeePhone" disabled={input2Disabled}/>
+                                            <ErrorMessage name="employeePhone" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="address" className="form-label">Địa Chỉ</label>
+                                            <Field type="text" className="form-control" id="address"
+                                                   name="employeeAddress" disabled={input2Disabled}/>
+                                            <ErrorMessage name="employeeAddress" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
+                                        </div>
+                                        <div className="mb-3 mt-4">
+                                            <div className="row" style={{
+                                                marginLeft: '5%',
+                                                marginRight: '5%'
+                                            }}>
+                                                <button type="button"
+                                                        style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
+                                                        className="btn btn-outline-primary"
+                                                        onClick={handleToggleInputsInfo}>
+                                                    {!input2Disabled ? `Huỷ` : 'Đổi thông tin'}
+                                                </button>
+                                                <button type="submit"
+                                                        style={{
+                                                            width: '40%',
+                                                            marginLeft: '10%',
+                                                            marginRight: 'auto',
+                                                            display: input2Disabled ? 'none' : 'block'
+                                                        }}
+                                                        className="btn btn-outline-primary">Lưu
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Form>
+                    </Formik>
+                </div>
+                <div className="col-6" style={{padding: '2%'}}>
+                    <div className="container">
+                        <div className="card">
+                            <div className="card-header">
+                                <h1 style={{textAlign: 'center'}}>Thay Đổi Mật Khẩu</h1>
+                            </div>
+                            <div className="card-body">
+                                <Formik
+                                    initialValues={{
+                                        id: infoUser.id,
+                                        userName: infoUser.userName,
+                                        newPassword: "",
+                                        password: "",
+                                        newPasswordConfirmation: ""
+                                    }}
+                                    validationSchema={Yup.object({
+                                        password: Yup.string()
+                                            .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                            .max(50, "Quá ký tự cho phép (50 ký tự)."),
+                                        newPassword: Yup.string()
+                                            .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                            .max(50, "Quá ký tự cho phép (50 ký tự)."),
+                                        newPasswordConfirmation: Yup.string()
+                                            .min(6, "Không đủ ký tự cho phép (6 ký tự).")
+                                            .max(50, "Quá ký tự cho phép (50 ký tự)."),
+                                    })}
+                                    onSubmit={(values) => {
+                                        changePass(values);
+                                    }}
+                                >
+                                    <Form>
                                         <div className="mb-3">
                                             <label htmlFor="oldPassword" className="form-label">Mật Khẩu Cũ</label>
                                             <Field type="hidden" className="form-control" name="id"/>
                                             <Field type="hidden" className="form-control" name="userName"/>
-                                            <Field type="password" className="form-control" name="password" onChange={handlePasswordChange}
-                                                   value={password} disabled={input1Disabled} />
-                                            <ErrorMessage name="password" component="span" style={{color: "red"}}></ErrorMessage>
+                                            <Field type="password" className="form-control" name="password"
+                                                   onChange={handlePasswordChange}
+                                                   value={password} disabled={input1Disabled}/>
+                                            <ErrorMessage name="password" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
                                         </div>
                                         <div className="mb-3">
                                             <label htmlFor="newPassword" className="form-label">Mật Khẩu Mới</label>
                                             <Field type="password" className="form-control" name="newPassword"
-                                                   onChange={handleNewPasswordChange} value={newPassword} disabled={input1Disabled} />
+                                                   onChange={handleNewPasswordChange} value={newPassword}
+                                                   disabled={input1Disabled}/>
                                             <span style={{color: "red", display: validationPass ? "none" : "flex"}}>Không đủ ký tự cho phép (6 ký tự)</span>
-                                            <span style={{color: "red", display: validationPassMax50 ? "none" : "flex"}}>Quá ký tự cho phép (50 ký tự)</span>
-                                            <ErrorMessage name="newPassword" component="span" style={{color: "red"}}></ErrorMessage>
+                                            <span
+                                                style={{color: "red", display: validationPassMax50 ? "none" : "flex"}}>Quá ký tự cho phép (50 ký tự)</span>
+                                            <ErrorMessage name="newPassword" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor="newPasswordConfirmation" className="form-label">Nhập Lại Mật Khẩu
+                                            <label htmlFor="newPasswordConfirmation" className="form-label">Nhập Lại Mật
+                                                Khẩu
                                                 Mới</label>
-                                            <Field type="password" className="form-control" name="newPasswordConfirmation"
-                                                   onChange={handleConfirmPasswordChange} value={confirmPassword} disabled={input1Disabled} />
-                                            <ErrorMessage name="newPasswordConfirmation" component="span" style={{color: "red"}}></ErrorMessage>
+                                            <Field type="password" className="form-control"
+                                                   name="newPasswordConfirmation"
+                                                   onChange={handleConfirmPasswordChange} value={confirmPassword}
+                                                   disabled={input1Disabled}/>
+                                            <ErrorMessage name="newPasswordConfirmation" component="span"
+                                                          style={{color: "red"}}></ErrorMessage>
 
                                             {passwordsMatch || confirmPassword === "" ? (
                                                 <p style={{color: "green"}}></p>
                                             ) : (
-                                                <p style={{ color: "red" }}>Mật khẩu không trùng khớp.</p>
+                                                <p style={{color: "red"}}>Mật khẩu không trùng khớp.</p>
                                             )}
                                         </div>
-                                        <div className="mt-4" id="showDiv" style={{display: isOTPVisible ? 'none' : 'block'}}>
+                                        <div className="mt-4" id="showDiv"
+                                             style={{display: isOTPVisible ? 'none' : 'block'}}>
                                             <div className="row" style={{
                                                 marginLeft: '5%',
                                                 marginRight: '5%'
@@ -416,41 +440,38 @@ function Information() {
                                                     {!input1Disabled ? `Huỷ` : 'Đổi mật khẩu'}
                                                 </button>
                                                 <button type="submit"
-                                                        style={{width: '40%', marginLeft: '10%', marginRight: 'auto', display: input1Disabled ? 'none' : 'block'}}
-                                                        className="btn btn-outline-primary" disabled={!passwordsMatch || !validationPass || !validationPassMax50}>Lưu
+                                                        style={{
+                                                            width: '40%',
+                                                            marginLeft: 'auto',
+                                                            marginRight: 'auto',
+                                                            display: input1Disabled ? 'none' : 'block'
+                                                        }}
+                                                        className="btn btn-outline-primary"
+                                                        disabled={!passwordsMatch || !validationPass || !validationPassMax50}>Lưu
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </Form>
-                    </Formik>
-                    <div id="hiddenDiv" style={{display: isOTPVisible ? 'block' : 'none'}}>
-                        <Formik
-                            initialValues={user}
-                            onSubmit={(values) => {
-                                auth(values);
-                            }}
-                            validationSchema={Yup.object({
-                                otp: Yup.string().trim()
-                                    .min(8, "Không đủ ký tự cho phép (8 ký tự)")
-                                    .max(8, "Quá ký tự cho phép (8 ký tự)"),
-                            })}
-                        >
-
-                            <Form>
-                                <div className="container">
-                                    <div className="card">
-                                        {/*<div className="card-header">*/}
-                                        {/*    <h1 style={{textAlign: 'center'}}>Thay Đổi Mật Khẩu</h1>*/}
-                                        {/*</div>*/}
-                                        <div className="card-body">
+                                    </Form>
+                                </Formik>
+                                <div id="hiddenDiv" style={{display: isOTPVisible ? 'block' : 'none'}}>
+                                    <Formik
+                                        initialValues={user}
+                                        onSubmit={(values) => {
+                                            auth(values);
+                                        }}
+                                        validationSchema={Yup.object({
+                                            otp: Yup.string().trim()
+                                                .min(8, "Không đủ ký tự cho phép (8 ký tự)")
+                                                .max(8, "Quá ký tự cho phép (8 ký tự)"),
+                                        })}
+                                    >
+                                        <Form>
                                             <div className="mb-3">
                                                 <label htmlFor="otp" className="form-label">Mã Xác Nhận</label>
-                                                <Field type="text" className="form-control" value={otp} onChange={handleOtpChange} name="otp"/>
-                                                <ErrorMessage name="otp" component="span" style={{color: "red"}}></ErrorMessage>
+                                                <Field type="text" className="form-control" value={otp}
+                                                       onChange={handleOtpChange} name="otp"/>
+                                                <ErrorMessage name="otp" component="span"
+                                                              style={{color: "red"}}></ErrorMessage>
                                                 <Field type="hidden" className="form-control" name="password"/>
                                             </div>
                                             <div className="mt-4">
@@ -461,7 +482,11 @@ function Information() {
                                                     display: isOTPReset ? 'none' : 'block'
                                                 }}>
                                                     <button type="button"
-                                                            style={{width: '45%', marginLeft: 'auto', marginRight: '10%'}}
+                                                            style={{
+                                                                width: '45%',
+                                                                marginLeft: 'auto',
+                                                                marginRight: '10%'
+                                                            }}
                                                             className="btn btn-outline-primary"
                                                             onClick={handleToggleInputs}>
                                                         Huỷ
@@ -472,32 +497,46 @@ function Information() {
                                                 </div>
                                                 <div className="row" style={{
                                                     display: isOTPReset ? 'block' : 'none',
-                                                    marginLeft: '5%',
-                                                    marginRight: '5%'
                                                 }}>
-                                                    <button type="button"
-                                                            style={{width: '30%'}}
-                                                            className="btn btn-outline-primary mx-2"
-                                                            onClick={handleToggleInputs}>
-                                                       Huỷ
-                                                    </button>
-                                                    <button type="button"
-                                                            style={{width: '30%'}}
-                                                            className="btn btn-outline-primary mx-2" id="subOtp" disabled={isCounting}
-                                                            onClick={() => resetOTP()}>
-                                                        {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
-                                                    </button>
-                                                    <button type="submit"
-                                                            style={{width: '30%'}}
-                                                            className="btn btn-outline-primary mx-2" id="subOtp">Xác Nhận
-                                                    </button>
+                                                    <div style={{marginLeft: '15%', marginRight: '15%', width: "80%"}}>
+                                                        <button type="button"
+                                                                style={{
+                                                                    width: '25%',
+                                                                    marginLeft: 'auto',
+                                                                    marginRight: 'auto'
+                                                                }}
+                                                                className="btn btn-outline-primary mx-2"
+                                                                onClick={handleToggleInputs}>
+                                                            Huỷ
+                                                        </button>
+                                                        <button type="button"
+                                                                style={{
+                                                                    width: '25%',
+                                                                    marginLeft: 'auto',
+                                                                    marginRight: 'auto'
+                                                                }}
+                                                                className="btn btn-outline-primary mx-2" id="subOtp"
+                                                                disabled={isCounting}
+                                                                onClick={() => resetOTP()}>
+                                                            {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
+                                                        </button>
+                                                        <button type="submit"
+                                                                style={{
+                                                                    width: '25%',
+                                                                    marginLeft: 'auto',
+                                                                    marginRight: 'auto'
+                                                                }}
+                                                                className="btn btn-outline-primary mx-2" id="subOtp">Xác
+                                                            Nhận
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </Form>
+                                    </Formik>
                                 </div>
-                            </Form>
-                        </Formik>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
