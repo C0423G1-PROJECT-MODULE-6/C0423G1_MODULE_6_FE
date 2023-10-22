@@ -3,19 +3,24 @@ import {Html5QrcodeScanner} from 'html5-qrcode';
 import {useNavigate} from 'react-router-dom';
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
 import * as customerService from "../../service/customer/CustomerService";
+import {useParams} from "react-router";
 
-function ScannerOderQR({result}) {
+function ScannerOderQR() {
     const [showScanResult, setShowScanResult] = useState(false);
     const [idProduct, setIdProduct] = useState()
+    const param = useParams();
     const navigate = useNavigate();
     const [userId, setUserId] = useState("");
 
     const handleDecodedText = async (decodedText) => {
         const productObj = JSON.parse(decodedText);
         setIdProduct(parseInt(productObj.id));
+        console.log(parseInt(productObj.id))
         if (userId) {
-            const result = await customerService.createCart(userId, parseInt(productObj.id));
-            navigate('/admin/order');
+            await customerService.createCart(param.id, parseInt(productObj.id));
+            console.log("------------------")
+            console.log(param.id)
+            navigate(`/admin/order/${param.id}`);
         }
     };
 
