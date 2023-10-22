@@ -1,9 +1,10 @@
 import HeaderAdmin from "./HeaderAdmin";
 import {Bar, Doughnut, Pie} from "react-chartjs-2";
 import * as SalesService from "../../service/sales_report/SalesService";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Chart, registerables} from "chart.js";
 import {getQuantityToday} from "../../service/sales_report/SalesService";
+import Footer from "../home/common/Footer";
 
 Chart.register(...registerables);
 
@@ -78,18 +79,25 @@ function HomeAdmin() {
             },
         },
     };
-    const percentageAchieved = Math.min((dailyMonth / 100000000) * 100, 100);
+    // const percentageAchieved = Math.min((dailyMonth / 100000000) * 100, 100);
+    const total = 100;
+    const macbook = 20/total * 100;
+    const iphone = 30/total * 100;
+    const watch = 10/total * 100;
+    const ipad = 38/total * 100;
 
     const donutChartData = {
         labels: [
-            `Số doanh thu bán được trong tháng (${percentageAchieved.toFixed(2)}%)`,
-            `Chỉ tiêu doanh thu trong tháng`,
+            `Macbook (${macbook.toFixed(0)}%)`,
+            `Iphone (${iphone.toFixed(0)}%)`,
+            `Apple Watch (${watch.toFixed(0)}%)`,
+            `Ipad (${ipad.toFixed(0)}%)`,
         ],
         datasets: [
             {
-                data: [percentageAchieved, 100 - percentageAchieved],
-                backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
-                borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+                data: [macbook, iphone, watch, ipad],
+                backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgb(255, 0, 221, 0.2)", "rgb(1, 250, 9, 0.2)"],
+                borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgb(255, 0, 221, 1)", "rgb(1, 250, 9,1)"],
                 borderWidth: 1,
             },
         ],
@@ -97,10 +105,10 @@ function HomeAdmin() {
 
 
     const cardBodyStyle = {
-        flex: '1 1 auto',
-        padding: 'var(--bs-card-spacer-y) var(--bs-card-spacer-x)',
+        // flex: '1 1 auto',
+        // padding: 'var(--bs-card-spacer-y) var(--bs-card-spacer-x)',
         color: 'white',
-        minHeight: '150px',
+        minHeight: '100px',
         fontSize: '35px',
     };
     useEffect(() => {
@@ -111,27 +119,39 @@ function HomeAdmin() {
             <HeaderAdmin/>
             <div className="container my-5 pt-4">
                 <div className="row mt-5">
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div style={{...cardBodyStyle, backgroundColor: '#3ea4ed'}} className="card-body">
-                                <h5 className="card-title">Số đơn bán trong ngày</h5>
-                                <p className="card-text">{quantityToDay}</p>
+                    <div className="col-md-4" >
+                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#3ea4ed'}}>
+                            <div className="card-header">
+                                Số đơn bán trong ngày
+                            </div>
+                            <div className="card-body">
+                                <blockquote className="blockquote mb-0">
+                                    {quantityToDay}
+                                </blockquote>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card">
-                            <div style={{...cardBodyStyle, backgroundColor: '#f3d652'}} className="card-body">
-                                <h5 className="card-title">Doanh thu trong ngày</h5>
-                                <p className="card-text">{dailyToDay} VND</p>
+                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#f3d652'}}>
+                            <div className="card-header">
+                                Doanh thu trong ngày
+                            </div>
+                            <div className="card-body">
+                                <blockquote className="blockquote mb-0">
+                                    {dailyToDay} VND
+                                </blockquote>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card">
-                            <div style={{...cardBodyStyle, backgroundColor: '#ff7a81'}} className="card-body">
-                                <h5 className="card-title">Chỉ tiêu tháng</h5>
-                                <p className="card-text">100,000,000 VND</p>
+                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#ff7a81'}}>
+                            <div className="card-header">
+                                Chỉ tiêu tháng
+                            </div>
+                            <div className="card-body">
+                                <blockquote className="blockquote mb-0">
+                                    100,000,000 VND
+                                </blockquote>
                             </div>
                         </div>
                     </div>
@@ -145,6 +165,7 @@ function HomeAdmin() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }

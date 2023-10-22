@@ -6,14 +6,13 @@ import {useNavigate} from "react-router-dom";
 import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css'
 import '../../css/user/login.css'
-import Footer from "../home/common/Footer";
 import {Helmet} from "react-helmet";
 
 
 function LoginForm() {
 
     const [user, setUser] = useState({
-        username: "",
+        userName: "",
         otp: ""
     });
 
@@ -23,6 +22,7 @@ function LoginForm() {
     const [countdown, setCountdown] = useState(5);
     const [isCounting, setIsCounting] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [value, setValue] = useState(null);
 
     const handleClick = () => {
         setLoading(true);
@@ -41,6 +41,7 @@ function LoginForm() {
         }
         return () => clearTimeout(timer);
     }, [countdown, isCounting]);
+
 
     const startCountdown = () => {
         setIsCounting(true);
@@ -69,9 +70,7 @@ function LoginForm() {
             let initOtp = {
                 userName: user.userName
             }
-            console.log(initOtp)
             const res = await AuthService.resetOTP(initOtp);
-            console.log(res)
             if (res.status === 200) {
                 toast("OTP đã được gửi qua mail của bạn");
             } else {
@@ -93,10 +92,11 @@ function LoginForm() {
         try {
             const res = await AuthService.login(data);
             console.log(res)
-            let initOtp = {
+            const initOtp = {
                 userName: res.data.userName,
                 otp: ""
             }
+            setValue(res.data.employeeName)
             setUser(initOtp);
             if (res.status === 200) {
                 showOTP();
@@ -148,16 +148,14 @@ function LoginForm() {
                     <body className="custom-background-HaiBH"/>
                 </Helmet>
             </div>
-            <div style={{width: '40%', height: '30%', margin: '0% auto 0% auto', padding: '4% 0 15% 0'}}>
-
-                <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
-                    <div className="spinner-container">
-                        <RingLoader color="white"/>
-                    </div>
+            <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
+                <div className="ring-loader">
+                    <RingLoader color="white"/>
                 </div>
-
+            </div>
+            <div style={{width: '40%', height: '30%', margin: '0% auto 0% auto', padding: '4% 0 15% 0'}}>
                 <div className="transparent-div-HaiBH card"
-                     style={{backgroundColor: 'rgba(192, 192, 192, 0.0)', border: "0 solid"}}>
+                     style={{backgroundColor: 'rgba(192, 192, 192, 0.0)', border: "0 solid", borderRadius: "10%"}}>
                     <div className="card-header">
 
                         <img
@@ -181,11 +179,18 @@ function LoginForm() {
                                     <div className="mb-3">
                                         <label htmlFor="exampleInputEmail1"
                                                className="form-label custom-label-HaiBH"
-                                               style={{color: 'white'}}>Tên Đăng Nhập</label>
-                                        <Field type="text" className="form-control bg bg-dark"
+                                               style={{color: 'white'}} hidden={isOTPVisible}>Tên Đăng Nhập</label>
+
+                                        <Field type={!isOTPVisible ? "text" : "hidden"} className="form-control bg bg-dark"
                                                id="exampleInputEmail1"
-                                               aria-describedby="emailHelp" name="userName" disabled={isOTPVisible}
-                                               style={{color: 'white'}}/>
+                                               aria-describedby="emailHelp" name="userName"
+                                               style={{color: 'white' }}/>
+
+                                        <p className="custom-label-HaiBH" hidden={!isOTPVisible}>
+                                            Xin Chào: {value} !
+                                        </p>
+
+
                                     </div>
                                     <div className="mb-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
                                         <label htmlFor="exampleInputPassword1"
