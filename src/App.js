@@ -40,7 +40,6 @@ function App() {
     return (
         <>
             <ToastContainer></ToastContainer>
-            <HeaderAdmin></HeaderAdmin>
             <Routes>
 
                 <Route path="*" element={<Home/>}></Route>
@@ -70,9 +69,11 @@ function App() {
                     <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
                     <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}></Route>
 
+                    
                     <Route path="/admin/order/:id" element={<Order/>}/>
-                    <Route path="/admin/customer" element={<CustomerList/>}/>
-                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
+
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>

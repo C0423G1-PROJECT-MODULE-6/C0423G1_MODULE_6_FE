@@ -8,12 +8,18 @@
 }
 
 .transparent-div-HaiBH {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
     /*background-color: rgba(255, 255, 255, 0.5);*/
-    /*backdrop-filter: blur(2px);*/
-    padding: 20px; /* Khoảng cách bên trong phần tử */
+    backdrop-filter: blur(1px);
+    padding-bottom: 10px; /* Khoảng cách bên trong phần tử */
+    padding-top: 10px; /* Khoảng cách bên trong phần tử */
     border: 1px solid #ccc; /* Viền phần tử */
 }
+
+#transparent-div-HaiBH {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 
 .custom-label-HaiBH {
     color: white; /* Màu chữ là trắng */
