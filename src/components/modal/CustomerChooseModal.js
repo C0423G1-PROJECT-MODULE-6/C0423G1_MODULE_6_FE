@@ -19,7 +19,6 @@ const CustomerChooseModal = ({handleData}) => {
         idCustomer: null,
         nameCustomer: ""
     });
-    // const [optionSearch, setOptionSearch] = useState();
     const loadCustomerList = async (page, name, phone, gender) => {
         const result = await getAllCustomerModal(page, name, phone, gender);
         if (result?.status === 200) {
@@ -32,7 +31,6 @@ const CustomerChooseModal = ({handleData}) => {
     const handleOptionSearchChange = (e) => {
         const {value} = e.target;
         setChange(+value);
-        // loadCustomerList();
     }
     const handleReset = () => {
         setPage(0);
@@ -242,17 +240,18 @@ const CustomerChooseModal = ({handleData}) => {
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => previousPage()}
-                                                        >Trước
+                                                <button className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => previousPage()}
+                                                >Trước
                                                 </button>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link "
-                                                >{page + 1} / {totalPage}</button>
+                                                <div className="page-link "
+                                                >{page + 1} / {totalPage}</div>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()} href="#">Sau
+                                                <button className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} onClick={() => nextPage()} >Sau
                                                 </button>
+
                                             </li>
                                         </ul>
                                     </nav>

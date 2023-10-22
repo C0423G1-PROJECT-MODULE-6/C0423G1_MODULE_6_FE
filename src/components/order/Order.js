@@ -312,8 +312,9 @@ function Order() {
                                                 data-bs-target="#exampleModalProduct" style={{width: '30%'}}>
                                             Chọn sản phẩm
                                         </button>
-                                        <Link style={{width: '30%'}} className="btn btn-outline-primary col-6 mx-1"
-                                              to={"/admin/scanner-qr-order"}>Scan QR</Link>
+                                        <Link to={"/admin/scanner-qr-order"}
+                                              className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}>Scan
+                                            QR</Link>
                                     </div>
                                     <div className="row">
                                         <table className="table " style={{width: '100%'}}>
