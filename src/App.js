@@ -57,10 +57,7 @@ function App() {
                     element={
                         <Authentication
                             allowedRoles={[
-                                EnumAppUserRole.ROLE_ADMIN,
-                                EnumAppUserRole.ROLE_SALE,
-                                EnumAppUserRole.ROLE_BUSINESS,
-                                EnumAppUserRole.ROLE_WAREHOUSE,
+                                EnumAppUserRole.ROLE_ADMIN
                             ]}
                         />
                     }
@@ -89,6 +86,38 @@ function App() {
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                 </Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_SALE
+                            ]}
+                        />
+                    }
+                >
+
+                </Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_BUSINESS
+                            ]}
+                        />
+                    }
+                ></Route>
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_WAREHOUSE
+                            ]}
+                        />
+                    }
+                ></Route>
             </Routes>
         </>
     );

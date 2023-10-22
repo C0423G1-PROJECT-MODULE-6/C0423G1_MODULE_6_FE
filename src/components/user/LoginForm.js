@@ -5,7 +5,10 @@ import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import {RingLoader} from "react-spinners";
 import '../../css/user/spinner.css'
+import '../../css/user/login.css'
 import Footer from "../home/common/Footer";
+
+
 
 
 function LoginForm() {
@@ -141,28 +144,30 @@ function LoginForm() {
 
     return (
         <>
+            {/*<body className="custom-background-HaiBH">*/}
 
-            <div style={{width: '40%', margin: '15% auto 20% auto'}}>
+
+            <div style={{width: '30%', margin: '0% auto 0% auto', padding: '8% 0 8% 0'}}>
+            {/*<div className="centered-div-HaiBH">*/}
                 <div className="spinner-overlay" style={{display: loading ? 'flex' : 'none'}}>
                     <div className="spinner-container">
                         <RingLoader color="#000000"/>
                     </div>
                 </div>
                 <fieldset
-                    className="form-input shadow"
+                    className="form-input shadow transparent-div-HaiBH"
                     style={{
                         borderRadius: '20px',
-                        border: '1px solid #000000',
+                        border: '0px solid #000000',
                         height: 'auto',
                         padding: '20px',
-                        backgroundColor: '#f8f9fa',
                         width: '100%',
                     }}
                 >
                     <legend className="float-none w-auto px-1">
-                        <h2>Đăng Nhập</h2>
+                        <h2 style={{color: "white"}} className="custom-label-HaiBH">Đăng Nhập</h2>
                     </legend>
-                    <div style={{margin: '3%'}}>
+                    <div style={{margin: '3%', color: 'white'}} className="">
                         <Formik
                             initialValues={initAccount}
                             onSubmit={(values) => {
@@ -171,19 +176,19 @@ function LoginForm() {
                         >
                             <Form>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleInputEmail1" className="form-label">Tên Đăng Nhập</label>
-                                    <Field type="text" className="form-control" id="exampleInputEmail1"
-                                           aria-describedby="emailHelp" name="userName" disabled={isOTPVisible}/>
+                                    <label htmlFor="exampleInputEmail1" className="form-label custom-label-HaiBH" style={{color: 'white'}}>Tên Đăng Nhập</label>
+                                    <Field type="text" className="form-control bg bg-dark" id="exampleInputEmail1"
+                                           aria-describedby="emailHelp" name="userName" disabled={isOTPVisible} style={{color: 'white'}}/>
                                 </div>
                                 <div className="mb-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
-                                    <label htmlFor="exampleInputPassword1" className="form-label">Mật Khẩu</label>
-                                    <Field type="password" className="form-control" id="exampleInputPassword1"
-                                           name="password"/>
+                                    <label htmlFor="exampleInputPassword1" className="form-label custom-label-HaiBH" style={{color: 'white'}}>Mật Khẩu</label>
+                                    <Field type="password" className="form-control bg bg-dark" id="exampleInputPassword1"
+                                           name="password" style={{color: 'white'}}/>
                                 </div>
                                 <div className="mt-4" style={{display: isOTPVisible ? 'none' : 'block'}}>
                                     <div style={{width: '40%', marginLeft: 'auto', marginRight: 'auto'}}>
                                         <button type="submit" style={{width: '100%'}}
-                                                className="btn btn-outline-primary" onClick={handleClick}>Login
+                                                className="btn btn-dark" onClick={handleClick}>Login
                                         </button>
                                     </div>
                                 </div>
@@ -198,8 +203,8 @@ function LoginForm() {
                             <Form>
                                 <div id="hiddenDiv" style={{display: isOTPVisible ? 'block' : 'none'}}>
                                     <div className="mb-3">
-                                        <label htmlFor="otp" className="form-label">Mã Xác Nhận</label>
-                                        <Field type="text" className="form-control" name="otp"/>
+                                        <label htmlFor="otp" className="form-label custom-label-HaiBH">Mã Xác Nhận</label>
+                                        <Field type="text" className="form-control bg bg-dark" name="otp" id="otp" style={{color: 'white'}}/>
                                     </div>
                                     <div className="mt-4">
                                         <div style={{
@@ -209,7 +214,7 @@ function LoginForm() {
                                             display: isOTPReset ? 'none' : 'block'
                                         }}>
                                             <button type="submit" style={{width: '100%'}}
-                                                    className="btn btn-outline-primary">
+                                                    className="btn btn-dark">
                                                 Xác Nhận
                                             </button>
                                         </div>
@@ -220,13 +225,13 @@ function LoginForm() {
                                         }}>
                                             <button type="button"
                                                     style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
-                                                    className="btn btn-outline-primary" disabled={isCounting}
+                                                    className="btn btn-dark" disabled={isCounting}
                                                     onClick={() => resetOTP()}>
                                                 {isCounting ? `${countdown}s` : 'Gửi Lại OTP'}
                                             </button>
                                             <button type="submit"
                                                     style={{width: '40%', marginLeft: '10%', marginRight: 'auto'}}
-                                                    className="btn btn-outline-primary" onClick={handleClick}>Xác Nhận
+                                                    className="btn btn-dark" onClick={handleClick}>Xác Nhận
                                             </button>
                                         </div>
                                     </div>
@@ -236,6 +241,7 @@ function LoginForm() {
                     </div>
                 </fieldset>
             </div>
+            {/*</body>*/}
             <Footer/>
         </>
     );
