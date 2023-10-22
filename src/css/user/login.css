@@ -1,0 +1,26 @@
+.custom-background-HaiBH {
+    /*background-color: #f2f2f2; !* Màu nền *!*/
+    /*background-image: url('backgroundadmin.jpeg'); !* Ảnh nền *!*/
+    /*background-size: cover; !* Kích thước ảnh nền *!*/
+    /*background-repeat: no-repeat; !* Không lặp lại ảnh *!*/
+}
+
+body {
+    background-color: #f2f2f2; /* Màu nền */
+    background-image: url('admin.jpeg'); /* Ảnh nền */
+    background-size: 100% 100%; /* Kích thước nền bằng 100% chiều rộng và 100% chiều cao của màn hình */
+    background-repeat: no-repeat; /* Không lặp lại ảnh */
+}
+
+.transparent-div-HaiBH {
+    background-color: rgba(255, 255, 255, 0.3);
+    /*background-color: rgba(255, 255, 255, 0.5);*/
+    /*backdrop-filter: blur(2px);*/
+    padding: 20px; /* Khoảng cách bên trong phần tử */
+    border: 1px solid #ccc; /* Viền phần tử */
+}
+
+.custom-label-HaiBH {
+    color: white; /* Màu chữ là trắng */
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black; /* Viền đen cho chữ */
+}
