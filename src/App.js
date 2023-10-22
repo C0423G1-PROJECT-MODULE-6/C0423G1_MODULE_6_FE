@@ -77,12 +77,30 @@ function App() {
                         />
                     }
                 >
+                    //admin
                     <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}/>
                     <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}/>
                     <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}/>
 
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                     <Route path="/admin/scanner-qr-order" element={<ScannerOrderQR/>}/>
+
+                    //sale
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+                    <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
+
+                    //business
+                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
+                    <Route path="/admin/business/supplier/create" element={<CreateSupplier/>}/>
+                    <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
+                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
+
+                    /ware
+                    <Route path="/admin/ware/warehouse/import/:product" element={<ImportProduct/>}/>
+                    <Route path="/admin/ware/warehouse" element={<Warehouse/>}/>
                 </Route>
 
                 <Route
