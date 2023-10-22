@@ -8,7 +8,7 @@ import axios from "axios";
  * return HttpStatus
  */
 export const getPageProductModalWareHouse = async (choose,page,value) => {
-    const result = await axios.get(`http://localhost:8080/api/admin/cart/list/product?choose=${choose}&page=${page}&value=${value}`)
+    const result = await axios.get(`http://localhost:8080/api/admin/sale/cart/list/product?choose=${choose}&page=${page}&value=${value}`)
     console.log(result)
     return result;
 }
