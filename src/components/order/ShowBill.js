@@ -15,8 +15,8 @@ function ShowBill() {
 
     console.log(param.id)
 
-    const findOrderBillNewest = async () => {
-        const res = await orderService.findOrderBillNewest(param.id);
+    const findOrderBillNewest = async (idCus) => {
+        const res = await orderService.findOrderBillNewest(idCus);
         setOrderBill(res);
         setCustomer(res.customer);
     };
@@ -28,7 +28,7 @@ function ShowBill() {
 
 
     useEffect(() => {
-        findOrderBillNewest();
+        findOrderBillNewest(param.id);
         setPrint(0);
     }, []);
 
