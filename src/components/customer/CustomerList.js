@@ -2,10 +2,11 @@ import React, {useEffect, useState} from "react";
 import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
+import {toast} from "react-toastify";
 
 export function CustomerList() {
     const [customers, setCustomers] = useState([]);
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [records, setRecords] = useState();
     const [totalPage, setTotalPage] = useState();
@@ -14,6 +15,7 @@ export function CustomerList() {
     const [searchGender, setSearchGender] = useState("3");
     const [sort, setSort] = useState("");
     const [refresh, setRefresh] = useState(true);
+    const pattern = /[!@#$%^&*()_+=|{}<>?]/;
 
     const getCustomerList = async () => {
         try {
@@ -34,8 +36,12 @@ export function CustomerList() {
     }, [page, refresh, sort]);
 
     const handleSearch = () => {
-        setPage(0);
-        setRefresh(!refresh)
+        if (pattern.test(searchName)){
+            toast("Không nhập ký tự đặc biệt");
+        }else {
+            setPage(0);
+            setRefresh(!refresh)
+        }
     }
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -84,7 +90,9 @@ export function CustomerList() {
                     <div className="col-auto mx-1">
                         <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
                                style={{width: '200px'}}
-                               onChange={(name) => (setSearchName(name.target.value))}  onKeyDown={handleKeyDown}/>
+                               onChange={(name) => {
+                                   (setSearchName(name.target.value))
+                               }}  onKeyDown={handleKeyDown}/>
                     </div>
                     <div className="col-auto mx-1">
                         <button className="btn btn-outline-primary text-center" type="button"
@@ -92,7 +100,7 @@ export function CustomerList() {
                         </button>
                     </div>
                 </div>
-                <div style={{minHeight:"280px"}}>
+                <div style={{minHeight:"400px"}}>
                     <table className="border border-dark table table-hover table-layout">
                         <thead>
                         <tr>
@@ -136,13 +144,13 @@ export function CustomerList() {
                                         <td style={{textAlign: "center"}}>{customer.totalPurchases}</td>
                                         <td style={{textAlign: "center"}}>
                                             <Link className="btn btn-outline-primary"
-                                                  to={`/admin/history/${customer.idCustomer}`}>Xem</Link>
+                                                  to={`/admin/business/customer/history/${customer.idCustomer}`}>Xem</Link>
                                         </td>
                                     </tr>
                                 )
                             })) : (<tr>
 
-                            <td colSpan={9} style={{textAlign: "center", color: "red"}}>Không tìm thấy!</td>
+                            <td colSpan={9} style={{textAlign: "center", color: "red"}}>Không tìm thấy</td>
 
                         </tr>)
                         }
@@ -157,6 +165,11 @@ export function CustomerList() {
                     <div className="col-auto ms-auto">
                         <nav className="bottom" aria-label="Page navigation">
                             <ul className="pagination mb-0 ">
+                                <li className="page-item">
+                                    <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                                       onClick={() => setPage(0)} tabIndex="-1" href="#"
+                                       aria-disabled="true">Đầu</a>
+                                </li>
                                 <li className="page-item ">
                                     <a onClick={() => previousPage()}
                                        className={`page-link ${page <= 0 ? "disabled" : ""}`} href="#" tabIndex="-1"
@@ -169,6 +182,10 @@ export function CustomerList() {
                                     <a onClick={() => nextPage()}
                                        className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`}
                                        href="#">Sau</a>
+                                </li>
+                                <li className="page-item">
+                                    <a className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} href="#"
+                                       onClick={() => setPage(totalPage-1)}>Cuối</a>
                                 </li>
                             </ul>
                         </nav>

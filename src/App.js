@@ -71,8 +71,8 @@ function App() {
                     <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
                     <Route path='/admin/employee/create' element={<CreateEmployee/>}></Route>
                     <Route path="/admin/order" element={<Order/>}/>
-                    <Route path="/admin/customer" element={<CustomerList/>}/>
-                    <Route path="/admin/history/:id" element={<ShoppingHistoryList/>}/>
+                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
                     <Route path="/admin/supplier" element={<Supplier/>}/>

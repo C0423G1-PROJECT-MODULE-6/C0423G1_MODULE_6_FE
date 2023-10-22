@@ -20,8 +20,8 @@ export const addCustomer = async (customer) => {
     return result;
 
 }
-const apiURL = "http://localhost:8080/api/admin/customer/list";
-const apiURLHistory = "http://localhost:8080/api/admin/customer/history";
+const apiURL = "http://localhost:8080/api/admin/business/customer/list";
+const apiURLHistory = "http://localhost:8080/api/admin/business/customer/list/history";
 
 export const getAllPage = async (limit, page, nameSearch, age, gender, sortName, sortCount) => {
     try {
