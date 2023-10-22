@@ -13,6 +13,7 @@ import Header from '../common/Header';
 import Footer from '../common/Footer';
 
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import { RingLoader } from 'react-spinners';
 
 const Detail = () => {
 
@@ -25,7 +26,7 @@ const Detail = () => {
     const [colorIsActive, setColorIsActive] = useState();
     const [capaIsActive, setCapaIsActive] = useState();
     const [id, setId] = useState(param.id);
-
+    const [isLoading, setIsLoading] = useState(true);
 
     const colorCode = {
         1: 'black-titan',
@@ -91,10 +92,25 @@ const Detail = () => {
         const data = await getColorsByNameAndCapacity(name, capa);
         setColors(data);
     }
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+        return () => {
+            clearTimeout(timer); // Clear the timer if the component unmounts before the timeout
+        };
+    }, []);
 
 
     return (
         <>
+            {isLoading &&
+                <div div className='spinner-container'>
+                    <RingLoader
+                        className='spinner-item' color="#fff" />
+                </div >
+            }
             <div className='home-body'>
                 <Header />
                 <div className="detail-container">
@@ -167,10 +183,7 @@ const Detail = () => {
 
 
                         </div>
-                        <div className="sale-event">
-                            <img src='https://toanhocbactrungnam.vn/uploads/news/2019_11/1573006985.png' />
-                            <p className='qr'>Quét mã QR</p>
-                        </div>
+
                     </div>
                 </div >
 

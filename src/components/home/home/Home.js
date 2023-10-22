@@ -9,6 +9,7 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getBestsellers, getListByName } from '../../../service/home/HomeService';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
+import { RingLoader } from 'react-spinners';
 
 const Home = () => {
 
@@ -17,7 +18,6 @@ const Home = () => {
     const [ipads, setIpads] = useState();
     const [watches, setWatches] = useState();
     const [bestsellers, setBestsellers] = useState();
-
 
     useEffect(() => {
         getIphones();
@@ -50,10 +50,26 @@ const Home = () => {
         setBestsellers(data);
     }
 
+    const [isLoading, setIsLoading] = useState(true);
 
+    useEffect(() => {
+        const handleLoad = () => {
+            setIsLoading(false);
+        };
 
+        window.addEventListener('load', handleLoad);
+
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
+    }, []);
     return (
         <>
+            {isLoading &&
+                <div div className='spinner-container'>
+                    <RingLoader className='spinner-item' color="#fff" />
+                </div >
+            }
             <div className='home-body'>
                 <Header />
                 <div className='home-container'>
@@ -73,7 +89,6 @@ const Home = () => {
                                 delay: 3000,
                                 disableOnInteraction: false,
                             }}
-
                             pagination={{
                                 dynamicBullets: true,
                                 clickable: true,
@@ -82,6 +97,7 @@ const Home = () => {
                                 nextEl: ".carousel-swiper-button-next",
                                 prevEl: ".carousel-swiper-button-prev"
                             }}
+
                             modules={[Pagination, Autoplay, Navigation]}
                             className="mySwiper"
                             loop={true}
@@ -115,7 +131,7 @@ const Home = () => {
                                     <i className='bx bxs-chevron-right'></i>
                                 </div>
                             </div>
-                            <Swiper
+                            <Swiper id='bs-swiper'
                                 slidesPerView={5}
                                 spaceBetween={30}
                                 loop={false}
@@ -126,7 +142,7 @@ const Home = () => {
                                 grabCursor={true}
                                 navigation={{
                                     nextEl: ".bs-swiper-button-next",
-                                    prevEl: ".bs-swiper-button-prev"
+                                    prevEl: ".bs-swiper-button-prev",
                                 }}
 
                                 modules={[Pagination, Autoplay, Navigation]}
@@ -136,6 +152,11 @@ const Home = () => {
                                     return (
                                         <SwiperSlide key={item.id}>
                                             <a className="bestseller-card" href={'/detail/' + item.type + '/' + item.id}>
+                                                {item.quantity == 0 &&
+                                                    <div className='soldout-part'>
+                                                        <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                    </div>
+                                                }
                                                 <div className="bestseller-image">
                                                     <img src={item.image} alt="" />
                                                 </div>
@@ -229,6 +250,11 @@ const Home = () => {
                                 return (
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
+                                            {item.quantity == 0 &&
+                                                <div className='soldout-part'>
+                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                </div>
+                                            }
                                             <div className="slide-image">
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
@@ -292,6 +318,11 @@ const Home = () => {
                                 return (
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
+                                            {item.quantity == 0 &&
+                                                <div className='soldout-part'>
+                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                </div>
+                                            }
                                             <div className="slide-image">
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
@@ -357,6 +388,11 @@ const Home = () => {
                                 return (
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
+                                            {item.quantity == 0 &&
+                                                <div className='soldout-part'>
+                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                </div>
+                                            }
                                             <div className="slide-image">
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
@@ -421,6 +457,11 @@ const Home = () => {
                                 return (
                                     <SwiperSlide >
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
+                                            {item.quantity == 0 &&
+                                                <div className='soldout-part'>
+                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                </div>
+                                            }
                                             <div className="slide-image">
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
