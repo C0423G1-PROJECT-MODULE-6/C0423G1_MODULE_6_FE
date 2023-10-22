@@ -58,7 +58,7 @@ function Order() {
         findCustomerByid(data);
     }
     const handleDataByChooseProduct = (data) => {
-        getAllCart();
+        getAllCart(data);
     }
     const handleDataByCreateCustomer = (data) => {
         findCustomerByid(data);
@@ -144,7 +144,7 @@ function Order() {
             }
             const res = await orderService.getBillNotPay(value);
             if (res.status === 200) {
-                navigate(`/admin/order/showBill/${res.data.customer.idCustomer}`);
+                navigate(`/admin/sale/order/showBill/${res.data.customer.idCustomer}`);
             }
         }
     };
