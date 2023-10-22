@@ -19,8 +19,8 @@ import CreateEmployee from './components/user/CreateEmployee';
 import ShowBill from "./components/order/ShowBill";
 import PrintPDF from "./components/order/PrintPDF";
 import ProductList from "./components/product/ProductList";
-import {Warehouse} from './components/warehouse/Warehouse';
-import {ImportProduct} from './components/warehouse/ImportProduct';
+import { Warehouse } from './components/warehouse/Warehouse';
+import { ImportProduct } from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
 import CreateProduct from "./components/product/CreateProduct";
@@ -45,6 +45,12 @@ function App() {
             <ToastContainer></ToastContainer>
             <Routes>
 
+
+           
+             
+             
+                <Route path='/home' element={<Home />} />
+                <Route path="/list/" element={<List />} />
                 <Route path="*" element={<Home/>}></Route>
                 <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
@@ -56,6 +62,7 @@ function App() {
                 <Route path="/detail/:type/:id" element={<Detail/>}/>
 
 
+
                 <Route
                     element={
                         <Authentication
@@ -65,6 +72,23 @@ function App() {
                         />
                     }
                 >
+                    <Route path="/admin/information/:id" element={<Information />}></Route>
+                    <Route path="/admin/home" element={<HomeAdmin />}></Route>
+                    <Route path='/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
+                    <Route path='/admin/employee/edit' element={<EditEmployee></EditEmployee>}></Route>
+                    <Route path='/admin/employee/create' element={<CreateEmployee />}></Route>
+                    <Route path="/admin/order" element={<Order />} />
+                    <Route path="/admin/customer" element={<CustomerList />} />
+                    <Route path="/admin/history/:id" element={<ShoppingHistoryList />} />
+                    <Route path="/admin/warehouse" element={<Warehouse />} />
+                    <Route path="/admin/warehouse/import" element={<ImportProduct />} />
+                    <Route path="/admin/supplier" element={<Supplier />} />
+                    <Route path="/admin/product/list" element={<ProductList />} />
+                    <Route path="/admin/product/create" element={<CreateProduct />} />
+                    <Route path="/admin/salesreport" element={<SalesReport />} />
+                    <Route path="/admin/order" element={<Order />} />
+                    <Route path="/admin/order/showBill" element={<ShowBill />} />
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF />} />
                     <Route path="/admin/information/:id" element={<Information/>}></Route>
                     <Route path="/admin/*" element={<HomeAdmin/>}></Route>
 
@@ -104,7 +128,7 @@ function App() {
                         />
                     }
                 >
-
+                  
                 </Route>
 
                 <Route
