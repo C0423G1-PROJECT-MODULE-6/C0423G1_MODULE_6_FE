@@ -53,7 +53,7 @@ export function ImportProduct() {
     try {
 
       await importProduct(newValue);
-      navigate("/admin/warehouse");
+      navigate("/admin/ware/warehouse");
       toast("Nhập thêm sản phẩm thành công!");
     } catch (error) {
       console.log("error:",error);
@@ -83,7 +83,7 @@ export function ImportProduct() {
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
             .max(2000, "Không được nhập quá 2000 sản phẩm")
-          // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
+          // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp")
           // productId: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
         onSubmit={(values, { setErrors }) => {
