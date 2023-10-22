@@ -17,13 +17,12 @@ function Supplier() {
     const [emailSearch, setEmailSearch] = useState("");
     const [totalPage, setTotalPage] = useState(0);
     const [refresh, setRefresh] = useState(true);
-    const [activeRow, setActiveRow] = useState(null);
-    const [supplierDelete, setSupplierDelete] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [typeSearch, setTypeSearch] = useState("");
     const [valueInput, setValueInput] = useState("");
     const [listAddress, setListAddress] = useState([]);
-    const [supplierEdit, setSupplierEdit] = useState({ idSupplier: 0 });
+    const [totalElement, setTotalElement] = useState(0);
+    const [inputAddress,setInputAddress] = useState("");
     const addressList = {
         1: "Thành phố Hà Nội",
         2: "Tỉnh Hà Giang",
@@ -99,7 +98,7 @@ function Supplier() {
     }
     useEffect(() => {
         getAll();
-    }, [refresh, currentPage, selectedSupplier])
+    }, [currentPage,showModal,refresh])
 
     const handleSetTypeSearch = () => {
         const specialCharsRegex = /[!#$%^&*(),?":{}|<>_]/;
@@ -107,12 +106,20 @@ function Supplier() {
             switch (typeSearch) {
                 case "Tên nhà cung cấp":
                     setSearchName(valueInput);
+                    setAddressSearch("");
+                    setEmailSearch("");
+                    setInputAddress("");
                     break;
                 case "Địa chỉ":
-                    setAddressSearch(valueInput);
+                    setAddressSearch(inputAddress);
+                    setSearchName("");
+                    setEmailSearch("");
                     break;
                 case "Email":
                     setEmailSearch(valueInput);
+                    setSearchName("");
+                    setAddressSearch("");
+                    setInputAddress("");
                     break;
                 default:
                     setSearchName("");
@@ -124,18 +131,17 @@ function Supplier() {
             setListSupplier([]);
         }
     }
+
     const handleShowModal = () => {
         if(selectedSupplier.length ===0){
             toast("vui lòng chọn sản phẩm")
         } else{
             setShowModal(true);
-            setRefresh(!refresh);
         }
     }
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setRefresh(!refresh);
     }
     const handleUpdate = () => {
         if (selectedSupplier.length === 0) {
@@ -147,49 +153,39 @@ function Supplier() {
 
     const getAll = async () => {
         const newList = await getList(currentPage, limit, searchName, addressSearch, emailSearch);
-        if (newList[2].status === 200) {
             setSearchName("");
             setAddressSearch("");
             setEmailSearch("");
             setListSupplier(newList[0]);
             setTotalPage(newList[2].data.totalPages);
+            setTotalElement(newList[2].data.totalElements);
             console.log(newList[2]);
-        } else {
-            console.log("aaaaaaaa");
-            setListSupplier([]);
-            setTotalPage(1);
-            setCurrentPage(0);
-        }
-
-
-
     }
 
+    console.log(searchName);
+    console.log(addressSearch);
+    console.log(emailSearch);
     const handleDelete = async () => {
-        if (listSupplier.length === 1 && totalPage !== 1) {
-            setCurrentPage(totalPage-1);
-        }
-        selectedSupplier.map(async s => {
-            await deleteSupplier(s.idSupplier)
-        })
+        for (const s of selectedSupplier) {
+            await deleteSupplier(s.idSupplier);
+          }
         toast("Xóa thành công")
-        handleCloseModal();
-        setSelectSupplier([]);
-        
-        setRefresh(!refresh);
-        getAll();
+        if (listSupplier.length === selectedSupplier.length && totalPage !== 1) {
+            setCurrentPage(currentPage-1);
+        }
+         setSelectSupplier([]);
+         handleCloseModal();
+         
     }
 
     const prePage = () => {
         setCurrentPage(currentPage - 1);
-        setRefresh(!refresh);
     }
 
     const nextPage = () => {
         const totalReal = totalPage - 1;
         if (currentPage < totalReal) {
             setCurrentPage(currentPage + 1);
-            setRefresh(!refresh);
         }
     }
 
@@ -206,15 +202,15 @@ function Supplier() {
                         <div className="col-auto me-2">
                             <select style={{ width: "180px" }} className="form-select" onClick={(event) => setTypeSearch(event.target.value)}>
                                 <option selected value={""}>--Tìm kiếm theo--</option>
-                                <option>Tên nhà cung cấp</option>
-                                <option>Địa chỉ</option>
-                                <option>Email</option>
+                                <option value={"Tên nhà cung cấp"}>Tên nhà cung cấp</option>
+                                <option value={"Địa chỉ"}>Địa chỉ</option>
+                                <option value={"Email"}>Email</option>
                             </select>
                         </div>
                         {typeSearch === "Địa chỉ" ?
                             <div className="col-auto me-2">
-                                <select style={{ width: "180px" }} className="form-control" onClick={(event) => setValueInput(event.target.value)}>
-                                    <option value={""}>---Chọn địa chỉ---</option>
+                                <select style={{ width: "180px" }} className="form-control" onClick={(event) => setInputAddress(event.target.value)}>
+                                    <option  value={""}>---Chọn địa chỉ---</option>
                                     {listAddress.map((address) => (
                                         <option key={address.code} value={address.code}>{address.name}</option>
                                     ))}
@@ -247,8 +243,7 @@ function Supplier() {
                             </tr>
                         </thead>
                         <tbody>
-                            {listSupplier
-                                && listSupplier.length !== 0 ? listSupplier.map((supplier, index) =>
+                            {listSupplier ? listSupplier.map((supplier, index) =>
 
                                     <>
                                         <tr key={supplier.idSupplier} onClick={() => {
@@ -277,8 +272,10 @@ function Supplier() {
 
                                 )
                                 : <tr>
-                                    <td colSpan="10" className="text-center"><h4>Không tìm thấy dữ liệu</h4></td>
-                                </tr>
+                                <td colSpan={8}>
+                                    <p style={{textAlign: "center", color: "red"}}>Không tìm thấy</p>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -291,7 +288,7 @@ function Supplier() {
                             <button type="button" className="btn btn-outline-primary">Thêm mới</button>
                         </Link>
                         {
-                            listSupplier.length != 0 &&
+                            totalElement > 0 &&
                             <>
                                 {selectedSupplier.length <= 1 && (
                                     <button type="button" className={`btn btn-outline-success me-1`} 
@@ -315,7 +312,7 @@ function Supplier() {
                                     </a>
                                 )}
                             </>
-                        }
+}           
 
                     </div>
 
@@ -354,7 +351,7 @@ function MyModal({ action, data, deleteFunc }) {
     return (
         <>
             <Modal.Header>
-                <h5 className="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
+                <h5 className="modal-title" id="deleteModalLabel">Thông báo!</h5>
             </Modal.Header>
             <Modal.Body>
             <p>Bạn có muốn xóa các sản phẩm :{data.map((s,index) => (

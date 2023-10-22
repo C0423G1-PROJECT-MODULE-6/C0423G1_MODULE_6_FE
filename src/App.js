@@ -82,6 +82,7 @@ function App() {
 
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                     <Route path="/admin/scanner-qr-order" element={<ScannerOrderQR/>}/>
+                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
                 </Route>
 
                 <Route
