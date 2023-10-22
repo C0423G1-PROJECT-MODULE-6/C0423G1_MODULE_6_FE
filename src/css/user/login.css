@@ -1,7 +1,7 @@
 
 
 .custom-background-HaiBH {
-    background-color: #f2f2f2; /* Màu nền */
+    background-color: black; /* Màu nền */
     background-image: url('admin.jpeg'); /* Ảnh nền */
     background-size: 100% 100%; /* Kích thước nền bằng 100% chiều rộng và 100% chiều cao của màn hình */
     background-repeat: no-repeat; /* Không lặp lại ảnh */
@@ -13,7 +13,7 @@
     backdrop-filter: blur(5px);
     padding-bottom: 10px; /* Khoảng cách bên trong phần tử */
     padding-top: 10px; /* Khoảng cách bên trong phần tử */
-    border: 1px solid #ccc; /* Viền phần tử */
+    /*border: 10px solid #ccc; !* Viền phần tử *!*/
 }
 
 #transparent-div-HaiBH {
