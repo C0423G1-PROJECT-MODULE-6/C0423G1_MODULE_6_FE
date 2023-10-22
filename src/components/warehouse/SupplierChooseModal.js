@@ -31,12 +31,18 @@ const SupplierChooseModal = ({ handleData }) => {
         switch (typeSearch) {
             case "supplier":
                 setSearchName(valueInput);
+                setAddressSearch("");
+                setEmailSearch("");
                 break;
             case "address":
                 setAddressSearch(valueInput);
+                setSearchName("");
+                setEmailSearch("");
                 break;
             case "email":
                 setEmailSearch(valueInput);
+                setAddressSearch("");
+                setSearchName("");
                 break;
         }
     }
