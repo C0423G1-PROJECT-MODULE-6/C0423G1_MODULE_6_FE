@@ -1,14 +1,12 @@
 import React, {useEffect, useState, useRef} from 'react';
 import "./modal_table.css";
-import * as productService from "../../service/product/ProductService";
-import * as appUserService from "../../service/user/AuthService";
-import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
-import * as UserService from "../../service/user/UserService";
+import * as productService from "../../service/product/ProductService"
+import * as cartService from "../../service/cart/CartService";
 import * as customerService from '../../service/customer/CustomerService';
 import Swal from "sweetalert2";
 import {toast} from "react-toastify";
 
-const ProductChooseModal = ({data1, handleData}) => {
+const ProductChooseModal = ({data1,idCustomer,handleData}) => {
 
     const modalRef = useRef(null); // Tạo một ref để truy cập modal
     const [productList, setProductList] = useState([]);
@@ -18,51 +16,34 @@ const ProductChooseModal = ({data1, handleData}) => {
     const [choose, setChoose] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
-    // const [userAppName, setUserAppName] = useState("");
     const [userId, setUserId] = useState("");
     const [selectedProduct, setSelectedProduct] = useState({
         id: null,
         name: ""
     });
     let [arraySelect, setArraySelect] = useState([]);
-    //---------------Get id User--------------------
 
-    const getUserId = async () => {
-        const isLoggedIn = infoAppUserByJwtToken();
-        if (isLoggedIn) {
-            const id = await getIdByUserName(isLoggedIn.sub);
-
-            setUserId(id.data);
-            // const nameUser = await UserService.findById(id.data);
-            // setUserAppName(nameUser.data.employeeName)
-        }
-    };
-    // const closeModal = () => {
-    //     if (modalRef.current) {
-    //         modalRef.current.click();
-    //     }
-    // };
     const handleSubmit = async () => {
-        if (arraySelect.length === 0) {
-            Swal.fire({
-                position: 'center',
-                icon: 'error',
-                title: 'Thao tác thất bại',
-                text: 'Vui lòng chọn sản phẩm trước khi bấm',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
+
         if (data1 === 1) {
             handleData(selectedProduct.id);
             let submitModal = await document.getElementById("closeModalProduct");
             submitModal.click();
-            // submitModal.setAttribute("data-bs-dismiss", "modal");
-            // submitModal.removeAttribute("data-bs-dismiss");
+
         }
         if (data1 === 0) {
+            if (arraySelect.length === 0) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Thao tác thất bại',
+                    text: 'Vui lòng chọn sản phẩm trước khi bấm',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
             for (let i = 0; i < arraySelect.length; i++) {
-                const result = await customerService.createCart(userId, arraySelect[i]);
+                const result = await customerService.createCart(idCustomer, arraySelect[i]);
                 if (result?.status === 204) {
                     toast.error(result.data, {
                         autoClose: 8000
@@ -73,13 +54,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                         autoClose: 8000
                     });
                 }
-                if (result?.status === 200) {
-                    toast.success(result.data, {
-                        autoClose: 8000
-                    });
-                }
                 let submitModal = await document.getElementById("closeModalProduct");
-                // submitModal.setAttribute("data-bs-dismiss", "modal");
                 submitModal.click();
                 setArraySelect([]);
                 handleData(selectedProduct.id);
@@ -88,16 +63,16 @@ const ProductChooseModal = ({data1, handleData}) => {
 
         }
 
-
-        //     //-----Pass the product id through the sales page----
-        // //    ----create cart-------
-        // closeModal();
     };
     //------------------------------------------------List & Search---------------------------
     const loadProductList = async (choose, page, searchValue) => {
-        const result = await productService.getPageProductModal(choose, page, searchValue);
+        let result;
+        if (data1 ===0){
+             result = await cartService.getPageProductModalWareHouse(choose, page, searchValue);
+        }else {
+             result = await productService.getPageProductModal(choose, page, searchValue);
+        }
         const listType = await productService.getAllType();
-        getUserId();
         setTypeProduct(listType);
         if (result?.status === 200) {
             setProductList(result?.data.content);
@@ -106,10 +81,36 @@ const ProductChooseModal = ({data1, handleData}) => {
             setProductList([]);
         }
     }
+    const vnd = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    })
     const handleOptionSearchChange = (e) => {
         const {value} = e.target;
         setChange(+value);
-        console.log(value);
+    }
+    const handleKeyDown = (event) => {
+      if (event.key=="Enter"){
+          handleSearch();
+      }
+    }
+    const handleQuantity = () => {
+        const quantity = document.getElementById("valueQuantity").value;
+        setSearchName(quantity);
+        setChoose("quantity")
+        setPage(0);
+    }
+    const handlePrice = () => {
+        const price = document.getElementById("valuePrice").value;
+        setSearchName(price);
+        setChoose("price")
+        setPage(0);
+    }
+    const handleType = () => {
+        const type = document.getElementById("valueType").value;
+        setSearchName(type);
+        setChoose("type")
+        setPage(0);
     }
     //--------------------------Page------------------------------
     const previousPage = () => {
@@ -117,7 +118,6 @@ const ProductChooseModal = ({data1, handleData}) => {
             setPage((pre) => pre - 1)
         }
     }
-
     const nextPage = () => {
         if (page + 1 < totalPage) {
             setPage((pre) => pre + 1)
@@ -150,11 +150,8 @@ const ProductChooseModal = ({data1, handleData}) => {
             setPage(0);
         }
     }
-    // const handleReset = () => {
-    //     setPage(0);
-    //     setChange("name");
-    //     setSearchName("");
-    // }
+
+
     useEffect(() => {
         loadProductList(choose, page, searchName);
     }, [choose, page, searchName, arraySelect]);
@@ -194,7 +191,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                                     </select>
                                     {change === 4 &&
                                     <select className="form-select shadow border-dark" name="groupValue"
-                                            id="valueQuantity" style={{width: "175px"}}>
+                                            id="valueQuantity" style={{width: "175px"}} onChange={handleQuantity} defaultValue={"smaller 10"}>
                                         <option value={"smaller 10"}> Từ 0 đến 10</option>
                                         <option value={"10 to 50"}>Từ 10 đến 50</option>
                                         <option value={"better 50"}>Lớn hơn 50</option>
@@ -204,16 +201,16 @@ const ProductChooseModal = ({data1, handleData}) => {
                                         type="text"
                                         className="form-control shadow border-dark"
                                         aria-describedby="passwordHelpInline" id="searchName" style={{width: "175px"}}
-                                    />}
+                                   onKeyDown={handleKeyDown} />}
                                     {change === 2 &&
                                     <select className="form-select shadow border-dark" name="groupValue"
-                                            id="valueType" style={{width: "175px"}}>
+                                            id="valueType" style={{width: "175px"}} onChange={handleType} >
                                         {typeProduct.map((type, index) => (
                                             <option value={type.idType}>{type.name}</option>))}
                                     </select>}
                                     {change === 3 &&
                                     <select className="form-select shadow border-dark" name="groupValue"
-                                            id="valuePrice" style={{width: "175px"}}>
+                                            id="valuePrice" style={{width: "175px"}} defaultValue={"5m to 10m"} onChange={handlePrice}>
                                         <option value={"smaller 5m"}>0 - 5 triệu</option>
                                         <option value={"5m to 10m"}>5 triệu - 10 triệu</option>
                                         <option value={"better 10m"}>Lớn hơn 10 triệu</option>
@@ -239,7 +236,8 @@ const ProductChooseModal = ({data1, handleData}) => {
                                 <button
                                     className=" btn btn-outline-secondary shadow"
                                     style={{width: "14%"}}
-                                    onClick={() => setArraySelect([])}
+                                    onClick={data1 !==1 ? () => setArraySelect([]):()=> setSelectedProduct(  {id: null,
+                                        name: ""})}
                                 >
                                     Hủy
                                 </button>
@@ -248,42 +246,58 @@ const ProductChooseModal = ({data1, handleData}) => {
                                 {data1 !== 1 ? <table className=" shadow w-100">
 
                                         <tr style={{fontSize: "larger", backgroundColor: "darkgrey"}}>
-                                            <th style={{width: "5%", paddingLeft: "1%"}}>STT</th>
-                                            <th style={{width: "40%", paddingLeft: "2%"}}>Tên</th>
-                                            <th style={{width: "20%", paddingLeft: "3%"}}>Giá</th>
-                                            <th style={{width: "15%"}}>CPU</th>
-                                            <th style={{width: "15%", paddingLeft: "3%"}}>Lưu trữ</th>
+                                            <th style={{width: "5%", paddingLeft: "2%"}}>#</th>
+                                            <th style={{width: "40%", paddingLeft: "2%"}}>Tên sản phẩm</th>
+                                            <th style={{width: "20%", paddingLeft: "3%"}}>Giá tiền</th>
+                                            <th style={{width: "15%"}}>Màu sắc</th>
+                                            <th style={{width: "15%", paddingLeft: "1%"}}>Dung lượng</th>
                                         </tr>
                                         {productList && productList.length !== 0 ?
                                             <tbody>
-                                            {productList.filter(product => product.quantity !== 0)
-                                                .map((product, index) => (
-                                                    <tr key={index} id={index} onClick={() => {
-                                                        if (!(arraySelect.includes(product?.id))) {
-                                                            setArraySelect((pre) => [...pre, product?.id])
-                                                            loadProductList(choose, page, searchName);
-                                                        } else {
-                                                            setArraySelect((pre) => pre.filter((e) => e !== product?.id))
-                                                        }
-                                                    }}
-                                                        style={arraySelect.indexOf(product?.id) !== -1 ? {
-                                                            background: '#282c34',
-                                                            color: '#f5f5f5',
-                                                            height: 40
-                                                        } : {height: 40}}
-                                                    >
-                                                        <td style={{
-                                                            width: "5%",
-                                                            paddingLeft: "2%"
-                                                        }}>{(index + 1) + page * 5}</td>
-                                                        <td style={{width: "43%", paddingLeft: "2%"}}>{product?.name}</td>
-                                                        <td style={{width: "20%", paddingLeft: "3%"}}>{product?.price}</td>
-                                                        <td style={{width: "15%"}}>{product?.cpu}</td>
-                                                        <td style={{
-                                                            width: "15%",
-                                                            paddingLeft: "4%"
-                                                        }}>{product?.quantity}</td>
-                                                    </tr>))}
+                                            {productList.map((product, index) => (
+                                                (product.quantity > 0) ? <tr key={index} id={index} onClick={() => {
+                                                    if (!(arraySelect.includes(product?.id))) {
+                                                        setArraySelect((pre) => [...pre, product?.id])
+                                                        loadProductList(choose, page, searchName);
+                                                    } else {
+                                                        setArraySelect((pre) => pre.filter((e) => e !== product?.id))
+                                                    }
+                                                }}
+                                                                             style={arraySelect.indexOf(product?.id) !== -1 ? {
+                                                                                 background: '#282c34',
+                                                                                 color: '#f5f5f5',
+                                                                                 height: 40
+                                                                             } : {height: 40}}
+                                                >
+                                                    <td style={{
+                                                        width: "5%",
+                                                        paddingLeft: "2%"
+                                                    }}>{(index + 1) + page * 5}</td>
+                                                    <td style={{width: "43%", paddingLeft: "2%"}}>{product?.name}</td>
+                                                    <td style={{width: "23%", paddingLeft: "3%"}}>
+                                                        {vnd.format(product.price)}
+                                                    </td>
+                                                    <td style={{width: "13%"}}>{product?.color}</td>
+                                                    <td style={{
+                                                        width: "15%",
+                                                        paddingLeft: "3%"
+                                                    }}>{product?.capacity}</td>
+                                                </tr> : <tr style={{height: 40, color: 'rgb(12 12 12 / 27%)',fontWeight:'bold'}}>
+                                                    <td style={{
+                                                        width: "5%",
+                                                        paddingLeft: "2%"
+                                                    }}>{(index + 1) + page * 5}</td>
+                                                    <td style={{width: "43%", paddingLeft: "2%"}}>{product?.name}</td>
+                                                    <td style={{width: "23%", paddingLeft: "3%"}}>
+                                                        {String(product?.price).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
+                                                    </td>
+                                                    <td style={{width: "13%"}}>{product?.color}</td>
+                                                    <td style={{
+                                                        width: "15%",
+                                                        paddingLeft: "3%"
+                                                    }}>{product?.capacity}</td>
+                                                </tr>
+                                            ))}
                                             </tbody> :
                                             <tbody>
                                             <tr style={{height: '150px'}}>
@@ -313,7 +327,7 @@ const ProductChooseModal = ({data1, handleData}) => {
                                                             id: product?.id,
                                                             name: product?.name
                                                         });
-                                                        console.log(selectedProduct.id)
+                                                        console.log(selectedProduct.id);
                                                     } else {
                                                         setSelectedProduct({id: null, name: ""});
                                                         console.log(selectedProduct.id)
@@ -323,24 +337,24 @@ const ProductChooseModal = ({data1, handleData}) => {
                                                     color: '#f5f5f5',
                                                     height: 40
                                                 } : {height: 40}}>
-                                                        <td style={{
-                                                            width: "5%",
-                                                            paddingLeft: "2%"
-                                                        }}>{(index + 1) + page * 5}</td>
-                                                        <td style={{
-                                                            width: "43%",
-                                                            paddingLeft: "2%"
-                                                        }}>{product?.name}</td>
-                                                        <td style={{
-                                                            width: "20%",
-                                                            paddingLeft: "3%"
-                                                        }}>{product?.price}</td>
-                                                        <td style={{width: "15%"}}>{product?.cpu}</td>
-                                                        <td style={{
-                                                            width: "15%",
-                                                            paddingLeft: "4%"
-                                                        }}>{product?.quantity}</td>
-                                                    </tr>))}
+                                                    <td style={{
+                                                        width: "5%",
+                                                        paddingLeft: "2%"
+                                                    }}>{(index + 1) + page * 5}</td>
+                                                    <td style={{
+                                                        width: "43%",
+                                                        paddingLeft: "2%"
+                                                    }}>{product?.name}</td>
+                                                    <td style={{
+                                                        width: "20%",
+                                                        paddingLeft: "3%"
+                                                    }}>{product?.price}</td>
+                                                    <td style={{width: "15%"}}>{product?.cpu}</td>
+                                                    <td style={{
+                                                        width: "15%",
+                                                        paddingLeft: "4%"
+                                                    }}>{product?.quantity}</td>
+                                                </tr>))}
                                             </tbody> :
                                             <tbody>
                                             <tr style={{height: '150px'}}>
@@ -379,17 +393,18 @@ const ProductChooseModal = ({data1, handleData}) => {
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => previousPage()}
-                                                        href="#">Trước
+                                                <button className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => previousPage()}
+                                                        >Trước
                                                 </button>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link "
-                                                >{page + 1} / {totalPage}</button>
+                                                <div className="page-link "
+                                                >{page + 1} / {totalPage}</div>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()} href="#">Sau
-                                                </button>
+                                                    <button className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} onClick={() => nextPage()} >Sau
+                                                    </button>
+
                                             </li>
                                         </ul>
                                     </nav>

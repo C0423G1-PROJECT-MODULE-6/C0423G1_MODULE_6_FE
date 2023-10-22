@@ -1,6 +1,13 @@
-tr.selected {
-    background-color: rgba(149, 162, 235, 0.592) !important;
-    transition: background-color 0.1s ease, box-shadow 0.1s ease;
-    box-shadow: 0 0 5px rgba(12, 22, 219, 0.3);
-    --bs-table-bg: none;
-  }
+.selectedphuoc {
+  background-color: black !important;
+  /* font-weight: bold; */
+  
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 0 5px rgba(12, 22, 219, 0.3);
+  --bs-table-bg:none;
+}
+
+.selectedphuoc td{
+color: white!important;
+}
+
