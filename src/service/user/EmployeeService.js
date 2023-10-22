@@ -1,21 +1,21 @@
 import axios from "axios";
 
-export const getEmployeeList = async (page,searchJob, searchName,searchPhone) =>{
-    try{
-        
-        const respon = await axios.get(`http://localhost:8080/api/admin/employee/list?page=${page}&searchJob=${searchJob}&searchName=${searchName}&searchPhone=${searchPhone}`);
+export const getEmployeeList = async (page, searchJob, searchName, searchPhone) => {
+    try {
+
+        const respon = await axios.get(`http://localhost:8080/api/admin/admin/employee/list?page=${page}&searchJob=${searchJob}&searchName=${searchName}&searchPhone=${searchPhone}`);
         return respon.data;
-    } catch(e){
+    } catch (e) {
         console.log(e);
     }
 }
 export const deleteEmployee = async (id) => {
-    try{
-        await axios.delete(`http://localhost:8080/api/admin/employee/delete/${id}`);
-    }catch(e){
+    try {
+        await axios.delete(`http://localhost:8080/api/admin/admin/employee/delete/${id}`);
+    } catch (e) {
         console.log(e);
     }
-    
+
 }
 // CaoNV
 export const crateEmployee = async (employeeDto) => {
@@ -24,5 +24,16 @@ export const crateEmployee = async (employeeDto) => {
 }
 export const getNewEmployee = async () => {
     const res = await axios.get('http://localhost:8080/api/admin/employee/create');
+    return res
+}
+export const getEmployee = async (id) => {
+
+    const res = await axios.get(`http://localhost:8080/api/admin/employee/${id}`);
+
+    console.log(res);
+    return res.data
+}
+export const updateEmployee = async (employee) => {
+    const res = await axios.patch(`http://localhost:8080/api/admin/employee/update/${employee.id}`, employee);
     return res
 }

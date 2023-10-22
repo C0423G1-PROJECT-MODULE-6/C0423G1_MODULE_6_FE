@@ -11,8 +11,8 @@ export const getAllWarehouse = async (sort, choose, value, page) => {
 export const importProduct = async (warehouse) => {
     try{
         await axios.post("http://localhost:8080/api/admin/warehouse/create",warehouse)
-    }catch(e){
-        console.log(e);
+    }catch(error){
+        console.log(error);
     }
 }
 export const findProductById = async (id) => {
@@ -21,7 +21,7 @@ export const findProductById = async (id) => {
         console.log("Find:", res);
         return res.data;
     }catch(e){
-        alert("nôtk")
+        console.log(e);
     }
 }
 export const findSupplierById = async (id) => {

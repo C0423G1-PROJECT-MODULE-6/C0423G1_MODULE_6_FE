@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router";
-import * as customerService from '../../service/customer/CustomerService';
+// import * as customerService from '../../service/customer/CustomerService';
 import "./modal_table.css";
 import {Field, Form, Formik, ErrorMessage} from "formik";
+import {getAllCustomerModal} from "../../service/customer/CustomerService";
+import {format, parseISO} from "date-fns";
 
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
-    const [change, setChange] = useState();
+    const [change, setChange] = useState(0);
     const [name, setName] = useState("");
-    const [gender, setGender] = useState("2");
+    const [gender, setGender] = useState("");
     const [phone, setPhone] = useState("");
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
@@ -17,33 +19,28 @@ const CustomerChooseModal = ({handleData}) => {
         idCustomer: null,
         nameCustomer: ""
     });
-    // const [optionSearch, setOptionSearch] = useState();
     const loadCustomerList = async (page, name, phone, gender) => {
-        const result = await customerService.getAllCustomerModal(page, name, phone, gender);
+        const result = await getAllCustomerModal(page, name, phone, gender);
         if (result?.status === 200) {
             setCustomerList(result?.data.content);
             setTotalPage(result?.data.totalPages);
-        }else {
+        } else {
             setCustomerList([]);
         }
     }
     const handleOptionSearchChange = (e) => {
-        const { value } = e.target;
+        const {value} = e.target;
         setChange(+value);
-        // loadCustomerList();
     }
     const handleReset = () => {
         setPage(0);
         setName("");
         setPhone("");
-        setGender("2");
+        setGender("");
     }
-    const handleSubmit = () => {
-        console.log(selectedCustomer);
-        let submitModal = document.getElementById("submitModal");
-        submitModal.setAttribute("data-bs-dismiss", "modal");
+    const handleSubmitCustomer = async () => {
+        let submitModal = await document.getElementById("closeModal");
         submitModal.click()
-        submitModal.removeAttribute("data-bs-dismiss");
         handleData(selectedCustomer.idCustomer);
     }
     const previousPage = () => {
@@ -52,40 +49,49 @@ const CustomerChooseModal = ({handleData}) => {
         }
     }
     const handleSearch = () => {
-        const choose = +document.getElementById("chooseSearch").value;
+        const choose = +document.getElementById("chooseSearchCustomer").value;
         const value = document.getElementById("search").value;
-        let  valueGender = document.getElementById("valueGender");
-        if (valueGender){
-            valueGender = valueGender.value;
-        }
-        // console.log(valueGender)
-
-        if (choose === 0){
-            console.log(choose);
-            setName(value);
+        let valueGender = document.getElementById("valueGender");
+        // if (valueGender.value === ""){
+        //
+        // }
+        if (choose === 0) {
+            setName(value.trim());
             setPhone("");
-            setGender("2");
+            setGender("");
             setPage(0);
-            console.log(value);
-            console.log(valueGender);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
         }
-        if (choose === 1){
-            console.log(choose);
-            console.log(value);
-            setName(value);
-            setGender(valueGender);
+        if (choose === 1) {
+            setName(value.trim());
+            setGender(valueGender.value);
+            setPhone("");
             setPage(0);
-
-            console.log(valueGender);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
         }
-        if (choose === 2){
+        if (choose === 2) {
+            setName("");
+            setGender("");
             setPhone(value);
             setPage(0);
-            console.log(choose);
-            console.log(value);
-            console.log(valueGender);
+            setSelectedCustomer({
+                idCustomer: null,
+                nameCustomer: ""
+            })
         }
 
+    }
+    const handleKeyDownCustomer = (event) => {
+        console.log(event.key)
+        if (event.key=="Enter"){
+            handleSearch();
+        }
     }
 
     const nextPage = () => {
@@ -100,7 +106,8 @@ const CustomerChooseModal = ({handleData}) => {
     }
     useEffect(() => {
         loadCustomerList(page, name, phone, gender);
-    }, [page, name, phone, gender,change]);
+
+    }, [page, name, phone, gender, change]);
 
     if (!customerList) {
         return <div></div>;
@@ -113,27 +120,28 @@ const CustomerChooseModal = ({handleData}) => {
                     <div className="modal-header">
                         <h1 className="modal-title fs-3">Chọn khách hàng có sẵn</h1>
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body" style={{height: "420px"}}>
                         <div className="pt-4">
                             <div className="row g-3 align-items-center justify-content-end" style={{marginRight: '3%'}}>
                                 <div className="col-auto">
                                     <h1 className="col-form-label">Tìm kiếm theo</h1>
                                 </div>
                                 <div className="col-auto">
-                                    <select name='optionSearch' defaultValue={0} id="chooseSearch"
-                                            className="form-select shadow border-dark" onChange={handleOptionSearchChange}>
-                                        <option value={0} >Tên khách hàng</option>
-                                        <option value={1} >Giới tính</option>
-                                        <option value={2} >Số điện thoại</option>
+                                    <select name='optionSearch' defaultValue={0} id="chooseSearchCustomer"
+                                            className="form-select shadow border-dark"
+                                            onChange={handleOptionSearchChange}>
+                                        <option value={0}>Tên khách hàng</option>
+                                        <option value={1}>Giới tính</option>
+                                        <option value={2}>Số điện thoại</option>
                                     </select>
                                 </div>
                                 <div className="col-auto">
                                     {change === 1 &&
                                     <select className="form-select shadow border-dark" name="groupValue"
                                             id="valueGender">
-                                        <option value={0}>Nữ</option>
-                                        <option value={1}>Nam</option>
-                                        <option value={2}>Tất cả</option>
+                                        <option value={"0"}>Nữ</option>
+                                        <option value={"1"}>Nam</option>
+                                        <option value={""}>Tất cả</option>
                                     </select>}
                                 </div>
                                 <div className="col-auto">
@@ -141,12 +149,15 @@ const CustomerChooseModal = ({handleData}) => {
                                     <input type="text" name="inputSearch" id="search"
                                            className="shadow form-control border-dark"
                                            aria-describedby="passwordHelpInline"
-                                           placeholder={(change === 2) ? "Nhập tên số điện thoại..." : "Nhập tên khách hàng"}
+                                           placeholder={(change === 2) ? "Nhập số điện thoại..." : "Nhập tên khách hàng..."}
+                                           onKeyDown={handleKeyDownCustomer}
                                     />
 
                                 </div>
                                 <div className="col-auto">
-                                    <button className="btn btn-outline-primary text-center shadow"  onClick={handleSearch}>Tìm kiếm</button>
+                                    <button className="btn btn-outline-primary text-center shadow"
+                                            onClick={handleSearch}>Tìm kiếm
+                                    </button>
                                 </div>
                             </div>
                             <div className="mx-auto p-3 " style={{width: '95%'}} id="TinDT">
@@ -156,8 +167,8 @@ const CustomerChooseModal = ({handleData}) => {
                                         <th style={{width: '6%'}} className="text-center">STT</th>
                                         <th style={{width: '20%'}}>Tên khách hàng</th>
                                         <th style={{width: '15%'}}>Số điện thoại</th>
-                                        <th style={{width: '25%'}}>Địa chỉ</th>
-                                        <th style={{width: '10%'}}>Tuổi</th>
+                                        <th style={{width: '20%'}}>Địa chỉ</th>
+                                        <th style={{width: '15%'}}>Ngày sinh</th>
                                         <th style={{width: '31%'}}>Email</th>
                                     </tr>
                                     </thead>
@@ -170,13 +181,12 @@ const CustomerChooseModal = ({handleData}) => {
                                                         idCustomer: customer?.idCustomer,
                                                         nameCustomer: customer?.nameCustomer
                                                     });
-                                                    console.log(selectedCustomer.idCustomer)
                                                 } else {
                                                     setSelectedCustomer({idCustomer: null, nameCustomer: ""});
-                                                    console.log(selectedCustomer.idCustomer)
                                                 }
                                             }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
-                                                background: '#0d6efd',
+                                                background: '#282c34',
+                                                color: '#f5f5f5',
                                                 height: 50
                                             } : {height: 50}}
                                             >
@@ -184,16 +194,18 @@ const CustomerChooseModal = ({handleData}) => {
                                                     {(index + 1) + page * 5}
                                                 </td>
                                                 <td>{customer?.nameCustomer}</td>
-                                                <td>{customer?.phoneNumberCustomer}</td>
+                                                <td>{customer?.phoneNumberCustomer.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')}</td>
                                                 <td>{customer?.addressCustomer}</td>
-                                                <td>1</td>
+                                                <td>
+                                                    {format(parseISO(customer?.dateOfBirthCustomer), 'dd-MM-yyyy')}
+                                                </td>
                                                 <td>{customer?.emailCustomer}</td>
                                             </tr>))}
                                         </tbody> :
                                         <tbody>
                                         <tr style={{height: '150px'}}>
-                                            <td style={{fontSize: '30px', textAlign: 'center'}} colSpan="6">Không có dữ
-                                                liệu
+                                            <td style={{fontSize: '30px', textAlign: 'center'}} colSpan="6">Không tìm
+                                                thấy khách hàng phù hợp
                                             </td>
                                         </tr>
                                         </tbody>
@@ -211,14 +223,14 @@ const CustomerChooseModal = ({handleData}) => {
                                         <button
                                             className="btn btn-outline-primary shadow"
                                             style={{marginRight: '2rem', width: '40%'}}
-                                            id="submitModal"
-                                            onClick={() => handleSubmit()}
+                                            id="submitModalCustomer"
+                                            onClick={() => handleSubmitCustomer()}
                                         >
                                             Chọn
                                         </button>
                                     )}
                                     <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
-                                            style={{width: '40%'}}>
+                                            style={{width: '40%'}} id="closeModal">
                                         Trở về
                                     </button>
                                 </div>
@@ -228,17 +240,18 @@ const CustomerChooseModal = ({handleData}) => {
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => previousPage()}
-                                                        href="#">Trước
+                                                <button className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => previousPage()}
+                                                >Trước
                                                 </button>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link "
-                                                >{page + 1} / {totalPage}</button>
+                                                <div className="page-link "
+                                                >{page + 1} / {totalPage}</div>
                                             </li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()} href="#">Sau
+                                                <button className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} onClick={() => nextPage()} >Sau
                                                 </button>
+
                                             </li>
                                         </ul>
                                     </nav>

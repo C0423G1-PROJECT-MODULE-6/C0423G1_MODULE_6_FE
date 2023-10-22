@@ -2,43 +2,54 @@ import React, { useEffect, useState } from 'react';
 import * as orderService from "../../service/order/OrderService";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {useParams} from "react-router";
 
 function ShowBill() {
     const [orderBill, setOrderBill] = useState(null);
-    const [carts, setCarts] = useState([]);
+    const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [print, setPrint] = useState(false);
     const navigate = useNavigate();
-    const findOrderBillNewest = async () => {
-        const res = await orderService.findOrderBillNewest();
+    const [customer, setCustomer] = useState(null);
+    const param = useParams();
+
+    console.log(param.id)
+
+    const findOrderBillNewest = async (idCus) => {
+        const res = await orderService.findOrderBillNewest(idCus);
         setOrderBill(res);
+        setCustomer(res.customer);
     };
 
-    const getAllCart = async (idUser) => {
-        const res = await orderService.getAllCart(idUser);
-        setCarts(res.data);
+    const getAllCart = async (idCustomer) => {
+        const res = await orderService.getAllCart(idCustomer);
+        setProducts(res.data);
     };
+
 
     useEffect(() => {
-        findOrderBillNewest();
-        getAllCart(1);
+        findOrderBillNewest(param.id);
+        setPrint(0);
     }, []);
 
     useEffect(() => {
-        if (carts.length > 0) {
+        customer && getAllCart(customer.idCustomer);
+    }, [customer]);
+
+    useEffect(() => {
+        if (products.length > 0) {
             let total = 0;
-            carts.forEach((cart, index) => {
-                total += cart.priceProduct * cart.quantityOrder + cart.priceProduct * 0.1;
+            products.forEach((product, index) => {
+                total += product.priceProduct * product.quantityOrder + product.priceProduct * 0.1;
             });
             setTotalPrice(total);
         }
-    }, [carts]);
+    }, [products]);
 
     const handlePrintChange = (e) => {
         const printStatus = e.target.checked ? 1 : 0;
         console.log(printStatus)
         setPrint(printStatus);
-
     };
 
     const handleSubmit =async () => {
@@ -51,7 +62,6 @@ function ShowBill() {
             navigate("/admin/order")
             toast("Bạn đã thanh toán thành công");
         }
-
     };
 
     return (
@@ -99,20 +109,20 @@ function ShowBill() {
                             </tr>
                             </thead>
                             <tbody>
-                            {carts.map((cart, index) => (
+                            {products.map((product, index) => (
                                 <tr key={index}>
                                     <th scope="row" className="text-center">{index + 1}</th>
-                                    <td className="text-center">{cart ? cart.nameProduct : "N/A"}</td>
-                                    <td className="text-center">{cart ? cart.priceProduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
-                                    <td className="text-center">{cart ? cart.quantityOrder : "N/A"}</td>
+                                    <td className="text-center">{product ? product.nameProduct : "N/A"}</td>
+                                    <td className="text-center">{product ? product.priceProduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
+                                    <td className="text-center">{product ? product.quantityOrder : "N/A"}</td>
                                     <td className="text-center text-danger">
-                                        {cart ? (cart.priceProduct * cart.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
+                                        {product ? (product.priceProduct * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
                                     </td>
                                 </tr>
                             ))}
                             <tr>
-                                <th colSpan="4" className="text-right">Thành tiền (đã bao gồm thuế):</th>
-                                <td className="text-center text-danger">
+                                <th colSpan="4" className="text-right border border-end-0">Thành tiền (đã bao gồm thuế):</th>
+                                <td className="text-center text-danger border border-start-0">
                                     {totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                 </td>
                             </tr>
@@ -126,6 +136,7 @@ function ShowBill() {
                                 name="print"
                                 checked={print}
                                 onChange={handlePrintChange}
+                                defaultChecked={false}
                             />
                             <label className="form-check-label" htmlFor="print">In hóa đơn</label>
                         </div>
@@ -140,7 +151,7 @@ function ShowBill() {
                         className="btn btn-primary"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        Thanh toán
                     </button>
                 </div>
             )}

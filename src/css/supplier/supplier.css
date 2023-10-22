@@ -1,7 +1,16 @@
 .active {
-    background-color: rgba(149, 162, 235, 0.592) !important;
-    font-weight: bold;
+    background-color: black !important;
+    /* font-weight: bold; */
+    
     transition: background-color 0.1s ease, box-shadow 0.1s ease;
     box-shadow: 0 0 5px rgba(12, 22, 219, 0.3);
     --bs-table-bg:none;
   }
+
+.active td{
+color: white!important;
+}
+.colorthead tr{
+  background-color:grey !important;
+  --bs-table-bg:none;
+}
