@@ -19,32 +19,32 @@ function Order() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const navigate = useNavigate();
+    const [products, setProducts] = useState([])
     const [userId, setUserId] = useState("");
-    const [userAppName, setUserAppName] = useState("");
-    const [resetCart, setResetCart] = useState(false);
+    const [renderStatus, setRenderStatus] = useState(false)
 
     const getAppUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
         if (isLoggedIn) {
             const id = await getIdByUserName(isLoggedIn.sub);
             setUserId(id.data);
-            const nameUser = await UserService.findById(id.data);
-            setUserAppName(nameUser.data.employeeName);
         }
     };
     useEffect(() => {
         getAppUserId();
     }, []);
-
-
     const findCustomerByid = async (data) => {
-        const res = await orderService.findCustomerById(data);
-        console.log(res.objectResponse)
+
+        const res =await orderService.findCustomerById(data);
+        console.log(res)
+
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
             setOrderBillNotPay(res.objectResponse);
-        } else {
+        } else if (res && res.type === "cartOrder"){
+            setCarts(res.objectResponse);
+        }else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
     };
@@ -60,37 +60,44 @@ function Order() {
     }
     const updateCustomerConfirm = (data) => {
         console.log(data)
+        console.log(data.idCustomer)
         setCustomer(data)
     }
 
-    useEffect(() => {
-        userId && getAllCart();
-    }, [customer, userId]);
 
-    const getAllCart = async () => {
-        const res = await orderService.getAllCart(userId);
-        if (res.status === 200) {
-            setHasResult(res.data.length > 0);
-            setCarts(res.data);
-            const initialQuantities = new Array(res.data.length).fill(1);
-            setQuantity(initialQuantities);
-        } else if (res.status === 404) {
+
+
+    const getAllCart = async (idCustomer) => {
+        const res = await orderService.getAllCart(idCustomer);
+        console.log(res.data)
+        if (res.status === 200){
+            if(res.data){
+                setHasResult(res.data.length > 0);
+                setProducts(res.data);
+                const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
+                setQuantity(initialQuantities);
+            }
+        }else if (res.status === 404){
             setHasResult(false);
         }
     }
+    useEffect(() => {
+        customer && getAllCart(customer.idCustomer);
+    }, [customer,renderStatus]);
 
 
     useEffect(() => {
         let total = 0;
-        carts.forEach((cart, index) => {
-            total += cart.priceProduct * quantity[index] + cart.priceProduct * 0.1;
+        products.forEach((product, index) => {
+            total += product.priceProduct * quantity[index] + product.priceProduct * 0.1;
         });
         setTotalPrice(total);
-    }, [carts, quantity]);
+    }, [products, quantity]);
 
 
     const closeModal = () => {
-        setOrderBillNotPay(null);
+       carts && setCarts([]);
+       orderBillNotPay && setOrderBillNotPay(null);
     }
 
     console.log("customer " + JSON.stringify(customer))
@@ -100,38 +107,44 @@ function Order() {
             const newQuantities = [...quantity];
             newQuantities[index] = quantity[index] - 1;
             setQuantity(newQuantities);
-            updateCurrentQuantity(newQuantities[index], carts[index].idProduct, userId);
+            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
         }
     };
 
     const increaseValue = (index) => {
-        const newQuantities = [...quantity];
-        newQuantities[index] = quantity[index] + 1;
-        setQuantity(newQuantities);
-        updateCurrentQuantity(newQuantities[index], carts[index].idProduct, userId);
-    };
-
-    const updateCurrentQuantity = async (newQuantity, idProduct, idUser) => {
-        await orderService.updateQuantity(newQuantity, idProduct, idUser);
-    };
-
-    const handleDeleteProduct = async (idProduct, idUser) => {
-        const res = await orderService.deleteChosenProduct(idProduct, idUser);
-        res.status === 200 && getAllCart();
-    };
-
-    const showOrderBill = async (value) => {
-        console.log(value)
-        value = {
-            ...value,
-            idCustomerOrder: customer.idCustomer,
-            idUser: userId
+        if (products[index]){
+            const newQuantities = [...quantity];
+            newQuantities[index] = quantity[index] + 1;
+            setQuantity(newQuantities);
+            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
         }
-        console.log(value)
 
-        const res = await orderService.getBillNotPay(value);
-        if (res.status === 200) {
-            navigate("/admin/order/showBill");
+    };
+
+    const updateCurrentQuantity =async (newQuantity, idProduct, idCustomer) => {
+        await orderService.updateQuantity(newQuantity,idProduct,idCustomer);
+    };
+
+    const handleDeleteProduct = async (idProduct,idCustomer) => {
+       const res= await orderService.deleteChosenProduct(idProduct,idCustomer);
+       res.status === 200 && getAllCart(idCustomer);
+    };
+
+    const showOrderBill =async (value) => {
+        if (customer === null) {
+            toast.error("Khách hàng không được để trống");
+        }else if (products.length < 1){
+            toast.error("Bạn cần phải có sản phẩm");
+        }else {
+            value = {
+                ...value,
+                idCustomerOrder : customer.idCustomer,
+                idUser: userId
+            }
+            const res = await orderService.getBillNotPay(value);
+            if (res.status === 200){
+                navigate("/admin/order/showBill");
+            }
         }
     };
 
@@ -140,20 +153,15 @@ function Order() {
         idCustomerOrder: "",
         idUser: ""
     }
-    // const validationSchema = {
-    //     idCustomerOrder: Yup.number().required("Không được để trống")
-    // }
-
 
     return (
         <>
             <HeaderAdmin/>
             <Formik initialValues={initialValues}
-                // validationSchema={Yup.object(validationSchema)}
-                    onSubmit={(value) => {
-                        console.log("Form values:", value);
-                        showOrderBill(value)
-                    }}>
+            onSubmit={(value)=>{
+                console.log("Form values:", value);
+                showOrderBill(value)}}
+            >
                 <Form>
                     <div className="  d-flex justify-content-center my-5 pt-5">
                         <fieldset className="form-input shadow mx-auto" style={{
@@ -184,11 +192,43 @@ function Order() {
                                             Thêm mới khách hàng
                                         </button>
                                     </div>
-                                    <div>
-                                        <div className="row p-2 mx-auto" style={{width: '90%'}}>
-                                            <div className="col-4 p-2">
-                                                <label>Tên khách hàng</label>
-                                            </div>
+
+                                    {customer ? (
+                                        <div>
+                                            <div className="row p-2 mx-auto" style={{ width: '90%' }}>
+                                                <div className="col-4 p-2">
+                                                    <label>Tên khách hàng</label>
+                                                </div>
+
+                                                <div className="col-8 mb-2">
+                                                    <input
+                                                        className="form-control mt-2 border border-dark"
+                                                        type="text"
+                                                        value={customer ? customer.nameCustomer : ""}
+                                                        disabled
+                                                    />
+                                                    {customer ? null : (
+                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                            <ErrorMessage
+                                                                className="text-danger"
+                                                                name="idCustomerOrder"
+                                                                component="small"
+                                                            />
+                                                        </div>
+                                                    )}
+
+                                                </div>
+
+                                                <div className="col-4 p-2">
+                                                    <label>Số điện thoại</label>
+                                                </div>
+                                                <div className="col-8 mb-2">
+                                                    <input
+                                                        className="form-control mt-2 border border-dark"
+                                                        type="text"
+                                                        value={customer ? customer.phoneNumberCustomer : ""}
+                                                        disabled
+                                                    />
 
                                             <div className="col-8 mb-2">
                                                 <input
@@ -209,49 +249,20 @@ function Order() {
 
                                             </div>
 
-
-                                            <div className="col-4 p-2">
-                                                <label>Số điện thoại</label>
-                                            </div>
-                                            <div className="col-8 mb-2">
-                                                <input
-                                                    className="form-control mt-2 border border-dark"
-                                                    type="text"
-                                                    value={customer ? customer.phoneNumberCustomer : ""}
-                                                    readOnly
-                                                />
-                                                {/*{customer ? null : (*/}
-                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
-                                                {/*        <ErrorMessage*/}
-                                                {/*            className="text-danger"*/}
-                                                {/*            name="idCustomerOrder"*/}
-                                                {/*            component="small"*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*)}*/}
-                                            </div>
-                                            <div className="col-4 p-2">
-                                                <label>Địa chỉ</label>
-                                            </div>
-                                            <div className="col-8 mb-2">
-                                                <input
-                                                    className="form-control mt-2 border border-dark"
-                                                    type="text"
-                                                    value={customer ? customer.addressCustomer : ""}
-                                                    readOnly
-                                                />
-                                                {/*{customer ? null : (*/}
-                                                {/*    <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>*/}
-                                                {/*        <ErrorMessage*/}
-                                                {/*            className="text-danger"*/}
-                                                {/*            name="idCustomerOrder"*/}
-                                                {/*            component="small"*/}
-                                                {/*        />*/}
-                                                {/*    </div>*/}
-                                                {/*)}*/}
-                                            </div>
-                                            <div className="col-4 p-2">
-                                                <label>Ngày sinh </label>
+                                                </div>
+                                                <div className="col-4 p-2">
+                                                    <label>Email</label>
+                                                </div>
+                                                <div className="col-8 mb-2">
+                                                    <input
+                                                        className="form-control mt-2 border border-dark"
+                                                        type="email"
+                                                        value={customer ? customer.emailCustomer : ""}
+                                                        disabled
+                                                    />
+                                                </div>
+                                                <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
+                                                <Field name="idUser" type="hidden" value={1}/>
                                             </div>
                                             <div className="col-8 mb-2">
                                                 <input
@@ -307,39 +318,95 @@ function Order() {
                                 }}>
                                     <legend className="float-none w-auto px-1">Sản phẩm đã chọn</legend>
                                     <div className="d-flex justify-content-center mb-3">
-                                        <button type="button" className="btn btn-outline-primary col-6 mx-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalProduct" style={{width: '30%'}}>
+                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalProduct" style={{ width: '30%' }}
+                                                disabled={customer === null}
+                                        >
                                             Chọn sản phẩm
                                         </button>
-                                        <Link to={"/admin/scanner-qr-order"}
-                                              className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}>Scan
-                                            QR</Link>
+                                        <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}
+                                                disabled={customer === null}
+                                        >Scan QR</button>
                                     </div>
                                     <div className="row">
-                                        <table className="table " style={{width: '100%'}}>
-                                            <thead>
-                                            <tr>
-                                                <th className="col-1 text-center">#</th>
-                                                <th className="col-3 text-center">Tên sản phẩm</th>
-                                                <th className="col-2 text-center">Đơn giá</th>
-                                                <th className="col-2 text-center">Số lượng</th>
-                                                <th className="col-2 text-center">Số tiền</th>
-                                                <th className="col-2 text-center" style={{width: "100%"}}>Thao tác</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {hasResult ? (
-                                                    carts.map((cart, index) => (
-                                                        <tr key={index}>
-                                                            <td className="col-1 text-center">{index + 1}</td>
-                                                            <td className="col-3 text-center">{cart.nameProduct}</td>
-                                                            <td className="col-2 text-center">
-                                                                {cart.priceProduct
-                                                                    .toLocaleString('vi-VN', {
-                                                                        style: 'currency',
-                                                                        currency: 'VND'
-                                                                    })}
+                                        <div className="col-12">
+                                            <div className="table-container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                                <table className="table " style={{ width: '100%' }}>
+                                                    <thead>
+                                                    <tr>
+                                                        <th className="col-1 text-center">#</th>
+                                                        <th className="col-3 text-center">Tên sản phẩm</th>
+                                                        <th className="col-2 text-center">Đơn giá</th>
+                                                        <th className="col-2 text-center">Số lượng</th>
+                                                        <th className="col-2 text-center">Số tiền</th>
+                                                        <th className="col-1 text-center" style={{width: "100%"}}>Thao tác</th>
+                                                    </tr>
+
+                                                    </thead>
+                                                    <tbody>
+                                                    { customer ? (
+                                                            products.map((product, index) => (
+                                                                <tr key={index}>
+                                                                    <td className="col-1 text-center">{index + 1}</td>
+                                                                    <td className="col-3 text-center">{product.nameProduct}</td>
+                                                                    <td className="col-2 text-center">
+                                                                        {product.priceProduct
+                                                                            .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                    </td>
+                                                                    <td className="col-2">
+                                                                        <div className="input-group">
+                                                                            <button
+                                                                                className="btn btn-danger"
+                                                                                type="button"
+                                                                                disabled={quantity[index] <= 1}
+                                                                                onClick={() => decreaseValue(index)}
+                                                                            >
+                                                                                -
+                                                                            </button>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control text-center"
+                                                                                value={quantity[index]}
+                                                                                onChange={(e) => {
+                                                                                    const newQuantities = [...quantity];
+                                                                                    const quantityOfChosen = parseInt(e.target.value);
+                                                                                    quantityOfChosen <= product.quantityProduct && (newQuantities[index] = quantityOfChosen);
+                                                                                    quantityOfChosen > product.quantityProduct && (newQuantities[index]  = product.quantityProduct);
+                                                                                    quantityOfChosen <= 0 && (newQuantities[index] = 1);
+                                                                                    setQuantity(newQuantities);
+                                                                                    customer && updateCurrentQuantity(newQuantities[index], product.idProduct, customer.idCustomer);
+                                                                                }}
+                                                                            />
+                                                                            <button
+                                                                                className="btn btn-success"
+                                                                                type="button"
+                                                                                disabled={quantity[index] >= product.quantityProduct}
+                                                                                onClick={() => increaseValue(index)}
+                                                                            >
+                                                                                +
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="col-2 text-center text-danger">
+                                                                        { (product.priceProduct * quantity[index])
+                                                                            .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                    </td>
+                                                                    <td className="col-2 text-center">
+                                                                        <button
+                                                                            className="btn btn-danger"
+                                                                            type="button"
+                                                                            onClick={()=> handleDeleteProduct(product.idProduct,customer.idCustomer)}
+                                                                        >
+                                                                            <i className="fa fa-times"></i>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+
+                                                            ))
+                                                        ) :
+                                                        (<tr>
+                                                            <td className="text-center" colSpan="6">
+                                                                <b>----Trống----</b>
                                                             </td>
                                                             <td className="col-2">
                                                                 <div className="input-group">
@@ -459,6 +526,7 @@ function Order() {
                         </fieldset>
                     </div>
                     <BillNotPayConfirm
+                        carts={carts}
                         orderBill={orderBillNotPay}
                         handleClose={closeModal}
                         handleData={updateCustomerConfirm}
@@ -467,9 +535,8 @@ function Order() {
             </Formik>
 
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
-
-            <CustomerCreateModal handleData={handleDataByCreateCustomer}/>
-            <ProductChooseModal data1={0} handleData={handleDataByChooseProduct}/>
+            <CustomerCreateModal handleData={handleDataByCreateCustomer} />
+            <ProductChooseModal data1={0} idCustomer={customer.idCustomer} handleData={handleDataByChooseProduct}/>
         </>
     );
 }
