@@ -44,11 +44,10 @@ function App() {
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
 
-                <Route path='/home' element={<Home />} />
-                <Route path="/list/" element={<List />} />
-                <Route path="/list/:type" element={<List />} />
-                <Route path="/detail/:type/:id" element={<Detail />} />
-
+                <Route path='/home' element={<Home/>}/>
+                <Route path="/list/" element={<List/>}/>
+                <Route path="/list/:type" element={<List/>}/>
+                <Route path="/detail/:type/:id" element={<Detail/>}/>
 
 
                 <Route
@@ -77,9 +76,9 @@ function App() {
                         />
                     }
                 >
-                    <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
-                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
-                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}></Route>
+                    <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}/>
+                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}/>
+                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}/>
 
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
                     <Route path="/admin/scanner-qr-order" element={<ScannerOrderQR/>}/>
