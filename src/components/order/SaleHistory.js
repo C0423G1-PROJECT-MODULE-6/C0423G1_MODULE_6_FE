@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import * as orderService from "../../service/order/OrderService"
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from '../home/common/Footer'
 
 export function SaleHistory() {
     const [saleHistorys, setSaleHistorys] = useState([]);
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [records, setRecords] = useState();
     const [totalPage, setTotalPage] = useState();
@@ -37,6 +38,11 @@ export function SaleHistory() {
         setPage(0);
         setRefresh(!refresh)
     }
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    }
 
     const previousPage = () => {
         setPage(page - 1);
@@ -65,8 +71,8 @@ export function SaleHistory() {
                             </select>
                         </div>
                         <div className="col-auto me-2">
-                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm tên khách hàng"
-                                   onChange={(name) => (setSearchName(name.target.value))}/>
+                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm theo tên khách hàng"
+                                   onChange={(name) => (setSearchName(name.target.value))} onKeyDown={handleKeyDown}/>
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
@@ -75,46 +81,53 @@ export function SaleHistory() {
                     </div>
 
                 </div>
-                <table className="border border-dark table table-hover">
-                    <thead>
-                    <tr>
-                        <th style={{background: "darkgrey", width:"10%"}}>#</th>
-                        <th style={{background: "darkgrey", width:"15%"}}>Ngày</th>
-                        <th style={{background: "darkgrey", width:"15%"}}>Thời Gian</th>
-                        <th style={{background: "darkgrey", width:"20%"}}>Họ và tên khách hàng</th>
-                        <th style={{background: "darkgrey", width:"23%"}}>Thông tin mua hàng</th>
-                        <th style={{background: "darkgrey", width:"17%"}}>Tổng tiền</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {saleHistorys.length !==0?(
-                        saleHistorys.map((sale, index)=>{
-                            return(
-                                <tr key={sale.idOrderBill}>
-                                    <td>{index+1}</td>
-                                    <td>{new Date(sale.dateOfOrder).toLocaleDateString('en-GB')}</td>
-                                    <td>{sale.timeOfOrder}</td>
-                                    <td>{sale.nameCustomer}</td>
-                                    <td>{sale.infoBuy}</td>
-                                    <td>{vnd.format(sale.totalMoney)}</td>
-                                </tr>
-                            )
-                        })):(
+                <div style={{minHeight:"400px"}}>
+                    <table className="border border-dark table table-hover">
+                        <thead>
                         <tr>
-
-                            <td colSpan={6} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
-
+                            <th style={{background: "darkgrey", width:"5%"}}>#</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Ngày</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Thời Gian</th>
+                            <th style={{background: "darkgrey", width:"15%"}}>Họ và tên khách hàng</th>
+                            <th style={{background: "darkgrey", width:"45%"}}>Thông tin mua hàng</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Tổng tiền</th>
                         </tr>
-                    )
-                    }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {saleHistorys.length !==0?(
+                            saleHistorys.map((sale, index)=>{
+                                return(
+                                    <tr key={sale.idOrderBill}>
+                                        <td>{index+1}</td>
+                                        <td>{new Date(sale.dateOfOrder).toLocaleDateString('en-GB')}</td>
+                                        <td>{sale.timeOfOrder}</td>
+                                        <td>{sale.nameCustomer}</td>
+                                        <td>{sale.infoBuy}</td>
+                                        <td>{vnd.format(sale.totalMoney)}</td>
+                                    </tr>
+                                )
+                            })):(
+                            <tr>
 
-                <div className="container mt-3">
+                                <td colSpan={6} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
+
+                            </tr>
+                        )
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="container my-3">
                     <div className="row">
                         <div className="col-auto ms-auto">
                             <nav className="bottom" aria-label="Page navigation">
                                 <ul className="pagination mb-0 ">
+                                    <li className="page-item">
+                                        <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                                           onClick={() => setPage(0)} tabIndex="-1" href="#"
+                                           aria-disabled="true">Đầu</a>
+                                    </li>
                                     <li className="page-item ">
                                         <a onClick={() => previousPage()}
                                            className={`page-link ${page <= 0 ? "disabled" : ""}`} href="#" tabIndex="-1"
@@ -128,12 +141,17 @@ export function SaleHistory() {
                                            className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`}
                                            href="#">Sau</a>
                                     </li>
+                                    <li className="page-item">
+                                        <a className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} href="#"
+                                           onClick={() => setPage(totalPage-1)}>Cuối</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </>
     );
 }
