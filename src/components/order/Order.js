@@ -11,6 +11,7 @@ import HeaderAdmin from "../user/HeaderAdmin";
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
 import * as UserService from "../../service/user/UserService";
 import {toast} from "react-toastify";
+import {useParams} from "react-router";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -23,6 +24,8 @@ function Order() {
     const [products, setProducts] = useState([])
     const [userId, setUserId] = useState("");
     const [renderStatus, setRenderStatus] = useState(false)
+    const paramCusScan = useParams();
+
 
     const getAppUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
@@ -35,22 +38,23 @@ function Order() {
         getAppUserId();
     }, []);
     const findCustomerByid = async (data) => {
-
-        const res =await orderService.findCustomerById(data);
+        const res = await orderService.findCustomerById(data);
         console.log(res)
 
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
             setOrderBillNotPay(res.objectResponse);
-        } else if (res && res.type === "cartOrder"){
+        } else if (res && res.type === "cartOrder") {
             setCarts(res.objectResponse);
-        }else {
+        } else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
     };
 
     const handleDataByChooseCustomer = (data) => {
+        console.log("oder")
+        console.log(data);
         findCustomerByid(data);
     }
     const handleDataByChooseProduct = (data) => {
@@ -64,25 +68,23 @@ function Order() {
     }
 
 
-
-
     const getAllCart = async (idCustomer) => {
         const res = await orderService.getAllCart(idCustomer);
         console.log(res.data)
-        if (res.status === 200){
-            if(res.data){
+        if (res.status === 200) {
+            if (res.data) {
                 setHasResult(res.data.length > 0);
                 setProducts(res.data);
                 const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
                 setQuantity(initialQuantities);
             }
-        }else if (res.status === 404){
+        } else if (res.status === 404) {
             setHasResult(false);
         }
     }
     useEffect(() => {
         customer && getAllCart(customer.idCustomer);
-    }, [customer,renderStatus]);
+    }, [customer, renderStatus]);
 
 
     useEffect(() => {
@@ -95,8 +97,8 @@ function Order() {
 
 
     const closeModal = () => {
-       carts && setCarts([]);
-       orderBillNotPay && setOrderBillNotPay(null);
+        carts && setCarts([]);
+        orderBillNotPay && setOrderBillNotPay(null);
     }
 
     console.log("customer " + JSON.stringify(customer))
@@ -106,42 +108,42 @@ function Order() {
             const newQuantities = [...quantity];
             newQuantities[index] = quantity[index] - 1;
             setQuantity(newQuantities);
-            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
+            customer && updateCurrentQuantity(newQuantities[index], products[index].idProduct, customer.idCustomer);
         }
     };
 
     const increaseValue = (index) => {
-        if (products[index]){
+        if (products[index]) {
             const newQuantities = [...quantity];
             newQuantities[index] = quantity[index] + 1;
             setQuantity(newQuantities);
-            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
+            customer && updateCurrentQuantity(newQuantities[index], products[index].idProduct, customer.idCustomer);
         }
 
     };
 
-    const updateCurrentQuantity =async (newQuantity, idProduct, idCustomer) => {
-        await orderService.updateQuantity(newQuantity,idProduct,idCustomer);
+    const updateCurrentQuantity = async (newQuantity, idProduct, idCustomer) => {
+        await orderService.updateQuantity(newQuantity, idProduct, idCustomer);
     };
 
-    const handleDeleteProduct = async (idProduct,idCustomer) => {
-       const res= await orderService.deleteChosenProduct(idProduct,idCustomer);
-       res.status === 200 && getAllCart(idCustomer);
+    const handleDeleteProduct = async (idProduct, idCustomer) => {
+        const res = await orderService.deleteChosenProduct(idProduct, idCustomer);
+        res.status === 200 && getAllCart(idCustomer);
     };
 
-    const showOrderBill =async (value) => {
+    const showOrderBill = async (value) => {
         if (customer === null) {
             toast.error("Khách hàng không được để trống");
-        }else if (products.length < 1){
+        } else if (products.length < 1) {
             toast.error("Bạn cần phải có sản phẩm");
-        }else {
+        } else {
             value = {
                 ...value,
-                idCustomerOrder :customer && customer.idCustomer,
-                idUser:userId && userId
+                idCustomerOrder: customer && customer.idCustomer,
+                idUser: userId && userId
             }
             const res = await orderService.getBillNotPay(value);
-            if (res.status === 200){
+            if (res.status === 200) {
                 navigate(`/admin/order/showBill/${res.data.customer.idCustomer}`);
             }
         }
@@ -157,9 +159,10 @@ function Order() {
         <>
             <HeaderAdmin/>
             <Formik initialValues={initialValues}
-            onSubmit={(value)=>{
-                console.log("Form values:", value);
-                showOrderBill(value)}}
+                    onSubmit={(value) => {
+                        console.log("Form values:", value);
+                        showOrderBill(value)
+                    }}
             >
                 <Form>
                     <div className="  d-flex justify-content-center my-5 pt-5">
@@ -176,7 +179,8 @@ function Order() {
                                     border: '1px solid black',
                                     height: 'auto',
                                     width: '80%',
-                                    padding: '20px'}}>
+                                    padding: '20px'
+                                }}>
                                     <legend className="float-none w-auto px-1">Thông tin khách hàng</legend>
                                     <div className="d-flex justify-content-center">
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1"
@@ -193,7 +197,7 @@ function Order() {
 
                                     {customer ? (
                                         <div>
-                                            <div className="row p-2 mx-auto" style={{ width: '90%' }}>
+                                            <div className="row p-2 mx-auto" style={{width: '90%'}}>
                                                 <div className="col-4 p-2">
                                                     <label>Tên khách hàng</label>
                                                 </div>
@@ -280,15 +284,16 @@ function Order() {
                                                         disabled
                                                     />
                                                 </div>
-                                                <Field name="idCustomerOrder" type="hidden" value={customer ? customer.idCustomer : ""}/>
+                                                <Field name="idCustomerOrder" type="hidden"
+                                                       value={customer ? customer.idCustomer : ""}/>
                                                 <Field name="idUser" type="hidden" value={{userId}}/>
                                             </div>
                                         </div>
-                                        ) : (
-                                            <div className="text-center">
-                                        <br/>
-                                        <b>----Hãy chọn hoặc thêm mới khách hàng----</b>
-                                            </div>)
+                                    ) : (
+                                        <div className="text-center">
+                                            <br/>
+                                            <b>----Hãy chọn hoặc thêm mới khách hàng----</b>
+                                        </div>)
                                     }
                                 </fieldset>
                             </div>
@@ -302,20 +307,22 @@ function Order() {
                                 }}>
                                     <legend className="float-none w-auto px-1">Sản phẩm đã chọn</legend>
                                     <div className="d-flex justify-content-center mb-3">
-                                        <button type="button" className="btn btn-outline-primary col-6 mx-1" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalProduct" style={{ width: '30%' }}
+                                        <button type="button" className="btn btn-outline-primary col-6 mx-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalProduct" style={{width: '30%'}}
                                                 disabled={customer === null}
                                         >
                                             Chọn sản phẩm
                                         </button>
-                                        <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}
-                                                disabled={customer === null}
-                                        >Scan QR</button>
+                                        {customer && <Link to={`/admin/scanner-qr-order/${customer.idCustomer}`}
+                                                           className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
+                                                           disabled={customer === null}>Scan QR</Link> }
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
-                                            <div className="table-container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                                <table className="table " style={{ width: '100%' }}>
+                                            <div className="table-container"
+                                                 style={{maxHeight: '400px', overflowY: 'auto'}}>
+                                                <table className="table " style={{width: '100%'}}>
                                                     <thead>
                                                     <tr>
                                                         <th className="col-1 text-center">#</th>
@@ -323,19 +330,24 @@ function Order() {
                                                         <th className="col-2 text-center">Đơn giá</th>
                                                         <th className="col-2 text-center">Số lượng</th>
                                                         <th className="col-2 text-center">Số tiền</th>
-                                                        <th className="col-1 text-center" style={{width: "100%"}}>Thao tác</th>
+                                                        <th className="col-1 text-center" style={{width: "100%"}}>Thao
+                                                            tác
+                                                        </th>
                                                     </tr>
 
                                                     </thead>
                                                     <tbody>
-                                                    { customer ? (
+                                                    {customer ? (
                                                             products.map((product, index) => (
                                                                 <tr key={index}>
                                                                     <td className="col-1 text-center">{index + 1}</td>
                                                                     <td className="col-3 text-center">{product.nameProduct}</td>
                                                                     <td className="col-2 text-center">
                                                                         {product.priceProduct
-                                                                            .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                            .toLocaleString('vi-VN', {
+                                                                                style: 'currency',
+                                                                                currency: 'VND'
+                                                                            })}
                                                                     </td>
                                                                     <td className="col-2">
                                                                         <div className="input-group">
@@ -355,7 +367,7 @@ function Order() {
                                                                                     const newQuantities = [...quantity];
                                                                                     const quantityOfChosen = parseInt(e.target.value);
                                                                                     quantityOfChosen <= product.quantityProduct && (newQuantities[index] = quantityOfChosen);
-                                                                                    quantityOfChosen > product.quantityProduct && (newQuantities[index]  = product.quantityProduct);
+                                                                                    quantityOfChosen > product.quantityProduct && (newQuantities[index] = product.quantityProduct);
                                                                                     quantityOfChosen <= 0 && (newQuantities[index] = 1);
                                                                                     setQuantity(newQuantities);
                                                                                     customer && updateCurrentQuantity(newQuantities[index], product.idProduct, customer.idCustomer);
@@ -372,14 +384,17 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        { (product.priceProduct * quantity[index])
-                                                                            .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                                                        {(product.priceProduct * quantity[index])
+                                                                            .toLocaleString('vi-VN', {
+                                                                                style: 'currency',
+                                                                                currency: 'VND'
+                                                                            })}
                                                                     </td>
                                                                     <td className="col-2 text-center">
                                                                         <button
                                                                             className="btn btn-danger"
                                                                             type="button"
-                                                                            onClick={()=> handleDeleteProduct(product.idProduct,customer.idCustomer)}
+                                                                            onClick={() => handleDeleteProduct(product.idProduct, customer.idCustomer)}
                                                                         >
                                                                             <i className="fa fa-times"></i>
                                                                         </button>
@@ -391,7 +406,7 @@ function Order() {
                                                             <td className="text-center" colSpan="6">
                                                                 <b>----Trống----</b>
                                                             </td>
-                                                </tr>)
+                                                        </tr>)
                                                     }
                                                     </tbody>
                                                 </table>
@@ -461,8 +476,9 @@ function Order() {
             </Formik>
 
             <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
-            <CustomerCreateModal handleData={handleDataByCreateCustomer} />
-            <ProductChooseModal data1={0} idCustomer={customer && customer.idCustomer} handleData={handleDataByChooseProduct}/>
+            <CustomerCreateModal handleData={handleDataByCreateCustomer}/>
+            <ProductChooseModal data1={0} idCustomer={customer && customer.idCustomer}
+                                handleData={handleDataByChooseProduct}/>
         </>
     );
 }

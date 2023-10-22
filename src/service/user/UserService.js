@@ -5,11 +5,7 @@ const apiAccount = "http://localhost:8080/api/user";
 
 
 export const edit = async (data) => {
-    try {
-        return await axios.put(apiAccount + `/information/edit`, data);
-    } catch (e) {
-        alert("Không có dữ liệu");
-    }
+    return await axios.put(apiAccount + `/information/edit`, data);
 }
 
 export const changePass = async (data) => {
@@ -17,9 +13,5 @@ export const changePass = async (data) => {
 }
 
 export const findById = async (id) => {
-    try {
-        return await axios.get(apiAccount + `/information/${id}`);
-    } catch (e) {
-        alert("Không có dữ liệu");
-    }
+    return await axios.get(apiAccount + `/information/${id}`);
 }
