@@ -32,6 +32,7 @@ import CreateSupplier from "./components/supplier/CreateSupplier";
 import HeaderAdmin from './components/user/HeaderAdmin';
 import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
+import ScannerOderQR from "./components/scanner_qr/ScannerOderQR";
 
 
 
@@ -93,7 +94,8 @@ function App() {
                     <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
-
+                    <Route path="/admin/home" element={<HomeAdmin/>}/>
+                    <Route path="/admin/scanner-qr-order" element={<ScannerOderQR/>}/>
                 </Route>
             </Routes>
         </>
