@@ -24,17 +24,82 @@ function Supplier() {
     const [valueInput, setValueInput] = useState("");
     const [listAddress, setListAddress] = useState([]);
     const [supplierEdit, setSupplierEdit] = useState({ idSupplier: 0 });
+    const addressList = {
+        1: "Thành phố Hà Nội",
+        2: "Tỉnh Hà Giang",
+        4: "Tỉnh Cao Bằng",
+        6: "Tỉnh Bắc Kạn",
+        8: "Tỉnh Tuyên Quang",
+        10: "Tỉnh Lào Cai",
+        11: "Tỉnh Điện Biên",
+        12: "Tỉnh Lai Châu",
+        14: "Tỉnh Sơn La",
+        15: "Tỉnh Yên Bái",
+        17: "Tỉnh Hoà Bình",
+        19: "Tỉnh Thái Nguyên",
+        20: "Tỉnh Lạng Sơn",
+        22: "Tỉnh Quảng Ninh",
+        24: "Tỉnh Bắc Giang",
+        25: "Tỉnh Phú Thọ",
+        26: "Tỉnh Vĩnh Phúc",
+        27: "Tỉnh Bắc Ninh",
+        30: "Tỉnh Hải Dương",
+        31: "Thành phố Hải Phòng",
+        33: "Tỉnh Hưng Yên",
+        34: "Tỉnh Thái Bình",
+        35: "Tỉnh Hà Nam",
+        36: "Tỉnh Nam Định",
+        37: "Tỉnh Ninh Bình",
+        38: "Tỉnh Thanh Hóa",
+        40: "Tỉnh Nghệ An",
+        42: "Tỉnh Hà Tĩnh",
+        44: "Tỉnh Quảng Bình",
+        45: "Tỉnh Quảng Trị",
+        46: "Tỉnh Thừa Thiên Huế",
+        48: "Thành phố Đà Nẵng",
+        49: "Tỉnh Quảng Nam",
+        51: "Tỉnh Quảng Ngãi",
+        52: "Tỉnh Bình Định",
+        54: "Tỉnh Phú Yên",
+        56: "Tỉnh Khánh Hòa",
+        58: "Tỉnh Ninh Thuận",
+        60: "Tỉnh Bình Thuận",
+        62: "Tỉnh Kon Tum",
+        64: "Tỉnh Gia Lai",
+        66: "Tỉnh Đắk Lắk",
+        67: "Tỉnh Đắk Nông",
+        68: "Tỉnh Lâm Đồng",
+        70: "Tỉnh Bình Phước",
+        72: "Tỉnh Tây Ninh",
+        74: "Tỉnh Bình Dương",
+        75: "Tỉnh Đồng Nai",
+        77: "Tỉnh Bà Rịa - Vũng Tàu",
+        79: "Thành phố Hồ Chí Minh",
+        80: "Tỉnh Long An",
+        82: "Tỉnh Tiền Giang",
+        83: "Tỉnh Bến Tre",
+        84: "Tỉnh Trà Vinh",
+        86: "Tỉnh Vĩnh Long",
+        87: "Tỉnh Đồng Tháp",
+        89: "Tỉnh An Giang",
+        91: "Tỉnh Kiên Giang",
+        92: "Thành phố Cần Thơ",
+        93: "Tỉnh Hậu Giang",
+        94: "Tỉnh Sóc Trăng",
+        95: "Tỉnh Bạc Liêu",
+        96: "Tỉnh Cà Mau"
+    }
+    const [selectedSupplier, setSelectSupplier] = useState([]);
     useEffect(() => {
         handleGetListAddress()
     }, [typeSearch])
-    console.log(listAddress);
     const handleGetListAddress = async () => {
         const res = await getAllAddress();
         setListAddress(res);
     }
     useEffect(() => {
         getAll();
-    }, [refresh])
+    }, [refresh, currentPage, selectedSupplier])
 
     const handleSetTypeSearch = () => {
         const specialCharsRegex = /[!#$%^&*(),?":{}|<>_]/;
@@ -59,29 +124,25 @@ function Supplier() {
             setListSupplier([]);
         }
     }
-
-    const handleRowClick = (index, obj) => {
-        if (activeRow === index) {
-            setActiveRow(null);
-            setSupplierDelete(null);
-            setSupplierEdit({ idSupplier: 0 });
-            setRefresh(!refresh);
-        } else {
-            setActiveRow(index);
-            setSupplierDelete(obj);
-            setSupplierEdit(obj);
+    const handleShowModal = () => {
+        if(selectedSupplier.length ===0){
+            toast("vui lòng chọn sản phẩm")
+        } else{
+            setShowModal(true);
             setRefresh(!refresh);
         }
-    };
-    console.log(supplierEdit);
-    const handleShowModal = () => {
-        setShowModal(true);
-        setRefresh(!refresh);
     }
 
     const handleCloseModal = () => {
         setShowModal(false);
         setRefresh(!refresh);
+    }
+    const handleUpdate = () => {
+        if (selectedSupplier.length === 0) {
+            toast("vui lòng chọn sản phẩm")
+        } else {
+            navigate(`/admin/business/supplier/edit/${selectedSupplier[0].idSupplier}`)
+        }
     }
 
     const getAll = async () => {
@@ -91,8 +152,8 @@ function Supplier() {
             setAddressSearch("");
             setEmailSearch("");
             setListSupplier(newList[0]);
-            setTotalPage(Math.ceil(newList[1] / limit));
-            console.log(newList[2].status);
+            setTotalPage(newList[2].data.totalPages);
+            console.log(newList[2]);
         } else {
             console.log("aaaaaaaa");
             setListSupplier([]);
@@ -105,20 +166,18 @@ function Supplier() {
     }
 
     const handleDelete = async () => {
-        const result = await deleteSupplier(supplierDelete.idSupplier);
         if (listSupplier.length === 1 && totalPage !== 1) {
-            setCurrentPage(currentPage - 1);
+            setCurrentPage(totalPage-1);
         }
-        if (result === 204) {
-            toast("Xóa thành công")
-        } else {
-            toast.error("Lỗi không thể xóa đối tượng này")
-        }
+        selectedSupplier.map(async s => {
+            await deleteSupplier(s.idSupplier)
+        })
+        toast("Xóa thành công")
         handleCloseModal();
-        setActiveRow(null);
-        setSupplierDelete({});
+        setSelectSupplier([]);
+        
         setRefresh(!refresh);
-        console.log(result)
+        getAll();
     }
 
     const prePage = () => {
@@ -133,7 +192,7 @@ function Supplier() {
             setRefresh(!refresh);
         }
     }
-    console.log(listSupplier.length);
+
 
     return (
         <>
@@ -157,7 +216,7 @@ function Supplier() {
                                 <select style={{ width: "180px" }} className="form-control" onClick={(event) => setValueInput(event.target.value)}>
                                     <option value={""}>---Chọn địa chỉ---</option>
                                     {listAddress.map((address) => (
-                                        <option key={address.code}>{address.name}</option>
+                                        <option key={address.code} value={address.code}>{address.name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -189,16 +248,28 @@ function Supplier() {
                         </thead>
                         <tbody>
                             {listSupplier
-                                && listSupplier.length != 0 ? listSupplier.map((supplier, index) =>
+                                && listSupplier.length !== 0 ? listSupplier.map((supplier, index) =>
 
                                     <>
-                                        <tr key={supplier.idSupplier} className={activeRow === index ? "active" : {}}
-                                            onClick={() => handleRowClick(index, supplier)}
+                                        <tr key={supplier.idSupplier} onClick={() => {
+                                            const isSelected = selectedSupplier.find(s => s.idSupplier === supplier.idSupplier);
+
+                                            if (isSelected) {
+                                                const updatedSupplier = selectedSupplier.filter(s => s.idSupplier !== supplier.idSupplier);
+                                                setSelectSupplier(updatedSupplier);
+                                            } else {
+                                                const updatedSupplier = [...selectedSupplier, supplier];
+                                                setSelectSupplier(updatedSupplier);
+                                            }
+                                        }}
+                                            className={
+                                                selectedSupplier.some(s => s.idSupplier === supplier.idSupplier) ? "active" : ""
+                                            }
                                         >
                                             <td >{index + 1}</td>
                                             <td >{supplier.idSupplier}</td>
                                             <td >{supplier.nameSupplier}</td>
-                                            <td >{supplier.addressSupplier}</td>
+                                            <td >{addressList[supplier.addressSupplier]}</td>
                                             <td >{supplier.phoneNumberSupplier}</td>
                                             <td >{supplier.emailSupplier}</td>
                                         </tr>
@@ -212,34 +283,66 @@ function Supplier() {
                         </tbody>
                     </table>
                 </div>
+
                 <div className="row d-flex justify-content-around my-3">
+
                     <div className="col float-start">
                         <Link className="me-1" to={`/admin/business/supplier/create`} style={{ textDecoration: 'none' }}>
                             <button type="button" className="btn btn-outline-primary">Thêm mới</button>
                         </Link>
-                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/business/supplier/edit/${supplierEdit.idSupplier}`} title="Chỉnh sửa">
-                            Cập nhật
-                        </Link>
-                        <button className={`btn btn-outline-danger ${(activeRow === null) ? "disabled" : ""}`} title="" onClick={() => handleShowModal()}  >
-                            Xóa
-                        </button>
-                        <Modal show={showModal} onHide={handleCloseModal} >
-                            <MyModal action={handleCloseModal} data={supplierDelete} deleteFunc={handleDelete} />
-                        </Modal>
+                        {
+                            listSupplier.length != 0 &&
+                            <>
+                                {selectedSupplier.length <= 1 && (
+                                    <button type="button" className={`btn btn-outline-success me-1`} 
+                                     title="Chỉnh sửa"
+                                    onClick={() => handleUpdate()}
+                                    >
+                                        Cập nhật
+                                    </button>
+                                )}
+                                <button className={`btn btn-outline-danger me-1`} title="" onClick={() => handleShowModal()}  >
+                                    Xóa
+                                </button>
+                                <Modal show={showModal} onHide={handleCloseModal} >
+                                    <MyModal action={handleCloseModal} data={selectedSupplier} deleteFunc={handleDelete} />
+                                </Modal>
+                                {selectedSupplier.length >= 2 && (
+                                    <a className="me-1">
+                                        <button onClick={() => setSelectSupplier([])} type="button"
+                                            className="btn btn-outline-secondary">Hủy Chọn
+                                        </button>
+                                    </a>
+                                )}
+                            </>
+                        }
+
                     </div>
-                    <div className="col-auto float-end">
-                        <ul className="pagination mb-0">
-                            <li className="page-item">
-                                <button onClick={() => prePage()} className={`page-link  ${currentPage <= 0 ? "disabled" : ""}`}>Trước</button>
-                            </li>
-                            <li className="page-item" aria-current="page">
-                                <a className="page-link" href="#">{currentPage + 1}/{totalPage}</a>
-                            </li>
-                            <li className="page-item">
-                                <button onClick={() => nextPage()} className={`page-link ${currentPage >= (totalPage - 1) ? "disabled" : ""}`}>Sau</button>
-                            </li>
-                        </ul>
-                    </div>
+
+                    {totalPage > 1 && (
+                        <div className="col-auto float-end">
+                            <ul className="pagination mb-0">
+                                <li className="page-item">
+                                    <a className={`page-link ${currentPage === 0 ? "disabled" : ""}`}
+                                        onClick={() => setCurrentPage(0)} tabIndex="-1"
+                                        aria-disabled="true">Đầu</a>
+                                </li>
+                                <li className="page-item">
+                                    <button onClick={() => prePage()} className={`page-link  ${currentPage <= 0 ? "disabled" : ""}`}>Trước</button>
+                                </li>
+                                <li className="page-item" aria-current="page">
+                                    <a className="page-link" href="#">{currentPage + 1}/{totalPage}</a>
+                                </li>
+                                <li className="page-item">
+                                    <button onClick={() => nextPage()} className={`page-link ${currentPage >= (totalPage - 1) ? "disabled" : ""}`}>Sau</button>
+                                </li>
+                                <li className="page-item">
+                                    <a className={`page-link ${currentPage >= totalPage - 1 ? "disabled" : ""}`}
+                                        onClick={() => setCurrentPage(totalPage - 1)}>Cuối</a>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />
@@ -254,7 +357,13 @@ function MyModal({ action, data, deleteFunc }) {
                 <h5 className="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
             </Modal.Header>
             <Modal.Body>
-                <p>Bạn có muốn xóa sản phẩm này không {data.nameSupplier} ?</p>
+            <p>Bạn có muốn xóa các sản phẩm :{data.map((s,index) => (
+                                        <>
+                                            <br/>
+                                            {index + 1}: {s.nameSupplier}
+                                        </>
+                                    )
+                                )} không ?</p>
             </Modal.Body>
             <Modal.Footer>
                 <button type="button" className="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>
