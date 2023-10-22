@@ -242,7 +242,7 @@ export default function ProductList() {
 
                     </div>
                     {totalPages > 1 && (
-                        <div className="col-auto float-end">
+                        <div className="col-auto float-end mb-3">
                             <ul className="pagination mb-0">
                                 <li className="page-item">
                                     <a className={`page-link ${page === 0 ? "disabled" : ""}`}
