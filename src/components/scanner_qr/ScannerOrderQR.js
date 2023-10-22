@@ -5,7 +5,7 @@ import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthSer
 import * as customerService from "../../service/customer/CustomerService";
 import {useParams} from "react-router";
 
-function ScannerOderQR() {
+function ScannerOrderQR() {
     const [showScanResult, setShowScanResult] = useState(false);
     const [idProduct, setIdProduct] = useState()
     const param = useParams();
@@ -66,4 +66,4 @@ function ScannerOderQR() {
 }
 
 
-export default ScannerOderQR;
+export default ScannerOrderQR;

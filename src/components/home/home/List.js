@@ -12,6 +12,7 @@ import { getListByName, getSeriesByProductType } from '../../../service/home/Hom
 
 import Header from '../common/Header';
 import Footer from '../common/Footer';
+import { RingLoader } from 'react-spinners';
 
 const List = () => {
 
@@ -22,7 +23,8 @@ const List = () => {
     const [sortType, setSortType] = useState('desc');
     const [searchName, setSearchName] = useState(param.type);
     const [isActive, setIsActive] = useState('all');
-    console.log(param);
+    const [isLoading, setIsLoading] = useState(true);
+
 
     useEffect(() => {
         setSearchName(param.type);
@@ -38,6 +40,16 @@ const List = () => {
         const data = await getListByName(searchName, sortName, sortType);
         setProducts(data);
     }
+
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+        return () => {
+            clearTimeout(timer); // Clear the timer if the component unmounts before the timeout
+        };
+    }, []);
 
     const getSeries = async () => {
         const data = await getSeriesByProductType(param.type);
@@ -65,9 +77,17 @@ const List = () => {
             setSortType('desc');
         }
     }
-    console.log(param.type);
+    const handleUE = () => {
+        setTimeout()
+    }
+
+
     return (
         <>
+
+
+
+
             <div className='home-body'>
                 <Header />
                 {/* Title */}
@@ -78,11 +98,10 @@ const List = () => {
                 <div className='carousel-on-list'>
 
                     <Swiper
-                        // autoplay={{
-                        //     delay: 3000,
-                        //     disableOnInteraction: false,
-                        // }}
-
+                        autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        }}
                         pagination={{
                             dynamicBullets: true,
                             clickable: true,
@@ -131,11 +150,16 @@ const List = () => {
                         {products.length > 0 ? products.map((item) => {
                             return (
                                 <a className="device-card" href={'/detail/' + item.type + '/' + item.id}>
+                                    {item.quantity == 0 &&
+                                        <div className='soldout-part'>
+                                            <img className='soldout-word' src='/images/chayhang-2.png' />
+                                        </div>
+                                    }
                                     <div className="card-image">
                                         <img src={item.image} alt="" />
                                     </div>
-                                    <h3 className="product-name">{item.name + " " + item.capacity}</h3>
-                                    <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
+                                    <h3 className="product-name-on-list">{item.name + " " + item.capacity}</h3>
+                                    <h2 className="product-price-on-list">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
                                     <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
                                 </a>
                             )

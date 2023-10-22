@@ -19,23 +19,18 @@ import CreateEmployee from './components/user/CreateEmployee';
 import ShowBill from "./components/order/ShowBill";
 import PrintPDF from "./components/order/PrintPDF";
 import ProductList from "./components/product/ProductList";
-import {Warehouse} from './components/warehouse/Warehouse';
 import {ImportProduct} from './components/warehouse/ImportProduct';
 import Supplier from "./components/supplier/Supplier";
 import SalesReport from "./components/sales_report/SalesReport";
 import CreateProduct from "./components/product/CreateProduct";
-import UpdateProduct from "./components/product/UpdateProduct";
 import Home from './components/home/home/Home';
 import List from './components/home/home/List';
 import Detail from './components/home/home/Detail';
 import CreateSupplier from "./components/supplier/CreateSupplier";
-import HeaderAdmin from './components/user/HeaderAdmin';
 import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
-import ScannerOderQR from "./components/scanner_qr/ScannerOderQR";
+import ScannerOrderQR from "./components/scanner_qr/ScannerOrderQR";
 import EditSupplier from "./components/supplier/EditSupplier";
-
-
 
 
 function App() {
@@ -44,17 +39,33 @@ function App() {
         <>
             <ToastContainer></ToastContainer>
             <Routes>
-
-                <Route path="*" element={<Home/>}></Route>
+                <Route path="*" element={<Home/>}/>
                 <Route path="/401" element={<Error401/>}/>
                 <Route path="/403" element={<Error403/>}/>
                 <Route path="/login" element={<LoginForm/>}/>
+
                 <Route path='/home' element={<Home/>}/>
+                <Route path="/list/" element={<List/>}/>
                 <Route path="/list/:type" element={<List/>}/>
-                <Route path="/admin/product/update/:id" element={<UpdateProduct/>}/>
-                <Route path="/admin/product/list" element={<ProductList/>}/>
                 <Route path="/detail/:type/:id" element={<Detail/>}/>
 
+
+                <Route
+                    element={
+                        <Authentication
+                            allowedRoles={[
+                                EnumAppUserRole.ROLE_ADMIN,
+                                EnumAppUserRole.ROLE_SALE,
+                                EnumAppUserRole.ROLE_BUSINESS,
+                                EnumAppUserRole.ROLE_WAREHOUSE
+                            ]}
+                        />
+                    }
+                >
+                    <Route path="/admin/information/:id" element={<Information/>}/>
+                    <Route path="/admin/home" element={<HomeAdmin/>}/>
+                    <Route path="/admin/*" element={<HomeAdmin/>}/>
+                </Route>
 
                 <Route
                     element={
@@ -65,34 +76,12 @@ function App() {
                         />
                     }
                 >
-                    <Route path="/admin/information/:id" element={<Information/>}></Route>
-                    <Route path="/admin/*" element={<HomeAdmin/>}></Route>
+                    <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}/>
+                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}/>
+                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}/>
 
-                    <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}></Route>
-                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}></Route>
-                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}></Route>
-
-
-                    <Route path="/admin/order/:id" element={<Order/>}/>
-                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
-                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
-
-                    <Route path="/admin/warehouse" element={<Warehouse/>}/>
-                    <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
-                    <Route path="/admin/warehouse/import" element={<ImportProduct/>}/>
-                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
-                    <Route path="/admin/business/supplier/create" element={<CreateSupplier/>}/>
-                    <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
-                    <Route path="/admin/product/list" element={<ProductList/>}/>
-                    <Route path="/admin/product/create" element={<CreateProduct/>}/>
-                    <Route path="/admin/salesreport" element={<SalesReport/>}/>
-                    <Route path="/admin/order" element={<Order/>}/>
-                    <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
-                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
-                    <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/scanner-qr" element={<ScannerQR/>}/>
-                    <Route path="/admin/home" element={<HomeAdmin/>}/>
-                    <Route path="/admin/scanner-qr-order" element={<ScannerOderQR/>}/>
+                    <Route path="/admin/scanner-qr-order" element={<ScannerOrderQR/>}/>
                 </Route>
 
                 <Route
@@ -104,7 +93,10 @@ function App() {
                         />
                     }
                 >
-
+                    <Route path="/admin/order" element={<Order/>}/>
+                    <Route path="/admin/order/showBill/:id" element={<ShowBill/>}/>
+                    <Route path="/admin/order/showBill/print" element={<PrintPDF/>}/>
+                    <Route path="/admin/order/saleHistory" element={<SaleHistory/>}/>
                 </Route>
 
                 <Route
@@ -115,7 +107,13 @@ function App() {
                             ]}
                         />
                     }
-                ></Route>
+                >
+                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
+                    <Route path="/admin/business/supplier/create" element={<CreateSupplier/>}/>
+                    <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
+                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
+                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
+                </Route>
 
                 <Route
                     element={
@@ -125,7 +123,9 @@ function App() {
                             ]}
                         />
                     }
-                ></Route>
+                >
+                    <Route path="/admin/warehouse/import/:product" element={<ImportProduct/>}/>
+                </Route>
             </Routes>
         </>
     );
