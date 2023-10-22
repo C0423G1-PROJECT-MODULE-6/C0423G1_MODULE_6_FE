@@ -20,32 +20,30 @@ function Order() {
     const [totalPrice, setTotalPrice] = useState(0);
     const [orderBillNotPay, setOrderBillNotPay] = useState(null);
     const navigate = useNavigate();
+    const [products, setProducts] = useState([])
     const [userId, setUserId] = useState("");
-    const [userAppName, setUserAppName] = useState("");
-    const [resetCart, setResetCart] = useState(false);
+    const [renderStatus, setRenderStatus] = useState(false)
 
     const getAppUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
         if (isLoggedIn) {
             const id = await getIdByUserName(isLoggedIn.sub);
             setUserId(id.data);
-            const nameUser = await UserService.findById(id.data);
-            setUserAppName(nameUser.data.employeeName);
         }
     };
     useEffect(() => {
         getAppUserId();
     }, []);
-
-
     const findCustomerByid = async (data) => {
         const res =await orderService.findCustomerById(data);
-        console.log(res.objectResponse)
+        console.log(res)
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
             setOrderBillNotPay(res.objectResponse);
-        } else {
+        } else if (res && res.type === "cartOrder"){
+            setCarts(res.objectResponse);
+        }else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
     };
@@ -61,40 +59,47 @@ function Order() {
         toast("Bạn đã thêm mới khách hàng thành công");
     }
     const updateCustomerConfirm = (data) => {
+        console.log(data)
+        console.log(data.idCustomer)
         setCustomer(data)
     }
 
-    useEffect(() => {
-        userId && getAllCart();
-    }, [customer,userId]);
 
-    const getAllCart = async () => {
-        const res = await orderService.getAllCart(userId);
+
+
+    const getAllCart = async (idCustomer) => {
+        const res = await orderService.getAllCart(idCustomer);
         console.log(res.data)
         if (res.status === 200){
-            setHasResult(res.data.length > 0);
-            setCarts(res.data);
-            const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
-            setQuantity(initialQuantities);
+            if(res.data){
+                setHasResult(res.data.length > 0);
+                setProducts(res.data);
+                const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
+                setQuantity(initialQuantities);
+            }
         }else if (res.status === 404){
             setHasResult(false);
         }
     }
+    useEffect(() => {
+        customer && getAllCart(customer.idCustomer);
+    }, [customer,renderStatus]);
 
 
     useEffect(() => {
         let total = 0;
-        carts.forEach((cart, index) => {
-            total += cart.priceProduct * quantity[index] + cart.priceProduct * 0.1;
+        products.forEach((product, index) => {
+            total += product.priceProduct * quantity[index] + product.priceProduct * 0.1;
         });
         setTotalPrice(total);
-    }, [carts, quantity]);
+    }, [products, quantity]);
 
 
 
 
     const closeModal = () => {
-        setOrderBillNotPay(null);
+       carts && setCarts([]);
+       orderBillNotPay && setOrderBillNotPay(null);
     }
 
     console.log("customer "+JSON.stringify(customer))
@@ -104,30 +109,33 @@ function Order() {
             const newQuantities = [...quantity];
             newQuantities[index] = quantity[index] - 1;
             setQuantity(newQuantities);
-            updateCurrentQuantity(newQuantities[index],carts[index].idProduct,userId);
+            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
         }
     };
 
     const increaseValue = (index) => {
-        const newQuantities = [...quantity];
-        newQuantities[index] = quantity[index] + 1;
-        setQuantity(newQuantities);
-        updateCurrentQuantity(newQuantities[index],carts[index].idProduct,userId);
+        if (products[index]){
+            const newQuantities = [...quantity];
+            newQuantities[index] = quantity[index] + 1;
+            setQuantity(newQuantities);
+            customer && updateCurrentQuantity(newQuantities[index],products[index].idProduct,customer.idCustomer);
+        }
+
     };
 
-    const updateCurrentQuantity =async (newQuantity, idProduct, idUser) => {
-        await orderService.updateQuantity(newQuantity,idProduct,idUser);
+    const updateCurrentQuantity =async (newQuantity, idProduct, idCustomer) => {
+        await orderService.updateQuantity(newQuantity,idProduct,idCustomer);
     };
 
-    const handleDeleteProduct = async (idProduct,idUser) => {
-       const res= await orderService.deleteChosenProduct(idProduct,idUser);
-        res.status === 200 && getAllCart();
+    const handleDeleteProduct = async (idProduct,idCustomer) => {
+       const res= await orderService.deleteChosenProduct(idProduct,idCustomer);
+       res.status === 200 && getAllCart(idCustomer);
     };
 
     const showOrderBill =async (value) => {
         if (customer === null) {
             toast.error("Khách hàng không được để trống");
-        }else if (carts.length < 1){
+        }else if (products.length < 1){
             toast.error("Bạn cần phải có sản phẩm");
         }else {
             value = {
@@ -147,14 +155,14 @@ function Order() {
         idCustomerOrder : "",
         idUser: ""
     }
-
     return (
         <>
             <HeaderAdmin/>
             <Formik initialValues={initialValues}
             onSubmit={(value)=>{
                 console.log("Form values:", value);
-                showOrderBill(value)}}>
+                showOrderBill(value)}}
+            >
                 <Form>
                     <div className="  d-flex justify-content-center my-5 pt-5">
                         <fieldset className="form-input shadow mx-auto" style={{ borderRadius: '20px', border: '1px solid black', height: 'auto', width: '80%' }}>
@@ -195,8 +203,6 @@ function Order() {
                                                     )}
 
                                                 </div>
-
-
 
                                                 <div className="col-4 p-2">
                                                     <label>Số điện thoại</label>
@@ -262,11 +268,13 @@ function Order() {
                                     <div className="d-flex justify-content-center mb-3">
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1" data-bs-toggle="modal"
                                                 data-bs-target="#exampleModalProduct" style={{ width: '30%' }}
-                                                disabled={customer === null}>
+                                                disabled={customer === null}
+                                        >
                                             Chọn sản phẩm
                                         </button>
                                         <button className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}
-                                                disabled={customer === null}>Scan QR</button>
+                                                disabled={customer === null}
+                                        >Scan QR</button>
                                     </div>
 
                                     {/*<div className="row">*/}
@@ -284,15 +292,16 @@ function Order() {
                                                         <th className="col-2 text-center">Số tiền</th>
                                                         <th className="col-1 text-center" style={{width: "100%"}}>Thao tác</th>
                                                     </tr>
+
                                                     </thead>
                                                     <tbody>
-                                                    { hasResult ? (
-                                                            carts.map((cart, index) => (
+                                                    { customer ? (
+                                                            products.map((product, index) => (
                                                                 <tr key={index}>
                                                                     <td className="col-1 text-center">{index + 1}</td>
-                                                                    <td className="col-3 text-center">{cart.nameProduct}</td>
+                                                                    <td className="col-3 text-center">{product.nameProduct}</td>
                                                                     <td className="col-2 text-center">
-                                                                        {cart.priceProduct
+                                                                        {product.priceProduct
                                                                             .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                                                     </td>
                                                                     <td className="col-2">
@@ -312,17 +321,17 @@ function Order() {
                                                                                 onChange={(e) => {
                                                                                     const newQuantities = [...quantity];
                                                                                     const quantityOfChosen = parseInt(e.target.value);
-                                                                                    quantityOfChosen <= cart.quantityProduct && (newQuantities[index] = quantityOfChosen);
-                                                                                    quantityOfChosen > cart.quantityProduct && (newQuantities[index]  = cart.quantityProduct);
+                                                                                    quantityOfChosen <= product.quantityProduct && (newQuantities[index] = quantityOfChosen);
+                                                                                    quantityOfChosen > product.quantityProduct && (newQuantities[index]  = product.quantityProduct);
                                                                                     quantityOfChosen <= 0 && (newQuantities[index] = 1);
                                                                                     setQuantity(newQuantities);
-                                                                                    updateCurrentQuantity(newQuantities[index], cart.idProduct, 1);
+                                                                                    customer && updateCurrentQuantity(newQuantities[index], product.idProduct, customer.idCustomer);
                                                                                 }}
                                                                             />
                                                                             <button
                                                                                 className="btn btn-success"
                                                                                 type="button"
-                                                                                disabled={quantity[index] >= cart.quantityProduct}
+                                                                                disabled={quantity[index] >= product.quantityProduct}
                                                                                 onClick={() => increaseValue(index)}
                                                                             >
                                                                                 +
@@ -330,14 +339,14 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        { (cart.priceProduct * quantity[index])
+                                                                        { (product.priceProduct * quantity[index])
                                                                             .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                                                     </td>
                                                                     <td className="col-2 text-center">
                                                                         <button
                                                                             className="btn btn-danger"
                                                                             type="button"
-                                                                            onClick={()=>handleDeleteProduct(cart.idProduct,userId)}
+                                                                            onClick={()=> handleDeleteProduct(product.idProduct,customer.idCustomer)}
                                                                         >
                                                                             <i className="fa fa-times"></i>
                                                                         </button>
@@ -410,6 +419,7 @@ function Order() {
                         </fieldset>
                     </div>
                     <BillNotPayConfirm
+                        carts={carts}
                         orderBill={orderBillNotPay}
                         handleClose={closeModal}
                         handleData={updateCustomerConfirm}
