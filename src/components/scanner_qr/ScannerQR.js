@@ -8,6 +8,7 @@ function ScanQr({result}) {
     const navigate = useNavigate();
 
     const handleDecodedText = (decodedText) => {
+        console.log(decodedText)
         navigate('/admin/warehouse/import/'+ decodedText);
     };
 

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getList = async (page, limit, searchName, addressSearch, emailSearch) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/supplier?_page=${page}&_limit=${limit}&name_like=${searchName}&addressSearch=${addressSearch}&emailSearch=${emailSearch}`);
+        const result = await axios.get(`http://localhost:8080/api/admin/business/supplier?_page=${page}&_limit=${limit}&name_like=${searchName}&addressSearch=${addressSearch}&emailSearch=${emailSearch}`);
         const records = result.data.totalElements;
         const data = result.data.content;
         return [data, records, result];
@@ -13,7 +13,7 @@ export const getList = async (page, limit, searchName, addressSearch, emailSearc
 
 export const deleteSupplier = async (idSupplier) => {
     try {
-        return (await axios.delete(`http://localhost:8080/api/admin/supplier/${idSupplier}`)).status;
+        return (await axios.delete(`http://localhost:8080/api/admin/business/supplier/${idSupplier}`)).status;
     } catch (error) {
         return error;
     }
@@ -30,7 +30,7 @@ export const getAllAddress = async () => {
 
 export const createNewSupplier = async (supplier) => {
     try {
-        const res = await axios.post(`http://localhost:8080/api/admin/supplier/create`, supplier);
+        const res = await axios.post(`http://localhost:8080/api/admin/business/supplier/create`, supplier);
         console.log(res)
         return res;
     } catch (e) {
@@ -40,7 +40,7 @@ export const createNewSupplier = async (supplier) => {
 
 export const findSupplierById = async (id) =>{
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/supplier/${id}`);
+        const res = await axios.get(`http://localhost:8080/api/admin/business/supplier/${id}`);
         console.log(res)
         return res.data;
     } catch (e) {
@@ -50,7 +50,7 @@ export const findSupplierById = async (id) =>{
 
 export const editSupplier = async (data) =>{
     try {
-        const res = await axios.patch(`http://localhost:8080/api/admin/supplier/edit/${data.idSupplier}`,data);
+        const res = await axios.patch(`http://localhost:8080/api/admin/business/supplier/edit/${data.idSupplier}`,data);
         console.log(res)
         return res;
     } catch (e) {

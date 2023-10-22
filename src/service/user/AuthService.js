@@ -4,11 +4,7 @@ import jwt_decode from "jwt-decode";
 const apiAuth = "http://localhost:8080/api/user";
 
 export const create = async (data) => {
-    try {
-        return await axios.post(apiAuth + "/signup", data);
-    } catch (e) {
-        alert("Không có dữ liệu");
-    }
+    return await axios.post(apiAuth + "/signup", data);
 }
 
 export const login = async (data) => {

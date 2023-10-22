@@ -123,6 +123,7 @@ const EmployeeList = () => {
   return (
     <>
       <HeaderAdmin></HeaderAdmin>
+
       <div className="container my-5 pt-5">
         <div className="col-12 d-flex justify-content-center">
           <h1>Danh sách nhân viên</h1>
@@ -253,6 +254,14 @@ const EmployeeList = () => {
               <ul className="pagination">
                 <li className="page-item">
                   <button
+                    onClick={() => setPage(0)}
+                    className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                  >
+                    Đầu 
+                  </button>
+                </li>
+                <li className="page-item">
+                  <button
                     onClick={() => previousPage()}
                     className={`page-link ${page <= 0 ? "disabled" : ""}`}
                   >
@@ -274,11 +283,22 @@ const EmployeeList = () => {
                     Sau
                   </button>
                 </li>
+                <li className="page-item">
+                  <button
+                    onClick={() => setPage(totalPage-1)}
+                    className={`page-link ${
+                      page >= totalPage - 1 ? "disabled" : ""
+                    }`}
+                  >
+                    Cuối
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>
         </div>
       </div>
+      <h1>anhcao</h1>
       <Footer></Footer>
       {/* Modal */}
       <ModalDelete

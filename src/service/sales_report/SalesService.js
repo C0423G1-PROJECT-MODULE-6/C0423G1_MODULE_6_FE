@@ -1,5 +1,17 @@
 import axios from "axios";
 
+
+export const getDailyMonth = async () => {
+    try {
+        const res = await axios.get(` http://localhost:8080/api/admin/sales-report/dailymonth`);
+        console.log(res)
+        return res.data;
+    } catch (e) {
+        alert("Không có dữ liệu");
+        return [];
+    }
+};
+
 export const getAllSreach = async (startDate, endDate, searchTerm) => {
     const formatDate = (date) => {
         const d = new Date(date);
@@ -40,6 +52,25 @@ export const getAllProduct = async () => {
 export const getAll = async () => {
     try {
         const res = await axios.get(`http://localhost:8080/api/admin/sales-report`);
+        return res.data;
+    } catch (e) {
+        alert("Không có dữ liệu");
+        return [];
+    }
+};
+export const getDailyToday = async () => {
+    try {
+        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/daily`);
+        console.log(res)
+        return res.data;
+    } catch (e) {
+        alert("Không có dữ liệu");
+        return [];
+    }
+};
+export const getQuantityToday = async () => {
+    try {
+        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/quantity`);
         return res.data;
     } catch (e) {
         alert("Không có dữ liệu");

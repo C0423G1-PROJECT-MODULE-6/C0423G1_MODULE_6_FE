@@ -22,10 +22,10 @@ export const acceptToPay = async (print, orderBill) => {
 };
 
 
-export const findOrderBillNewest = async () => {
+export const findOrderBillNewest = async (idCustomer) => {
     try{
         const res = await axios
-            .get(`http://localhost:8080/api/admin/order/payment/showBillNewest`)
+            .get(`http://localhost:8080/api/admin/order/payment/showBillNewest/${idCustomer}`)
         return res.data;
     }catch (e){
         alert("Access Denied");
@@ -44,11 +44,17 @@ export const getBillNotPay = async (value) => {
 };
 
 
-export const getOrderNotPayByChoose =async (idCustomer, idUser, choose) => {
+export const getOrderNotPayByChoose =async (idCustomer,idUser, choose, object) => {
     try{
-        const res = await axios
-            .get(`http://localhost:8080/api/admin/order/customer/getOrderNotPay/${idCustomer}/${idUser}?_choose=${choose}`)
-        console.log("1service"+ JSON.stringify(res.data))
+        let res;
+        if (object === 1){
+            res = await axios
+                .get(`http://localhost:8080/api/admin/order/customer/getCartByChoose/${idCustomer}?_choose=${choose}&_object=${object}`)
+        }else if (object === 2){
+            res = await axios
+                .get(`http://localhost:8080/api/admin/order/customer/getOrderNotPay/${idCustomer}/${idUser}?_choose=${choose}`)
+            console.log(res)
+        }
         return res.data;
     }catch (e){
         alert("Access Denied");
@@ -59,6 +65,7 @@ export const getOrderNotPayByChoose =async (idCustomer, idUser, choose) => {
 export const findCustomerById = async (data) => {
     try{
         const res = await axios.get(`http://localhost:8080/api/admin/order/customer/${data}`)
+        console.log(res.data)
         return res.data;
     }catch (e){
         alert("Access Denied");
@@ -66,9 +73,12 @@ export const findCustomerById = async (data) => {
 };
 
 
-export const deleteChosenProduct =async (idProduct,idUser) => {
+export const deleteChosenProduct =async (idProduct,idCustomer) => {
     try{
-        const res = await axios.post(`http://localhost:8080/api/admin/order/cart/deleteChosenProduct/${idUser},${idProduct}`)
+        console.log(idCustomer)
+        console.log(idProduct)
+        const res = await axios.post(`http://localhost:8080/api/admin/order/cart/deleteChosenProduct/${idProduct}/${idCustomer}`)
+        console.log(res.status)
         return res;
     }catch (e){
         alert("Access Denied");
@@ -76,9 +86,9 @@ export const deleteChosenProduct =async (idProduct,idUser) => {
 };
 
 
-export const updateQuantity = async (newQuantity, idProduct, idUser) => {
+export const updateQuantity = async (newQuantity, idProduct, idCustomer) => {
     try{
-        const res = await axios.post(`http://localhost:8080/api/admin/order/cart/${idUser}/${idProduct}?_quantity=${newQuantity}`)
+        const res = await axios.post(`http://localhost:8080/api/admin/order/cart/${idCustomer}/${idProduct}?_quantity=${newQuantity}`)
         return res;
     }catch (e){
         alert("Access Denied");
@@ -88,9 +98,7 @@ export const updateQuantity = async (newQuantity, idProduct, idUser) => {
 
 export const getAllCart =async (idUser) => {
     try {
-        console.log(idUser)
         const res = await axios.get(`http://localhost:8080/api/admin/order/cart/${idUser}`)
-        console.log(res)
         return res;
     } catch (e){
         alert("Access Denied 1");

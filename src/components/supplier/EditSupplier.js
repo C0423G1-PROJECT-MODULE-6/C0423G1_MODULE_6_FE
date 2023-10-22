@@ -206,7 +206,7 @@ function EditSupplier() {
                                                 <button
                                                     type="button"
                                                     className="btn btn-outline-secondary"
-                                                    onClick={() => navigate('/admin/supplier')}
+                                                    onClick={() => navigate('/admin/business/supplier')}
                                                 >
                                                     Trở về
                                                 </button>

@@ -214,10 +214,10 @@ function Supplier() {
                 </div>
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
-                        <Link className="me-1" to={`/admin/supplier/create`} style={{ textDecoration: 'none' }}>
+                        <Link className="me-1" to={`/admin/business/supplier/create`} style={{ textDecoration: 'none' }}>
                             <button type="button" className="btn btn-outline-primary">Thêm mới</button>
                         </Link>
-                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/supplier/edit/${supplierEdit.idSupplier}`} title="Chỉnh sửa">
+                        <Link type="button" className={`btn btn-outline-success me-1 ${(activeRow === null) ? "disabled" : ""}`} to={`/admin/business/supplier/edit/${supplierEdit.idSupplier}`} title="Chỉnh sửa">
                             Cập nhật
                         </Link>
                         <button className={`btn btn-outline-danger ${(activeRow === null) ? "disabled" : ""}`} title="" onClick={() => handleShowModal()}  >

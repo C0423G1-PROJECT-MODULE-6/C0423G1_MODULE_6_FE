@@ -11,7 +11,7 @@ import * as UserService from '../../service/user/UserService';
 import {toast} from "react-toastify";
 
 
-function HeaderAdmin() {
+function HeaderAdmin({refresh}) {
     const navigate = useNavigate();
     const [JwtToken, setJwtToken] = useState(localStorage.getItem("JWT"));
     const [userName, setUsername] = useState("");
@@ -47,7 +47,7 @@ function HeaderAdmin() {
         getAppUserId();
         getUsername();
         // getNameUser()
-    }, []);
+    }, [refresh]);
 
     const getUsername = async () => {
         const response = await appUserService.infoAppUserByJwtToken();

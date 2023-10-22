@@ -41,19 +41,19 @@ function CreateSupplier() {
                             nameSupplier: Yup.string()
                                 .required("Không được để trống")
                                 .matches(/^[^0-9`~!@#$%^()_=\[{\]}\\|;:",><?]+$/, "Tên chỉ chứa chữ cái và một số ký tự đặc biệt &,.,*,'!,/")
-                                .max(100, "Tên không được quá 100 ký tự")
+                                .max(100, "Tên tối đa 100 ký tự")
                                 .min(2, "Tên tối thiểu là 2 ký tự"),
                             phoneNumberSupplier: Yup.string()
                                 .required("Không được để trống")
                                 .matches(/^[^a-zA-Z`~!@#$%^&*()_\-+=\[{\]}\\|;:'",<.>/?]+$/, "SĐT không chứa ký tự chữ và ký tự đặc biệt")
                                 .matches(/^(0|(\+84))[0-9]+$/, "SĐT phải bắt đầu từ 0 hoặc +84")
-                                .max(12, "SĐT không quá 12 chữ số")
+                                .max(12, "SĐT tối đa 12 chữ số")
                                 .min(10, "SĐT tối thiểu 10 chữ số"),
                             emailSupplier: Yup.string()
-                                .required("Không được để trống!")
-                                .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, "Email không đúng định dạng!")
-                                .max(100, "Email không được quá 100 ký tự!")
-                                .min(10, "Email tối thiểu 10 ký tự!"),
+                                .required("Không được để trống")
+                                .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, "Email không đúng định dạng")
+                                .max(100, "Email tối đa 100 ký tự")
+                                .min(10, "Email tối thiểu 10 ký tự"),
                             addressSupplier: Yup.string()
                                 .required("Vui lòng chọn địa chỉ")
                         }
@@ -169,7 +169,7 @@ function CreateSupplier() {
                                                 <button
                                                     type="button"
                                                     className="btn btn-outline-secondary"
-                                                    onClick={() => navigate('/admin/supplier')}
+                                                    onClick={() => navigate('/admin/business/supplier')}
                                                 >
                                                     Trở về
                                                 </button>
