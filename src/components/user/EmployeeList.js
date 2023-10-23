@@ -11,6 +11,8 @@ import "../../css/user/employee.css";
 import HeaderAdmin from "./HeaderAdmin";
 import { toast } from "react-toastify";
 import Footer from "../home/common/Footer";
+import {format, parseISO} from "date-fns";
+
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -35,7 +37,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
-  console.log(employee);
+ 
   //list
   const loadEmployeeList = async () => {
     try {
@@ -54,6 +56,7 @@ const EmployeeList = () => {
       setEmployeeList([]);
     }
   };
+
   useEffect(() => {
     loadEmployeeList();
   }, [page, searchJob, searchName, searchPhone]);
@@ -105,7 +108,7 @@ const EmployeeList = () => {
       loadEmployeeList();
       setSelectedRow(null);
       setEmployee(null);
-      toast("xóa thành công");
+      toast("Xóa thành công");
     }
   };
 
@@ -171,18 +174,19 @@ const EmployeeList = () => {
             </div>
           </div>
         </div>
-        <div style={{ minHeight: "220px" }}>
+        <div style={{ minHeight: "365px" }}>
           <table className="border border-dark table table-hover">
             <thead>
               <tr>
                 <th style={{ backgroundColor: "darkgray", width: "5%" }}>#</th>
-                <th style={{ backgroundColor: "darkgray", width: "25%" }}>
+                <th style={{ backgroundColor: "darkgray", width: "20%" }}>
                   Họ và tên
                 </th>
+                <th style={{ backgroundColor: "darkgray", width: "10%" }}>Ảnh</th>
                 <th style={{ backgroundColor: "darkgray", width: "10%" }}>
                   Ngày sinh
                 </th>
-                <th style={{ backgroundColor: "darkgray", width: "35%" }}>
+                <th style={{ backgroundColor: "darkgray", width: "30%" }}>
                   Địa chỉ
                 </th>
                 <th style={{ backgroundColor: "darkgray", width: "15%" }}>
@@ -211,7 +215,14 @@ const EmployeeList = () => {
                   >
                     <td>{index + 1}</td>
                     <td>{employee.employeeName}</td>
-                    <td>{employee.employeeBirthday}</td>
+                    <td><img src={employee.employeeImage}
+                                                  alt={"không có ảnh"}
+                                                  height="47.5" width="40"
+                                                  style={{
+                                                      borderRadius: "100px",
+                                                      marginRight: "3px"
+                                                  }}/></td>
+                    <td>{format(parseISO(employee.employeeBirthday), 'dd-MM-yyyy')}</td>
                     <td>{employee.employeeAddress}</td>
                     <td>{employee.employeeTypeName}</td>
                     <td>{employee.employeePhone}</td>
@@ -225,13 +236,13 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/admin/employee/create"}>
+            <Link to={"/admin/admin/employee/create"}>
               <button type="button" className="btn btn-outline-primary me-1">
                 Thêm mới
               </button>
             </Link>
 
-            <Link to={`/admin/employee/edit/${employee?.id}`}>
+            <Link to={`/admin/admin/employee/edit/${employee?.id}`}>
               <button
                 type="button"
                 className="btn btn-outline-success me-1"
@@ -298,7 +309,6 @@ const EmployeeList = () => {
           </div>
         </div>
       </div>
-      <h1>anhcao</h1>
       <Footer></Footer>
       {/* Modal */}
       <ModalDelete

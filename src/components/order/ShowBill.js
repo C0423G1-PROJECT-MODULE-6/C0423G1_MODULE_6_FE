@@ -40,7 +40,7 @@ function ShowBill() {
         if (products.length > 0) {
             let total = 0;
             products.forEach((product, index) => {
-                total += product.priceProduct * product.quantityOrder + product.priceProduct * 0.1;
+                total += product.priceProduct * 1.2 * product.quantityOrder + product.priceProduct * 0.1;
             });
             setTotalPrice(total);
         }
@@ -53,14 +53,18 @@ function ShowBill() {
     };
 
     const handleSubmit =async () => {
-        const res =await orderService.acceptToPay(print,orderBill);
-        console.log(res)
-        if (res && res.type === "print"){
-            navigate("/admin/order");
-            toast("Bạn đã thanh toán thành công");
-        }else if (res && res.type === "noPrint"){
-            navigate("/admin/order")
-            toast("Bạn đã thanh toán thành công");
+        if (products){
+            const res =await orderService.acceptToPay(print,orderBill);
+            console.log(res)
+            if (res && res.type === "print"){
+                navigate("/admin/sale/order");
+                toast("Bạn đã thanh toán thành công");
+            }else if (res && res.type === "noPrint"){
+                navigate("/admin/sale/order")
+                toast("Bạn đã thanh toán thành công");
+            }
+        }else {
+            toast.error("Bạn phải có đơn hàng mới được thanh toán");
         }
     };
 
@@ -116,7 +120,7 @@ function ShowBill() {
                                     <td className="text-center">{product ? product.priceProduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
                                     <td className="text-center">{product ? product.quantityOrder : "N/A"}</td>
                                     <td className="text-center text-danger">
-                                        {product ? (product.priceProduct * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
+                                        {product ? (product.priceProduct * 1.2 * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
                                     </td>
                                 </tr>
                             ))}
