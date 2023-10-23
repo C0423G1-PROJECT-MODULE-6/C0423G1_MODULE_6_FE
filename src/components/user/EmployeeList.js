@@ -124,8 +124,6 @@ const EmployeeList = () => {
       
     }
   };
-
-  console.log(selectedEmployees);
   return (
     <>
       <HeaderAdmin></HeaderAdmin>
