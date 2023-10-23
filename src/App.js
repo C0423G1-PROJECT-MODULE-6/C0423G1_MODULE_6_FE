@@ -79,46 +79,18 @@ function App() {
                         />
                     }
                 >
-                    //admin
-                    <Route path='/admin/admin/employee' element={<EmployeeList></EmployeeList>}/>
-                    <Route path='/admin/admin/employee/edit/:id' element={<EditEmployee></EditEmployee>}/>
-                    <Route path='/admin/admin/employee/create' element={<CreateEmployee/>}/>
-
-
-                    //sale
-                    <Route path="/admin/sale/scanner-qr-order" element={<ScannerOrderQR/>}/>
-                    <Route path="/admin/sale/salereport" element={<SalesReport/>}/>
-                    <Route path="/admin/sale/order" element={<Order/>}/>
-                    <Route path="/admin/sale/order/showBill/:id" element={<ShowBill/>}/>
-                    <Route path="/admin/sale/order/showBill/print" element={<PrintPDF/>}/>
-
-                    //business
-                    <Route path="/admin/business/supplier" element={<Supplier/>}/>
-                    <Route path="/admin/business/supplier/create" element={<CreateSupplier/>}/>
-                    <Route path="/admin/business/supplier/edit/:id" element={<EditSupplier/>}/>
-                    <Route path="/admin/business/customer" element={<CustomerList/>}/>
-                    <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
-                    <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
-                    <Route path="/admin/business/product/list" element={<ProductList/>}/>
-
-
-                    <Route path="/admin/business/product/create" element={<CreateProduct />} />
-                    <Route path="/admin/business/product/list" element={<ProductList />} />
-                    <Route path="/admin/business/product/update/:id" element={<UpdateProduct />} />
-
-                    /ware
-                    <Route path="/admin/ware/warehouse/import/:product" element={<ImportProduct/>}/>
-                    <Route path="/admin/ware/warehouse" element={<Warehouse/>}/>
-                    <Route path="/admin/ware/scanner-qr" element={<ScannerQR/>}/>
-
-
+                    <Route path="/admin/admin/employee" element={<EmployeeList/>}/>
+                    <Route path="/admin/admin/employee/edit/:id" element={<EditEmployee/>}/>
+                    <Route path="/admin/admin/employee/create" element={<CreateEmployee/>}/>
                 </Route>
+
 
                 <Route
                     element={
                         <Authentication
                             allowedRoles={[
-                                EnumAppUserRole.ROLE_SALE
+                                EnumAppUserRole.ROLE_SALE,
+                                EnumAppUserRole.ROLE_ADMIN
                             ]}
                         />
                     }
@@ -126,15 +98,15 @@ function App() {
                     <Route path="/admin/sale/order" element={<Order/>}/>
                     <Route path="/admin/sale/order/showBill/:id" element={<ShowBill/>}/>
                     <Route path="/admin/sale/order/showBill/print" element={<PrintPDF/>}/>
-                    <Route path="/admin/sale/scanner-qr-order" element={<ScannerOrderQR/>}/>
-                    <Route path="/admin/sale/salereport" element={<SalesReport/>}/>
+                    <Route path="/admin/sale/scanner-qr-order/:idCustomer" element={<ScannerOrderQR/>}/>
                 </Route>
 
                 <Route
                     element={
                         <Authentication
                             allowedRoles={[
-                                EnumAppUserRole.ROLE_BUSINESS
+                                EnumAppUserRole.ROLE_BUSINESS,
+                                EnumAppUserRole.ROLE_ADMIN
                             ]}
                         />
                     }
@@ -146,13 +118,15 @@ function App() {
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
                     <Route path="/admin/business/product/list" element={<SaleHistory/>}/>
+                    <Route path="/admin/business/salereport" element={<SalesReport/>}/>
                 </Route>
 
                 <Route
                     element={
                         <Authentication
                             allowedRoles={[
-                                EnumAppUserRole.ROLE_WAREHOUSE
+                                EnumAppUserRole.ROLE_WAREHOUSE,
+                                EnumAppUserRole.ROLE_ADMIN
                             ]}
                         />
                     }
