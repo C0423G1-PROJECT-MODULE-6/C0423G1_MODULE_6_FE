@@ -103,7 +103,7 @@ function App() {
 
 
                     <Route path="/admin/business/product/create" element={<CreateProduct />} />
-                    <Route path="/admin/business/product/list" element={<CreateProduct />} />
+                    <Route path="/admin/business/product/list" element={<ProductList />} />
                     <Route path="/admin/business/product/update/:id" element={<UpdateProduct />} />
 
                     /ware
