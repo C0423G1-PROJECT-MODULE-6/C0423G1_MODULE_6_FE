@@ -1,9 +1,9 @@
 .selectedphuoc {
-  background-color: black !important;
+  background-color: darkgrey !important;
   /* font-weight: bold; */
   
   transition: background-color 0.1s ease, box-shadow 0.1s ease;
-  box-shadow: 0 0 5px rgba(12, 22, 219, 0.3);
+  box-shadow: 0 0 5px darkgrey;
   --bs-table-bg:none;
 }
 
