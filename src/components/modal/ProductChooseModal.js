@@ -251,7 +251,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                         {productList && productList.length !== 0 ?
                                             <tbody>
                                             {productList.map((product, index) => (
-                                                (product.quantity > -1) ? <tr key={index} id={index} onClick={() => {
+                                                (product.quantity > 0) ? <tr key={index} id={index} onClick={() => {
                                                     if (!(arraySelect.includes(product?.id))) {
                                                         setArraySelect((pre) => [...pre, product?.id])
                                                         loadProductList(choose, page, searchName);
