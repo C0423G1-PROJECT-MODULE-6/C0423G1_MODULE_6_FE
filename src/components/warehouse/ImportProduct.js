@@ -82,11 +82,12 @@ export function ImportProduct() {
           productId: productId ? productId.id : null
         }}
         validationSchema={Yup.object({
-          quantity: Yup.number("ok")
+          quantity: Yup.number()
+          .typeError('Vui lòng chỉ nhập số')
             .integer("Vui lòng nhập số nguyên dương")
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
-            .max(2000, "Không được nhập quá 2000 sản phẩm")
+            .max(1000, "Không được nhập quá 1000 sản phẩm")
         })}
         onSubmit={(values, { setErrors }) => {
           console.log("values:", values);
