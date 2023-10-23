@@ -5,6 +5,7 @@ import * as supplierService from '../../service/supplier/SupplierService'
 import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from "../home/common/Footer";
 
 function EditSupplier() {
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ function EditSupplier() {
         console.log(supplier)
         const res = await supplierService.editSupplier(supplier);
         if (res.status === 200) {
-            navigate("/admin/supplier")
+            navigate("/admin/business/supplier")
             toast("Chỉnh sửa thành công!")
         } else {
             toast.error("Chỉnh sửa thất bại!")
@@ -224,6 +225,7 @@ function EditSupplier() {
                     </Form>
                 </div>
             </Formik>
+            <Footer/>
         </div>
     );
 }
