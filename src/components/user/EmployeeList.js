@@ -123,7 +123,6 @@ const EmployeeList = () => {
       navigate(`/admin/admin/employee/edit/${selectedEmployees[0].id}` );
       
     }
-
   };
 
   console.log(selectedEmployees);
