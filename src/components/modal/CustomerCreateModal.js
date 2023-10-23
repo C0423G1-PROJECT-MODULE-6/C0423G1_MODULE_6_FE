@@ -3,6 +3,7 @@ import {Field, Form, Formik, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
 import {isAfter, parseISO} from "date-fns";
+import XRegExp from "xregexp";
 
 const CustomerCreateModal = ({handleData}) => {
     const validateBirth = (value) => {
@@ -38,7 +39,7 @@ const CustomerCreateModal = ({handleData}) => {
             validationSchema={Yup.object({
                 nameCustomer: Yup.string()
                     .max(100, "Tên khách hàng tối đa 100 ký tự!")
-                    .min(3, "Tên khách hàng tối thiểu 3 ký tự .").required("Không bỏ trống trường này.").matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/,"Nhập sai định dạng tên."),
+                    .min(3, "Tên khách hàng tối thiểu 3 ký tự .").required("Không bỏ trống trường này.").matches(XRegExp('^\\p{Lu}\\p{Ll}*([\\s]\\p{Lu}\\p{Ll}*)*$'),"Nhập sai định dạng tên."),
                 dateOfBirthCustomer: Yup.string().required(
                     "Không bỏ trống trường này ."
                 ).test("birthday",
