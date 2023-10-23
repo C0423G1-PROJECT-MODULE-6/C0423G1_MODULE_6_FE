@@ -45,7 +45,7 @@ export default function ProductList() {
         if (selectedProducts.length === 0) {
             toast("vui lòng chọn sản phẩm")
         } else {
-            navigate(`/admin/product/update/${selectedProducts[0].id}`)
+            navigate(`/admin/business/product/update/${selectedProducts[0].id}`)
         }
     }
     const confirmDelete = async () => {
@@ -151,7 +151,7 @@ export default function ProductList() {
                     </div>
                 </div>
                 <div style={{minHeight: "455px"}} id="QuanND">
-                    <table className="shadow w-100">
+                    <table className="shadow w-100 table-hover">
                         <thead>
                         <tr style={{background: "darkgrey"}}>
                             <th style={{background: "darkgrey"}}>#</th>
@@ -182,7 +182,9 @@ export default function ProductList() {
                             }}
                                  style={{
                                      height: "40px",
-                                     background: selectedProducts.some(product => product.id === p.id) ? "darkgrey" : "white"
+                                     background: selectedProducts.some(product => product.id === p.id) ? "black" : "white",
+                                     color: selectedProducts.some(product => product.id === p.id) ? "white" : "black"
+
                                  }}
                             >
                                 <td style={{width: "5%"}}>{(status + 1)+page*10}</td>
@@ -211,7 +213,7 @@ export default function ProductList() {
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
                         <a className="me-1">
-                            <Link to={"/admin/product/create"} type="button" className="btn btn-outline-primary">Thêm
+                            <Link to={"/admin/business/product/create"} type="button" className="btn btn-outline-primary">Thêm
                                 mới</Link>
                         </a>
                         {

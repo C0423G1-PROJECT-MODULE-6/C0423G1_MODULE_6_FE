@@ -12,7 +12,7 @@ export function SaleHistory() {
     const [searchName, setSearchName] = useState("");
     const [refresh, setRefresh] = useState(true);
     const [sort, setSort] = useState("");
-    const [otherSort, setOtherSort] = useState("")
+    const [otherSort, setOtherSort] = useState("dsc")
 
 
 

@@ -8,12 +8,17 @@ import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import SupplierChooseModal from "./SupplierChooseModal";
 import HeaderAdmin from "../user/HeaderAdmin";
+import ProductChooseModalForWarehouse from "./ProductChooseModalForWarehouse";
 
 export function ImportProduct() {
   const param = useParams()
   const navigate = useNavigate();
   const [supplierId, setSupplier] = useState(null)
   const [productId, setProduct] = useState()
+  const vnd = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
 
   const findSupplier = async (id) => {
     const res = await findSupplierById(id);
@@ -77,7 +82,7 @@ export function ImportProduct() {
           productId: productId ? productId.id : null
         }}
         validationSchema={Yup.object({
-          quantity: Yup.number()
+          quantity: Yup.number("ok")
             .integer("Vui lòng nhập số nguyên dương")
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
@@ -99,7 +104,6 @@ export function ImportProduct() {
             productId: productId.id,
             supplierId: supplierId.idSupplier
           }
-          console.log("submit:", newSubmit);
           addWarehouse(newSubmit, setErrors);
         }}>
         <Form>
@@ -113,7 +117,7 @@ export function ImportProduct() {
                   data-bs-target="#exampleModalProduct">
                   Chọn hàng có sẵn
                 </button>
-                <Link to="/admin/scanner-qr" className="btn btn-outline-primary col-6 mx-1"
+                <Link to="/admin/ware/scanner-qr" className="btn btn-outline-primary col-6 mx-1"
                   style={{ width: '30%' }}>Quét mã QR</Link>
               </div>
               <div>
@@ -131,7 +135,7 @@ export function ImportProduct() {
                     <label>Đơn giá <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-6 mb-2">
-                    <Field className="form-control mt-2 border border-dark" value={productId?.price}
+                    <Field className="form-control mt-2 border border-dark" value={productId?.price ? vnd.format(productId?.price): null}
                       name="product" type="text" readOnly />
 
                   </div>
@@ -195,7 +199,7 @@ export function ImportProduct() {
                     <button className="btn btn-outline-primary d-flex justify-content-center" type="submit"
                       style={{ width: '20%', marginTop: 10 }}>Lưu
                     </button>
-                    <Link to="/admin/warehouse"
+                    <Link to="/admin/ware/warehouse"
                       className="btn btn-outline-primary d-flex justify-content-center"
                       style={{ width: '20%', marginTop: 10, marginLeft: 10 }}>Trở về</Link>
                   </div>
@@ -212,7 +216,7 @@ export function ImportProduct() {
         </Form>
       </Formik>
       <ToastContainer/>
-      <ProductChooseModal data1={1} handleData={handleDataByChooseProduct} />
+      <ProductChooseModalForWarehouse data1={1} handleData={handleDataByChooseProduct} />
       <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
   )

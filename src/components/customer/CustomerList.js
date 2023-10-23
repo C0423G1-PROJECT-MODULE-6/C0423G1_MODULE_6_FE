@@ -65,10 +65,7 @@ export function CustomerList() {
                 <div className="col-12 d-flex justify-content-center">
                     <h1>Quản lý báo cáo khách hàng</h1>
                 </div>
-                <div className="col-12 d-flex justify-content-end my-3">
-                    <div className="col-auto d-flex justify-content-start" style={{marginRight: "24%"}}>
-                        <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
-                    </div>
+                <div className="col-12 d-flex justify-content-end mt-3">
                     <div className="col-auto mx-1">
                         <select className="form-select" onChange={(sort) => setSort(sort.target.value)}>
                             <option value="0">Sắp xếp số lần mua</option>
@@ -102,19 +99,25 @@ export function CustomerList() {
                         </button>
                     </div>
                 </div>
-                <div style={{minHeight: "400px"}}>
+                <div style={{minHeight: "520px"}}>
+                    <div className="col-auto d-flex justify-content-start mb-1">
+                        <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
+                    </div>
                     <table className="border border-dark table table-hover table-layout">
                         <thead>
                         <tr>
-                            <th style={{background: "darkgrey", width: "3%"}}>#</th>
-                            <th style={{background: "darkgrey", width: "17%"}}>Họ và tên</th>
-                            <th style={{background: "darkgrey", width: "10%"}}>Giới tính</th>
-                            <th style={{background: "darkgrey", width: "15%"}}>Email</th>
-                            <th style={{background: "darkgrey", width: "5%"}}>Tuổi</th>
-                            <th style={{background: "darkgrey", width: "15%"}}>Số điện thoại</th>
-                            <th style={{background: "darkgrey", width: "10%"}}>Địa chỉ</th>
-                            <th style={{background: "darkgrey", width: "10%", textAlign: "center"}}>Số lần mua</th>
-                            <th style={{background: "darkgrey", width: "15%", textAlign: "center"}}>Lịch sử mua hàng
+                            <th style={{background: "black", color: "white", width: "3%"}}>#</th>
+                            <th style={{background: "black", color: "white", width: "17%"}}>Họ và tên</th>
+                            <th style={{background: "black", color: "white", width: "10%"}}>Giới tính</th>
+                            <th style={{background: "black", color: "white", width: "15%"}}>Email</th>
+                            <th style={{background: "black", color: "white", width: "5%"}}>Tuổi</th>
+                            <th style={{background: "black", color: "white", width: "15%"}}>Số điện thoại</th>
+                            <th style={{background: "black", color: "white", width: "10%"}}>Địa chỉ</th>
+                            <th style={{background: "black", color: "white", width: "10%", textAlign: "center"}}>Số lần
+                                mua
+                            </th>
+                            <th style={{background: "black", color: "white", width: "15%", textAlign: "center"}}>Lịch sử
+                                mua hàng
                             </th>
                         </tr>
                         </thead>
@@ -136,7 +139,7 @@ export function CustomerList() {
                                 }
                                 return (
                                     <tr key={customer.idCustomer}>
-                                        <td>{index + 1}</td>
+                                        <td>{(index + 1) + ((page) * 10)}</td>
                                         <td>{customer.nameCustomer}</td>
                                         <td>{customer.genderCustomer ? 'Nam' : 'Nữ'}</td>
                                         <td>{customer.emailCustomer}</td>

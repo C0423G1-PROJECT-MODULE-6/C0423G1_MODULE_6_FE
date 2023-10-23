@@ -5,11 +5,11 @@ import BillNotPayConfirm from "./BillNotPayConfirm";
 import CustomerChooseModal from "../modal/CustomerChooseModal";
 import CustomerCreateModal from "../modal/CustomerCreateModal";
 import ProductChooseModal from "../modal/ProductChooseModal";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
-import { getIdByUserName, infoAppUserByJwtToken } from "../../service/user/AuthService";
-import { toast } from "react-toastify";
-import { useParams } from "react-router";
+import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
+import {toast} from "react-toastify";
+import {useParams} from "react-router";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -311,8 +311,8 @@ function Order() {
                                             Chọn sản phẩm
                                         </button>
                                         {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
-                                            className="btn btn-outline-primary col-6 mx-1" style={{ width: '30%' }}
-                                            disabled={customer === null}>Scan QR</Link>}
+                                                           className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
+                                                           disabled={customer === null}>Scan QR</Link> }
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
@@ -380,7 +380,7 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        {((product.priceProduct * 1.2) * quantity[index])
+                                                                        {((product.priceProduct *1.2)  * quantity[index])
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'

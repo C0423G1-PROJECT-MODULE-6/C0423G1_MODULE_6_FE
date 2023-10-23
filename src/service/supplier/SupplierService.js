@@ -29,13 +29,9 @@ export const getAllAddress = async () => {
 }
 
 export const createNewSupplier = async (supplier) => {
-    try {
-        const res = await axios.post(`http://localhost:8080/api/admin/business/supplier/create`, supplier);
-        console.log(res)
-        return res;
-    } catch (e) {
-        alert("Yêu cầu thất bại!")
-    }
+    const res = await axios.post(`http://localhost:8080/api/admin/business/supplier/create`, supplier);
+    console.log(res)
+    return res;
 }
 
 export const findSupplierById = async (id) =>{
@@ -49,11 +45,7 @@ export const findSupplierById = async (id) =>{
 }
 
 export const editSupplier = async (data) =>{
-    try {
-        const res = await axios.patch(`http://localhost:8080/api/admin/business/supplier/edit/${data.idSupplier}`,data);
-        console.log(res)
-        return res;
-    } catch (e) {
-        alert("Yêu cầu chỉnh sửa thất bại!")
-    }
+    const res = await axios.patch(`http://localhost:8080/api/admin/business/supplier/edit/${data.idSupplier}`,data);
+    console.log(res)
+    return res;
 }

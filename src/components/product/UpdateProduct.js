@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as productService from "../../service/product/ProductService";
 import {storage} from "../../firebase/Firebase";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
@@ -11,6 +11,7 @@ import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {v4} from "uuid";
 import CKEditorComponent from "./CKEditorComponent";
+import Footer from "../home/common/Footer";
 
 function randomString(length) {
     const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -71,7 +72,7 @@ function UpdateProduct() {
         try {
             const result = await productService.getProductId(id)
             if (result == null) {
-                navigate("/admin/product/list")
+                navigate("/admin/business/product/list")
                 toast("Không tìm thấy sản phẩm.")
             }
             setProduct(result);
@@ -139,7 +140,7 @@ function UpdateProduct() {
     const handleInputChange = (event) => {
         const files = event.target.files;
         const maxImageCount = 5;
-        const allowedFormats = ["image/png", "image/gif", "image/jpeg"];
+        const allowedFormats = ["image/png", "image/gif", "image/jpeg", "image/webp"];
 
         const newImages = Array.from(files).filter((file) => {
             if (imageUpload.map((img) => img.name).includes(file.name)) {
@@ -153,7 +154,7 @@ function UpdateProduct() {
             }
 
             if (!allowedFormats.includes(file.type)) {
-                toast("Vui lòng chọn chỉ các tệp hình ảnh (JPEG, PNG, hoặc GIF).");
+                toast("Vui lòng chọn chỉ các tệp hình ảnh (JPEG, PNG, WEBP hoặc GIF).");
                 return false;
             }
 
@@ -249,11 +250,11 @@ function UpdateProduct() {
                         add(values, setErrors);
                     }}>
 
-                    <div className="row p-2 mt-3 container" style={{marginLeft: 110}}>
-                        <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
+                    <div className="p-2 mt-3 container" style={{display:"flex",justifyContent:"space-between",width:"100%"}}>
+                        <div className="col-6">
                             <fieldset
                                 className="form-input-dao shadow"
-                                style={{width: 600, height: 480}}
+                                style={{width: 600, minHeight:"450px"}}
                             >
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
@@ -274,9 +275,10 @@ function UpdateProduct() {
                                                     ref={imgPreviewRef}
                                                     className="image-gap mx-2 mb-2"
                                                     style={{
+                                                        padding:"10px",
                                                         margin: "0px 8px 8px",
-                                                        width: "150px",
-                                                        height: "100px",
+                                                        width: "160px",
+                                                        height: "160px",
                                                         borderRadius: "10px",
                                                         objectFit: "cover",
                                                         border: "1px solid black"
@@ -556,7 +558,7 @@ function UpdateProduct() {
                                                 id="inputGroupFile01"
                                                 aria-describedby="inputGroupFileAddon03"
                                                 aria-label="Upload"
-                                                accept="image/png, image/gif, image/jpeg"
+                                                accept="image/png, image/gif, image/jpeg, image/webp"
                                                 ref={inputFileRef}
                                                 onChange={handleInputChange}
                                                 multiple=""/>
@@ -596,6 +598,7 @@ function UpdateProduct() {
 
                 </Formik>
             </div>
+            <Footer/>
         </>
 )
 

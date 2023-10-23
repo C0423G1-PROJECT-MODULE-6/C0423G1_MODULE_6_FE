@@ -30,7 +30,7 @@ function CreateEmployee(props) {
                             employeeImage: url,
                         })
                             .then(() => {
-                                navigate("/admin/employee");
+                                navigate("/admin/admin/employee");
                             })
                             .then(() => {
                                 Swal.fire({
@@ -56,7 +56,7 @@ function CreateEmployee(props) {
                     ...employee,
                     employeeImage: "https://i.bloganchoi.com/bloganchoi.com/wp-content/uploads/2022/02/avatar-trang-y-nghia.jpeg?fit=512%2C20000&quality=95&ssl=1"
                 }).then(() => {
-                    navigate("/admin/employee");
+                    navigate("/admin/admin/employee");
                 })
                     .then(() => {
                         Swal.fire({
@@ -135,7 +135,7 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-
+                        roleId:roles?.id
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -441,6 +441,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
+                                                    
                                                     <option value="Nam" >Nam</option>
                                                     <option value="Nữ" >Nữ</option>
                                                 </Field>
@@ -461,9 +462,8 @@ function CreateEmployee(props) {
                                             <div className="col-4">
                                         
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
-                                                  
-                                                    <option value="" label='--Chọn công việc--'></option>
-                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.name} />))}
+                                                
+                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
                                                     
                                                 </Field>
                                                 <div style={{ height: 16 }}>
@@ -478,7 +478,7 @@ function CreateEmployee(props) {
                                         <div className="row">
                                             {/* button  */}
                                             <div className="col-3 p-2 mt-3">
-                                                <Link to={"/admin/employee"}>
+                                                <Link to={"/admin/admin/employee"}>
                                                     <button className="btn btn-outline-secondary float-end mx-1 mt-2 shadow">
                                                         Trở về
                                                     </button>

@@ -96,7 +96,6 @@ function HeaderAdmin({refresh}) {
                         <Nav>
                             <NavDropdown title="Quản Lý" id="nav-dropdown-dark">
                             <Link to="/admin/admin/employee" className="dropdown-item">Quản Lý Nhân Viên</Link>
-                            <Link to="/admin/business/customer" className="dropdown-item">Quản Lý Khách Hàng</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -104,9 +103,10 @@ function HeaderAdmin({refresh}) {
                         <Nav>
                             <NavDropdown title="Kinh Doanh" id="nav-dropdown-dark">
                                 <Link to="/admin/business/order/saleHistory" className="dropdown-item">Quản Lý Lịch Sử Bán Hàng</Link>
-                                <Link to="/admin/salesreport" className="dropdown-item">Quản Lý Báo Cáo Doanh Thu</Link>
-                                <Link to="/admin/product/list" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
+                                <Link to="/admin/business/salereport" className="dropdown-item">Quản Lý Báo Cáo Doanh Thu</Link>
+                                <Link to="/admin/business/product/list" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
                                 <Link to="/admin/business/supplier" className="dropdown-item">Quản Lý Nhà Cung Cấp</Link>
+                                <Link to="/admin/business/customer" className="dropdown-item">Quản Lý Khách Hàng</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -114,7 +114,7 @@ function HeaderAdmin({refresh}) {
                     {(roleAdmin || roleSale) && (
                         <Nav>
                             <NavDropdown title="Bán Hàng" id="nav-dropdown-dark">
-                                <Link to="/admin/order" className="dropdown-item">Quản Lý Bán Hàng</Link>
+                                <Link to="/admin/sale/order/0" className="dropdown-item">Quản Lý Bán Hàng</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -122,7 +122,7 @@ function HeaderAdmin({refresh}) {
                     {(roleAdmin || roleWarehouse) && (
                         <Nav>
                             <NavDropdown title="Thủ Kho" id="nav-dropdown-dark">
-                                <Link to="/admin/warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
+                                <Link to="/admin/ware/warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
                             </NavDropdown>
                         </Nav>
                     )}
