@@ -1,4 +1,4 @@
-#QuanND .table-tin {
+#QuanND .table-quan {
     table-layout: fixed;
     width: 100%;
     border: 1px solid black;
@@ -31,6 +31,8 @@
 #QuanND tr  th:first-child  {
     border-left: 1px solid black;
 }
-#QuanND tr:hover  {
-    background: lightgrey;
+#QuanND tr:hover  td {
+    background: darkgray;
 }
+
+
