@@ -84,10 +84,6 @@ const List = () => {
 
     return (
         <>
-
-
-
-
             <div className='home-body'>
                 <Header />
                 {/* Title */}
@@ -159,8 +155,8 @@ const List = () => {
                                         <img src={item.image} alt="" />
                                     </div>
                                     <h3 className="product-name-on-list">{item.name + " " + item.capacity}</h3>
-                                    <h2 className="product-price-on-list">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                    <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                    <h2 className="product-price-on-list">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                    <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                 </a>
                             )
                         }) : <p className='no-products-found'>Không có sản phẩm</p>}
