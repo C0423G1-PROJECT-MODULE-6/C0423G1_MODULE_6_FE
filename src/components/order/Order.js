@@ -343,7 +343,7 @@ function Order() {
                                                                     <td className="col-1 text-center">{index + 1}</td>
                                                                     <td className="col-3 text-center">{product.nameProduct}</td>
                                                                     <td className="col-2 text-center">
-                                                                        {(product.priceProduct + product.priceProduct * 0.2)
+                                                                        {(product.priceProduct * 1.2)
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
@@ -384,7 +384,7 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        {((product.priceProduct + product.priceProduct * 0.1)  * quantity[index])
+                                                                        {((product.priceProduct *1.2)  * quantity[index])
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
