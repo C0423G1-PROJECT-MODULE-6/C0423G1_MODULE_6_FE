@@ -55,26 +55,26 @@ const Home = () => {
         setBestsellers(data);
     }
 
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const handleLoad = () => {
-            setIsLoading(false);
-        };
+    // useEffect(() => {
+    //     const handleLoad = () => {
+    //         setIsLoading(false);
+    //     };
 
-        window.addEventListener('load', handleLoad);
+    //     window.addEventListener('load', handleLoad);
 
-        return () => {
-            window.removeEventListener('load', handleLoad);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('load', handleLoad);
+    //     };
+    // }, []);
     return (
         <>
-            {isLoading &&
+            {/* {isLoading &&
                 <div div className='spinner-container'>
                     <RingLoader className='spinner-item' color="#fff" />
                 </div >
-            }
+            } */}
             <div className='home-body'>
                 <Header />
                 <div className='home-container'>
@@ -292,10 +292,10 @@ const Home = () => {
                             slidesPerView={4}
                             spaceBetween={-20}
                             loop={false}
-                            // autoplay={{
-                            //     delay: 3000,
-                            //     disableOnInteraction: false,
-                            // }}
+                            autoplay={{
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            }}
                             grabCursor={true}
                             navigation={{
                                 nextEl: ".macbook-swiper-button-next",
