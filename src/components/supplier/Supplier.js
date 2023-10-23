@@ -162,9 +162,6 @@ function Supplier() {
             console.log(newList[2]);
     }
 
-    console.log(searchName);
-    console.log(addressSearch);
-    console.log(emailSearch);
     const handleDelete = async () => {
         for (const s of selectedSupplier) {
             await deleteSupplier(s.idSupplier);
