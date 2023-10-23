@@ -111,6 +111,7 @@ function App() {
                     <Route path="/admin/ware/warehouse" element={<Warehouse/>}/>
                     <Route path="/admin/ware/scanner-qr" element={<ScannerQR/>}/>
 
+
                 </Route>
 
                 <Route
