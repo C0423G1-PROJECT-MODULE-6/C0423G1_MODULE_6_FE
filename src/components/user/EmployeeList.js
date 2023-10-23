@@ -120,11 +120,13 @@ const EmployeeList = () => {
     if (selectedEmployees.length === 0) {
       toast("Vui lòng chọn nhận viên để chỉnh sửa");
     } else {
-      navigate();
-      // `/admin/business/supplier/edit/${selectedSupplier[0].idSupplier}`
+      navigate(`/admin/admin/employee/edit/${selectedEmployees[0].id}` );
+      
     }
+
   };
 
+  console.log(selectedEmployees);
   return (
     <>
       <HeaderAdmin></HeaderAdmin>

@@ -9,6 +9,8 @@ import { getEmployee, updateEmployee } from '../../service/user/EmployeeService'
 import * as Yup from 'yup';
 import { differenceInYears, parse } from 'date-fns';
 import { getAppRoleList } from '../../service/user/AppRoleService';
+import HeaderAdmin from './HeaderAdmin';
+import Footer from '../home/common/Footer';
 function EditEmployee(props) {
     const [roles, setRole] = useState([]);
     const navigate = useNavigate();
@@ -136,6 +138,7 @@ function EditEmployee(props) {
     return (
         <div>
             <>
+                <HeaderAdmin></HeaderAdmin>
                 <Formik initialValues={{
                     id:employee?.id,
                     employeeCode: employee?.employeeCode,
@@ -495,6 +498,7 @@ function EditEmployee(props) {
                         </div>
                     </Form>
                 </Formik>
+                <Footer></Footer>
             </>
 
         </div>
