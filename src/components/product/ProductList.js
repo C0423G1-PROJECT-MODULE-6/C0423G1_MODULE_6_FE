@@ -43,31 +43,35 @@ export default function ProductList() {
     }
     const handleUpdate = () => {
         if (selectedProducts.length === 0) {
-            toast("vui lòng chọn sản phẩm")
+            toast("Vui lòng chọn sản phẩm")
         } else {
             navigate(`/admin/business/product/update/${selectedProducts[0].id}`)
         }
     }
-    const confirmDelete = async () => {
+    const confirmDelete =async () => {
         selectedProducts.map(async p => {
             await removeProduct(p.id)
         })
+        if (((totalElements-selectedProducts.length)<=((totalPages-1)*10))&&page>=1){
+            setTotalPages(totalPages-1)
+            setPage(page-1)
+        }
         toast("Xóa thành công");
         setModal(false);
         setSelectedProducts([]);
-        list();
+        await list();
     }
     const list = async () => {
-        const list = await getListProduct(sort, otherSort, choose, value, page);
-        setListProduct(list.content);
+        const lists = await getListProduct(sort, otherSort, choose, value, page);
+        setListProduct(lists.content);
         const res = await getAllType();
         setListType(res)
-        setTotalPages(list.totalPages);
-        setTotalElements(list.totalElements);
+        setTotalPages(lists.totalPages);
+        setTotalElements(lists.totalElements);
     }
     useEffect(() => {
         list()
-    }, [page, modal])
+    }, [page, modal,totalPages,totalElements])
     return (
         <>
             <HeaderAdmin/>
@@ -150,21 +154,21 @@ export default function ProductList() {
                         </div>
                     </div>
                 </div>
-                <div style={{minHeight: "455px"}} id="QuanND">
-                    <table className="shadow w-100 table-hover">
+                <div style={{minHeight: "455px"}} >
+                    <table className="shadow w-100" id="QuanND">
                         <thead>
-                        <tr style={{background: "darkgrey"}}>
-                            <th style={{background: "darkgrey"}}>#</th>
-                            <th style={{background: "darkgrey"}}>Tên</th>
-                            <th style={{background: "darkgrey"}}>Giá</th>
-                            <th style={{background: "darkgrey"}}>CPU</th>
-                            <th style={{background: "darkgrey"}}>Loại</th>
-                            <th style={{background: "darkgrey"}}>Màu</th>
-                            <th style={{background: "darkgrey"}}>Lưu Trữ</th>
-                            <th style={{background: "darkgrey"}}>Số lượng</th>
+                        <tr style={{background: "black",color:"white"}}>
+                            <th>#</th>
+                            <th>Tên</th>
+                            <th>Giá</th>
+                            <th>CPU</th>
+                            <th>Loại</th>
+                            <th>Màu</th>
+                            <th>Lưu Trữ</th>
+                            <th>Số lượng</th>
                         </tr>
                         </thead>
-                        <tbody>
+
                         {listProduct && listProduct.map((p, status) =>
                             (<tr key={p.id} onClick={() => {
                                 const isSelected = selectedProducts.find(product => product.id === p.id);
@@ -182,9 +186,8 @@ export default function ProductList() {
                             }}
                                  style={{
                                      height: "40px",
-                                     background: selectedProducts.some(product => product.id === p.id) ? "black" : "white",
-                                     color: selectedProducts.some(product => product.id === p.id) ? "white" : "black"
-
+                                     background: selectedProducts.some(product => product.id === p.id) ? "darkgrey" : "white",
+                                     color: selectedProducts.some(product => product.id === p.id) ? "white" : "black",
                                  }}
                             >
                                 <td style={{width: "5%"}}>{(status + 1)+page*10}</td>
@@ -203,9 +206,8 @@ export default function ProductList() {
                                     <p style={{textAlign: "center", color: "red"}}>Không tìm thấy</p>
                                 </td>
                             </tr>
-
                         )}
-                        </tbody>
+
                     </table>
                 </div>
 
@@ -283,13 +285,13 @@ export default function ProductList() {
                                         aria-label="Close"/>
                             </div>
                             <div className="modal-body">
-                                <p>Bạn có muốn xóa các sản phẩm :{selectedProducts.map((product, s) => (
+                                <p>Bạn có muốn xóa các sản phẩm sau :{selectedProducts.map((product, s) => (
                                         <>
                                             <br/>
-                                            {s + 1}: {product.name}
+                                            <b> {s + 1} </b> : {product.name}
                                         </>
                                     )
-                                )} không ?</p>
+                                )}</p>
                             </div>
                             <div className="modal-footer">
                                 <button type="submit" className="btn btn-outline-primary"
