@@ -2,7 +2,7 @@ import { getDownloadURL, ref, uploadBytes } from '@firebase/storage';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import storage from 'redux-persist/lib/storage';
+import { storage } from "../../firebase/Firebase";
 import Swal from 'sweetalert2';
 import { v4 } from 'uuid';
 import { getEmployee, updateEmployee } from '../../service/user/EmployeeService';
@@ -34,9 +34,9 @@ function EditEmployee(props) {
                     try {
                         await updateEmployee({
                             ...employeeUpdate,
-                            image: url
+                            employeeImage: url
                         }).then(() => {
-                            navigate("/dashboard/employee")
+                            navigate("/admin/employee")
                         }).then(
                             () => {
                                 Swal.fire({
@@ -61,9 +61,9 @@ function EditEmployee(props) {
         } else {
             await updateEmployee({
                 ...employeeUpdate,
-                image: employee.image,
+                employeeImage: employee?.employeeImage,
             }).then(() => {
-                navigate("/dashboard/employee")
+                navigate("/admin/employee")
             }).then(
                 () => {
                     Swal.fire({
@@ -80,7 +80,9 @@ function EditEmployee(props) {
         }
     };
     const handleInputChange = (event) => {
+
         const file = event.target.files[0];
+        console.log(file);
         if (file.size > 3000000) {
             Swal.fire({
                 icon: 'error',
@@ -105,7 +107,7 @@ function EditEmployee(props) {
     };
 
     useEffect(() => {
-        document.title = "RetroCare - Chỉnh sửa thông tin nhân viên";
+        document.title = "C4Zone - Chỉnh sửa thông tin nhân viên";
         loadEmployee(param.id);
         displayRole();
 
@@ -126,6 +128,8 @@ function EditEmployee(props) {
                 })
             }
         }
+        console.log(employee);
+        
 
     }
     if (employee === undefined) {
@@ -135,30 +139,33 @@ function EditEmployee(props) {
         <div>
             <>
                 <Formik initialValues={{
+                    id:employee?.id,
                     employeeCode: employee?.employeeCode,
                     employeeName: employee?.employeeName,
                     employeeAddress: employee?.employeeAddress,
                     employeePhone: employee?.employeePhone,
                     userName: employee?.userName,
-                    employeeStartDate: employee?.employeeStartDate,
+                    employeeStartDay: employee?.employeeStartDay,
                     employeeBirthday: employee?.employeeBirthday,
                     employeeIdCard: employee?.employeeIdCard,
                     email: employee?.email,
-                    employeeGender: employee?.employeeGender,
                    
+                    employeeGender: employee?.employeeGender,
+                    roleId: employee?.roleId
+                    
                 }}
                     validationSchema={Yup.object({
-                        nameEmployee: Yup.string().required("Vui lòng nhập tên nhân viên")
+                        employeeName: Yup.string().required("Vui lòng nhập tên nhân viên")
                             .max(100, "Vui lòng nhập dưới 100 kí tự")
                             .matches(/^[\p{L}\s]+$/u, "Tên nhân viên chỉ được chứa chữ cái và khoảng trắng"),
-                        address: Yup.string().required("Vui lòng nhập địa chỉ")
+                        employeeAddress: Yup.string().required("Vui lòng nhập địa chỉ")
                             .max(100, "Vui lòng nhập dưới 100 kí tự"),
-                        phoneNumber: Yup.string().required("Vui lòng nhập số điện thoại")
+                        employeePhone: Yup.string().required("Vui lòng nhập số điện thoại")
                             .min(10, "Vui lòng chỉ nhập từ 10 đến 11 số")
                             .max(11, "Vui lòng chỉ nhập từ 10 đến 11 số")
                             .matches(/^0\d{9,10}$/u, "Số điện thoại phải đúng định dạng 0XXXXXXXXX"),
-                        startDay: Yup.date().required("Vui lòng nhập ngày bắt đầu làm"),
-                        birthday: Yup.string().required("Vui lòng nhập ngày sinh")
+                        employeeStartDate: Yup.date().required("Vui lòng nhập ngày bắt đầu làm"),
+                        employeeBirthday: Yup.string().required("Vui lòng nhập ngày sinh")
                             .test('age', 'Nhân viên chưa đủ 18 tuổi', function (value) {
                                 const currentDate = new Date();
                                 const selectedDate = parse(value, 'yyyy-MM-dd', new Date());
@@ -166,11 +173,12 @@ function EditEmployee(props) {
 
                                 return age >= 18;
                             }),
-                        idCard: Yup.string().required("Vui lòng nhập CCCD hoặc CMND")
+                        employeeIdCard: Yup.string().required("Vui lòng nhập CCCD hoặc CMND")
                             .max(12, "Vui lòng nhập từ 12 kí tự trở xuống")
                             .matches(/^\d{9}(\d{3})?$/u, "Vui lòng chỉ nhập số và độ dài là 9 hoặc 12"),
                     })}
                     onSubmit={(value, { setErrors }) => {
+                        console.log(value);
                         let timerInterval
                         Swal.fire({
                             title: 'Auto close alert!',
@@ -351,13 +359,13 @@ function EditEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field
-                                                    name="employeeStartDate"
+                                                    name="employeeStartDay"
                                                     className="form-control border border-dark mt-2"
                                                     type="date"
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
-                                                        name="employeeStartDate"
+                                                        name="employeeStartDay"
                                                         style={{ color: "red", marginLeft: "20px" }}
                                                         component={"small"}
                                                     />
@@ -450,10 +458,10 @@ function EditEmployee(props) {
                                             </div>
                                             <div className="col-4">
 
-                                                <Field as="select" name="roleId" value={roles} className="form-select border border-dark mt-2">
+                                                <Field as="select" name="roleId"  className="form-select border border-dark mt-2">
 
-                                                    <option value="" label='--Chọn công việc--'></option>
-                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.name} />))}
+                                                    <option value='' label={employee.employeeTypeName}></option>
+                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
 
                                                 </Field>
                                                 <div style={{ height: 16 }}>

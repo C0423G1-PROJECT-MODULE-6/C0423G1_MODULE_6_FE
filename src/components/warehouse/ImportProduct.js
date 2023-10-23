@@ -99,7 +99,6 @@ export function ImportProduct() {
             productId: productId.id,
             supplierId: supplierId.idSupplier
           }
-          console.log("submit:", newSubmit);
           addWarehouse(newSubmit, setErrors);
         }}>
         <Form>
@@ -113,7 +112,7 @@ export function ImportProduct() {
                   data-bs-target="#exampleModalProduct">
                   Chọn hàng có sẵn
                 </button>
-                <Link to="/admin/scanner-qr" className="btn btn-outline-primary col-6 mx-1"
+                <Link to="/admin/ware/scanner-qr" className="btn btn-outline-primary col-6 mx-1"
                   style={{ width: '30%' }}>Quét mã QR</Link>
               </div>
               <div>
@@ -195,7 +194,7 @@ export function ImportProduct() {
                     <button className="btn btn-outline-primary d-flex justify-content-center" type="submit"
                       style={{ width: '20%', marginTop: 10 }}>Lưu
                     </button>
-                    <Link to="/admin/warehouse"
+                    <Link to="/admin/ware/warehouse"
                       className="btn btn-outline-primary d-flex justify-content-center"
                       style={{ width: '20%', marginTop: 10, marginLeft: 10 }}>Trở về</Link>
                   </div>
