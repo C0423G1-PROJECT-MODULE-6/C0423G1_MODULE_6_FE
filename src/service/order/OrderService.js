@@ -1,9 +1,18 @@
 import axios from "axios";
 
+export const findCustomerByIdScan =async (idCustomer) => {
+    try{
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/order/customerScan/${idCustomer}`);
+        return res.data;
+    }catch (e){
+        alert("Access Denied");
+    }
+};
+
+
 export const getSaleHistory = async (limit, page, searchName,sort,other) => {
     try {
         const res = await axios.get(`http://localhost:8080/api/admin/business/order/saleHistory?_limit=${limit}&_page=${page}&name_like=${searchName}&sort=${sort}&other=${other}`);
-
         return res;
     }catch (e) {
         console.log(e);

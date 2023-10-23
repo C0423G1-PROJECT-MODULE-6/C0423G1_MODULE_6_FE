@@ -8,11 +8,9 @@ import 'swiper/css/pagination';
 // import required modules
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getListByName, getSeriesByProductType } from '../../../service/home/HomeService';
-
-
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import { RingLoader } from 'react-spinners';
+
 
 const List = () => {
 
@@ -21,11 +19,13 @@ const List = () => {
     const [series, setSeries] = useState([])
     const [sortName, setSortName] = useState('id');
     const [sortType, setSortType] = useState('desc');
-    const [searchName, setSearchName] = useState(param.type);
+    const [searchName, setSearchName] = useState('');
     const [isActive, setIsActive] = useState('all');
     const [isLoading, setIsLoading] = useState(true);
 
-
+    useEffect(() => {
+        document.title = 'C4 Zone - Danh sách sản phẩm'
+    }, [])
     useEffect(() => {
         setSearchName(param.type);
         setIsActive('all');
@@ -77,17 +77,10 @@ const List = () => {
             setSortType('desc');
         }
     }
-    const handleUE = () => {
-        setTimeout()
-    }
 
 
     return (
         <>
-
-
-
-
             <div className='home-body'>
                 <Header />
                 {/* Title */}
@@ -159,8 +152,8 @@ const List = () => {
                                         <img src={item.image} alt="" />
                                     </div>
                                     <h3 className="product-name-on-list">{item.name + " " + item.capacity}</h3>
-                                    <h2 className="product-price-on-list">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                    <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                    <h2 className="product-price-on-list">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                    <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                 </a>
                             )
                         }) : <p className='no-products-found'>Không có sản phẩm</p>}

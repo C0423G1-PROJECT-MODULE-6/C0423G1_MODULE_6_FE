@@ -336,7 +336,7 @@ function Information() {
                                                 marginLeft: '5%',
                                                 marginRight: '5%'
                                             }}>
-                                                <button type="button"
+                                                <button type="reset"
                                                         style={{width: '50%', marginLeft: 'auto', marginRight: 'auto'}}
                                                         className="btn btn-outline-primary"
                                                         onClick={handleToggleInputsInfo}>

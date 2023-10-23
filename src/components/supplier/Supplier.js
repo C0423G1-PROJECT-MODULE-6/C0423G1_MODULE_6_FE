@@ -229,14 +229,14 @@ function Supplier() {
 
                         <thead style={{ background: 'grey' }} className="colorthead">
                             <tr>
-                                <th style={{ width: "5%" }}>
+                                <th style={{ width: "5%",color:"white" }}>
                                     #
                                 </th>
-                                <th style={{ width: "5%" }}>MS</th>
-                                <th style={{ width: "40%" }}>Tên nhà cung cấp</th>
-                                <th style={{ width: "20%" }}>Địa chỉ</th>
-                                <th style={{ width: "10%" }}>SĐT</th>
-                                <th style={{ width: "20%" }}>E-mail</th>
+                                <th style={{ width: "5%",color:"white" }}>MS</th>
+                                <th style={{ width: "40%",color:"white" }}>Tên nhà cung cấp</th>
+                                <th style={{ width: "20%",color:"white" }}>Địa chỉ</th>
+                                <th style={{ width: "10%",color:"white" }}>SĐT</th>
+                                <th style={{ width: "20%",color:"white" }}>E-mail</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,7 +258,7 @@ function Supplier() {
                                                 selectedSupplier.some(s => s.idSupplier === supplier.idSupplier) ? "active" : ""
                                             }
                                         >
-                                            <td >{index + 1}</td>
+                                            <td >{(index + 1 )+currentPage*10}</td>
                                             <td >{supplier.idSupplier}</td>
                                             <td >{supplier.nameSupplier}</td>
                                             <td >{addressList[supplier.addressSupplier]}</td>
@@ -351,13 +351,15 @@ function MyModal({ action, data, deleteFunc }) {
                 <h5 className="modal-title" id="deleteModalLabel">Thông báo!</h5>
             </Modal.Header>
             <Modal.Body>
-            <p>Bạn có muốn xóa các sản phẩm :{data.map((s,index) => (
+            <p>Bạn có muốn xóa các sản phẩm sai : {data.map((s,index) => (
                                         <>
                                             <br/>
-                                            {index + 1}: {s.nameSupplier}
+                                            <b>
+                                                {index + 1}: {s.nameSupplier}
+                                            </b>
                                         </>
                                     )
-                                )} không ?</p>
+                                )} </p>
             </Modal.Body>
             <Modal.Footer>
                 <button type="button" className="btn btn-outline-primary" onClick={() => deleteFunc()} >Xác nhận</button>

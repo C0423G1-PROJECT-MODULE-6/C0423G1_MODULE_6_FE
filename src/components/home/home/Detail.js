@@ -57,6 +57,9 @@ const Detail = () => {
     //     getProductBySelection();
     // }, [colorIsActive, capaIsActive])
 
+    useEffect(() => {
+        document.title = 'C4 Zone - ' + product.name;
+    }, [product])
 
     useEffect(() => {
         if (product.name && capaIsActive && colorIsActive) {
@@ -105,12 +108,12 @@ const Detail = () => {
 
     return (
         <>
-            {isLoading &&
+            {/* {isLoading &&
                 <div div className='spinner-container'>
                     <RingLoader
                         className='spinner-item' color="#fff" />
                 </div >
-            }
+            } */}
             <div className='home-body'>
                 <Header />
                 <div className="detail-container">
@@ -161,8 +164,8 @@ const Detail = () => {
                         <p className="title">{product.name}</p>
                         <p className="price-label">Giá khuyến mãi:</p>
                         <div className="price-line">
-                            <span className="price-on-detail">{new Intl.NumberFormat("de-DE").format(product.price)}đ</span>
-                            <span className="line-through-price-on-detail">{new Intl.NumberFormat("de-DE").format(product.price * 1.05)}đ</span>
+                            <span className="price-on-detail">{new Intl.NumberFormat("de-DE").format(product.price * 1.2)}đ</span>
+                            <span className="line-through-price-on-detail">{new Intl.NumberFormat("de-DE").format(product.price * 1.25)}đ</span>
                             <span className="discount-rate"> -10% </span>
                         </div>
                         <p className="capacity-label">Dung lượng:</p>
