@@ -152,17 +152,17 @@ export function ShoppingHistoryList() {
                             </button>
                         </div>
                     </div>
-                    <div style={{minHeight: "220px"}}>
+                    <div style={{minHeight: "250px"}}>
                         <div className="col-auto d-flex justify-content-start mb-1" >
                             <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
                         </div>
                         <table className="border border-dark table table-hover table-layout">
                             <thead>
                             <tr>
-                                <th style={{background: "darkgrey", width: "10%"}}>#</th>
-                                <th style={{background: "darkgrey", width: "30%"}}>Ngày mua</th>
-                                <th style={{background: "darkgrey", width: "40%"}}>Sản phẩm mua</th>
-                                <th style={{background: "darkgrey", width: "20%"}}>Số tiền</th>
+                                <th style={{background: "black", color: "white", width: "10%"}}>#</th>
+                                <th style={{background: "black", color: "white", width: "30%"}}>Ngày mua</th>
+                                <th style={{background: "black", color: "white", width: "40%"}}>Sản phẩm mua</th>
+                                <th style={{background: "black", color: "white", width: "20%"}}>Số tiền</th>
                             </tr>
                             </thead>
                             <tbody>
