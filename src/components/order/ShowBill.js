@@ -53,14 +53,18 @@ function ShowBill() {
     };
 
     const handleSubmit =async () => {
-        const res =await orderService.acceptToPay(print,orderBill);
-        console.log(res)
-        if (res && res.type === "print"){
-            navigate("/admin/order");
-            toast("Bạn đã thanh toán thành công");
-        }else if (res && res.type === "noPrint"){
-            navigate("/admin/order")
-            toast("Bạn đã thanh toán thành công");
+        if (products){
+            const res =await orderService.acceptToPay(print,orderBill);
+            console.log(res)
+            if (res && res.type === "print"){
+                navigate("/admin/sale/order");
+                toast("Bạn đã thanh toán thành công");
+            }else if (res && res.type === "noPrint"){
+                navigate("/admin/sale/order")
+                toast("Bạn đã thanh toán thành công");
+            }
+        }else {
+            toast.error("Bạn phải có đơn hàng mới được thanh toán");
         }
     };
 
