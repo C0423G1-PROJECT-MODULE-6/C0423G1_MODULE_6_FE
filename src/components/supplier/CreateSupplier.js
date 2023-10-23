@@ -5,6 +5,7 @@ import * as supplierService from '../../service/supplier/SupplierService'
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from "../home/common/Footer";
 
 function CreateSupplier() {
     const [address, setAddress] = useState([]);
@@ -20,7 +21,7 @@ function CreateSupplier() {
         const res = await supplierService.createNewSupplier(values);
         if (res.status === 200) {
             toast("Tạo mới thành công!");
-            navigate("/admin/supplier")
+            navigate("/admin/business/supplier")
         } else {
             toast.error("Tạo mới thất bại!");
         }
@@ -187,6 +188,7 @@ function CreateSupplier() {
                     </Form>
                 </div>
             </Formik>
+            <Footer/>
         </div>
     );
 }

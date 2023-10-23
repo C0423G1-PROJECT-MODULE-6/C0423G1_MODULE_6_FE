@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as productService from "../../service/product/ProductService";
 import {storage} from "../../firebase/Firebase";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
@@ -11,6 +11,7 @@ import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {v4} from "uuid";
 import CKEditorComponent from "./CKEditorComponent";
+import Footer from "../home/common/Footer";
 
 function randomString(length) {
     const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -71,7 +72,7 @@ function UpdateProduct() {
         try {
             const result = await productService.getProductId(id)
             if (result == null) {
-                navigate("/admin/product/list")
+                navigate("/admin/business/product/list")
                 toast("Không tìm thấy sản phẩm.")
             }
             setProduct(result);
@@ -596,6 +597,7 @@ function UpdateProduct() {
 
                 </Formik>
             </div>
+            <Footer/>
         </>
 )
 

@@ -67,11 +67,8 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
     //------------------------------------------------List & Search---------------------------
     const loadProductList = async (choose, page, searchValue) => {
         let result;
-        if (data1 ===0){
-             result = await cartService.getPageProductModalWareHouse(choose, page, searchValue);
-        }else {
+             // result = await cartService.getPageProductModalWareHouse(choose, page, searchValue);
              result = await productService.getPageProductModal(choose, page, searchValue);
-        }
         const listType = await productService.getAllType();
         setTypeProduct(listType);
         if (result?.status === 200) {
@@ -187,7 +184,6 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                         <option value={1}>Tên sản phẩm</option>
                                         <option value={2}>Loại</option>
                                         <option value={3}>Giá</option>
-                                        <option value={4}>Số lượng</option>
                                     </select>
                                     {change === 4 &&
                                     <select className="form-select shadow border-dark" name="groupValue"
@@ -348,7 +344,9 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                                     <td style={{
                                                         width: "20%",
                                                         paddingLeft: "3%"
-                                                    }}>{product?.price}</td>
+                                                    }}>
+                                                        {String(product?.price).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
+                                                    </td>
                                                     <td style={{width: "15%"}}>{product?.cpu}</td>
                                                     <td style={{
                                                         width: "15%",

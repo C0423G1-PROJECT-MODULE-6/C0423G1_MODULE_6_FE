@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import CKEditorComponent from "./CKEditorComponent";
+import Footer from "../home/common/Footer";
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -108,7 +109,7 @@ function CreateProduct() {
                 imageDtoList: listImgPath
             }
             await createProduct(product1, listImgPath);
-            await navigate("/admin/product/list");
+            await navigate("/admin/business/product/list");
             await toast(`Thêm mới sản phẩm ${product.nameProduct} thành công!`)
         } catch (error) {
             console.log(error);
@@ -565,6 +566,7 @@ function CreateProduct() {
 
                 </Formik>
             </div>
+            <Footer/>
         </>
     )
 
