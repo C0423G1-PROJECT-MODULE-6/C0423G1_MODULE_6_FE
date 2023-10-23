@@ -10,6 +10,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { crateEmployee, getNewEmployee } from '../../service/user/EmployeeService';
 import { async } from '@firebase/util';
 import { getAppRoleList } from '../../service/user/AppRoleService'
+import Header from '../home/common/Header';
+import HeaderAdmin from './HeaderAdmin';
+import Footer from '../home/common/Footer';
 
 function CreateEmployee(props) {
     const navigate = useNavigate();
@@ -121,7 +124,9 @@ function CreateEmployee(props) {
     }
     return (
         <div>
+
             <>
+            <HeaderAdmin></HeaderAdmin>
                 <Formik
                     initialValues={{
                         employeeCode: employee?.employeeCode,
@@ -503,6 +508,7 @@ function CreateEmployee(props) {
                         </div>
                     </Form>
                 </Formik>
+                <Footer></Footer>
             </>
 
         </div>
