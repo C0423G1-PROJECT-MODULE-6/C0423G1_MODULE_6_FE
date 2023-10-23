@@ -225,13 +225,13 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/admin/employee/create"}>
+            <Link to={"/admin/admin/employee/create"}>
               <button type="button" className="btn btn-outline-primary me-1">
                 Thêm mới
               </button>
             </Link>
 
-            <Link to={`/admin/employee/edit/${employee?.id}`}>
+            <Link to={`/admin/admin/employee/edit/${employee?.id}`}>
               <button
                 type="button"
                 className="btn btn-outline-success me-1"
