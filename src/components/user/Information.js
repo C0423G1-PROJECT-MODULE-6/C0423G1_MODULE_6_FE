@@ -77,12 +77,12 @@ function Information() {
 
     const getInfoUser = async (id) => {
         const userTemp = await UserService.findById(id);
-        setInfoUser(userTemp.data)
+        setInfoUser(userTemp.data);
     }
 
     useEffect(() => {
         getInfoUser(params.id);
-    }, [loading]);
+    }, [loading, input2Disabled]);
 
     const handleToggleInputs = () => {
         setInput1Disabled(true);
@@ -100,6 +100,7 @@ function Information() {
 
     const handleToggleInputsInfo = () => {
         setInput2Disabled(!input2Disabled);
+        getInfoUser(params.id);
     }
 
 
