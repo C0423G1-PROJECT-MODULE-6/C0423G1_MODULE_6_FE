@@ -117,7 +117,9 @@ function App() {
                     <Route path="/admin/business/customer" element={<CustomerList/>}/>
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
-                    <Route path="/admin/business/product/list" element={<SaleHistory/>}/>
+                    <Route path="/admin/business/product/list" element={<ProductList/>}/>
+                    <Route path="/admin/business/product/create" element={<CreateProduct/>}/>
+                    <Route path="/admin/business/product/update/:id" element={<UpdateProduct/>}/>
                     <Route path="/admin/business/salereport" element={<SalesReport/>}/>
                 </Route>
 
