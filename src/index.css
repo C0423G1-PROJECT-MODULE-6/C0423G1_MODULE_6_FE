@@ -746,6 +746,7 @@ h3.title {
   overflow: hidden;
 }
 .card-image img {
+  padding: 10px 0;
   width: 300px;
   height: auto;
   object-fit: cover;
