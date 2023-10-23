@@ -1,15 +1,14 @@
 import axios from "axios";
 export const getAllCustomerModal = async (page, name,phone,gender) => {
     try {
-        const result = await axios.get(`http://localhost:8080/api/admin/customer/list/modal?_limit=5&_page=${page}&name_like=${name}&gender=${gender}&phone=${phone}`);
-
+        const result = await axios.get(`http://localhost:8080/api/admin/business/customer/list/modal?_limit=5&_page=${page}&name_like=${name}&gender=${gender}&phone=${phone}`);
         return result;
     } catch (e) {
         console.log(e);
     }
 }
 export const addCustomer = async (customer) => {
-    const result = await axios.post(`http://localhost:8080/api/admin/customer/list/create`,customer);
+    const result = await axios.post(`http://localhost:8080/api/admin/business/customer/list/create`,customer);
     console.log(result);
     return result;
 
@@ -46,7 +45,7 @@ export const findById = async (id) => {
     }
 }
 export const createCart = async (idUser,idProduct) => {
-        const result = await axios.post(`http://localhost:8080/api/admin/sale/cart/create?id_customer=3&id_product=${idProduct}&quantity=1`);
+        const result = await axios.post(`http://localhost:8080/api/admin/sale/cart/create?id_customer=${idUser}&id_product=${idProduct}&quantity=1`);
     console.log(idUser)
         console.log(result);
         return result;

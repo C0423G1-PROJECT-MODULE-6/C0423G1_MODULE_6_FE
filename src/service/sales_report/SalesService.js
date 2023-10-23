@@ -3,11 +3,11 @@ import axios from "axios";
 
 export const getDailyMonth = async () => {
     try {
-        const res = await axios.get(` http://localhost:8080/api/admin/sales-report/dailymonth`);
+        const res = await axios.get(` http://localhost:8080/api/admin/sale/sales-report/dailymonth`);
         console.log(res)
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };
@@ -28,11 +28,11 @@ export const getAllSreach = async (startDate, endDate, searchTerm) => {
     const sreachString = "'" + searchTerm + "'"
     console.log(sreachString)
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/sreach?startDate=${formattedStartDate}&searchTerm=${sreachString}&endDate=${formattedEndDate}`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/sales-report/sreach?startDate=${formattedStartDate}&searchTerm=${sreachString}&endDate=${formattedEndDate}`);
         console.log(res)
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };
@@ -40,10 +40,10 @@ export const getAllSreach = async (startDate, endDate, searchTerm) => {
 
 export const getAllProduct = async () => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/product`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/sales-report/product`);
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };
@@ -51,29 +51,29 @@ export const getAllProduct = async () => {
 
 export const getAll = async () => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/sales-report`);
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };
 export const getDailyToday = async () => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/daily`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/sales-report/daily`);
         console.log(res)
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };
 export const getQuantityToday = async () => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/sales-report/quantity`);
+        const res = await axios.get(`http://localhost:8080/api/admin/sale/sales-report/quantity`);
         return res.data;
     } catch (e) {
-        alert("Không có dữ liệu");
+        // alert("Không có dữ liệu");
         return [];
     }
 };

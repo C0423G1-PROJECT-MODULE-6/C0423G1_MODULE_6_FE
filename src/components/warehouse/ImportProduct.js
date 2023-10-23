@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { findProductById, findSupplierById, importProduct } from "../../service/warehouse/WarehouseService";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import "../../css/warehouse/warehouse.css"
 import * as Yup from "yup";
@@ -44,16 +44,15 @@ export function ImportProduct() {
 
 
   const addWarehouse = async (value, setErrors) => {
+    try {
     const newValue = {
       ...value,
       productId: productId.id,
       supplierId: supplierId.idSupplier
     }
     // alert(JSON.stringify(newValue))
-    try {
-
       await importProduct(newValue);
-      navigate("/admin/warehouse");
+      navigate("/admin/ware/warehouse");
       toast("Nhập thêm sản phẩm thành công!");
     } catch (error) {
       console.log("error:",error);
@@ -83,18 +82,24 @@ export function ImportProduct() {
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
             .max(2000, "Không được nhập quá 2000 sản phẩm")
-          // supplierId: Yup.object().required("Vui lòng chọn nhà cung cấp"),
-          // productId: Yup.object().required("Vui lòng chọn sản phẩm")
         })}
         onSubmit={(values, { setErrors }) => {
           console.log("values:", values);
+          if (!productId && !supplierId) {
+            toast.error("Vui lòng chọn sản phẩm và nhà cung cấp");
+            return;
+          }else if(!productId){
+            toast.error("Vui lòng chọn sản phẩm")
+          }else if (!supplierId) {
+            toast.error("Vui lòng chọn nhà cung cấp");
+            return;
+          }
           const newSubmit = {
             ...values,
             productId: productId.id,
             supplierId: supplierId.idSupplier
           }
           console.log("submit:", newSubmit);
-          console.log(setErrors);
           addWarehouse(newSubmit, setErrors);
         }}>
         <Form>
@@ -187,7 +192,7 @@ export function ImportProduct() {
                     </button>
                   </div>
                   <div className="d-flex justify-content-center mt-3">
-                    <button className="btn btn-outline-primary d-flex justify-content-center"
+                    <button className="btn btn-outline-primary d-flex justify-content-center" type="submit"
                       style={{ width: '20%', marginTop: 10 }}>Lưu
                     </button>
                     <Link to="/admin/warehouse"
@@ -206,7 +211,7 @@ export function ImportProduct() {
 
         </Form>
       </Formik>
-      
+      <ToastContainer/>
       <ProductChooseModal data1={1} handleData={handleDataByChooseProduct} />
       <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>

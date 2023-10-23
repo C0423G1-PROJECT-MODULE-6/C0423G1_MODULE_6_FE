@@ -57,7 +57,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                 let submitModal = await document.getElementById("closeModalProduct");
                 submitModal.click();
                 setArraySelect([]);
-                handleData(selectedProduct.id);
+                handleData(idCustomer);
 
             }
 
@@ -353,7 +353,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                                     <td style={{
                                                         width: "15%",
                                                         paddingLeft: "4%"
-                                                    }}>{product?.quantity}</td>
+                                                    }}>{product?.capacity}</td>
                                                 </tr>))}
                                             </tbody> :
                                             <tbody>
