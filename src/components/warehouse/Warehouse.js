@@ -69,9 +69,9 @@ export function Warehouse() {
                 <select onChange={event => setValue(event.target.value)} className="form-select"
                   name="quantity" id="quantity">
                   <option value="">--Chọn số lượng--</option>
-                  <option value="smaller 10">Dưới 10</option>
-                  <option value="10 to 50">Từ 10 đến 50</option>
-                  <option value="better 50">Trên 50</option>
+                  <option value="smaller 50">Dưới 50</option>
+                  <option value="50 to 200">Từ 50 đến 200</option>
+                  <option value="better 200">Trên 200</option>
                 </select>)}
               {choose === "supplier" && (
                 <input name="supplier" id="supplier" className="form-control"
@@ -92,14 +92,14 @@ export function Warehouse() {
         <div style={{ minHeight: "455px" }} id="QuanND">
           <table className="shadow w-100">
             <thead>
-              <tr style={{ background: "darkgrey" }}>
-                <th style={{ background: "darkgrey" }}>#</th>
-                <th style={{ background: "darkgrey" }}>Ngày</th>
-                <th style={{ background: "darkgrey" }}>Tên hàng</th>
-                <th style={{ background: "darkgrey" }}>Tên nhà cung cấp</th>
-                <th style={{ background: "darkgrey" }}>Số lượng</th>
-                <th style={{ background: "darkgrey" }}>Đơn giá</th>
-                <th style={{ background: "darkgrey" }}>Thành tiền</th>
+              <tr style={{ background: "black" }}>
+                <th style={{ background: "black" }}>#</th>
+                <th style={{ background: "black" }}>Ngày</th>
+                <th style={{ background: "black" }}>Tên hàng</th>
+                <th style={{ background: "black" }}>Tên nhà cung cấp</th>
+                <th style={{ background: "black" }}>Số lượng</th>
+                <th style={{ background: "black" }}>Đơn giá</th>
+                <th style={{ background: "black" }}>Thành tiền</th>
               </tr>
             </thead>
             <tbody>
