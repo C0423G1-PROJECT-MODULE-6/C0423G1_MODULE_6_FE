@@ -10,6 +10,7 @@ import HeaderAdmin from "../user/HeaderAdmin";
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
 import {toast} from "react-toastify";
 import {useParams} from "react-router";
+import {findCustomerByIdScan} from "../../service/order/OrderService";
 
 function Order() {
     const [customer, setCustomer] = useState(null);
@@ -24,6 +25,8 @@ function Order() {
     const paramCusScan = useParams();
 
 
+
+
     const getAppUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
         if (isLoggedIn) {
@@ -35,7 +38,8 @@ function Order() {
     useEffect(() => {
         getAppUserId();
     }, []);
-    const findCustomerByid = async (data) => {
+
+    const findCustomerById = async (data) => {
         const res = await orderService.findCustomerById(data);
         console.log(res);
         if (res && res.type === "customer") {
@@ -47,17 +51,16 @@ function Order() {
         } else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
-
     };
 
     const handleDataByChooseCustomer = (data) => {
-        findCustomerByid(data);
+        findCustomerById(data);
     }
     const handleDataByChooseProduct = (data) => {
         getAllCart(data);
     }
     const handleDataByCreateCustomer = (data) => {
-        findCustomerByid(data);
+        findCustomerById(data);
     }
     const updateCustomerConfirm = (data) => {
         setCustomer(data)
@@ -66,21 +69,34 @@ function Order() {
 
     const getAllCart = async (idCustomer) => {
         const res = await orderService.getAllCart(idCustomer);
+        console.log(res)
         console.log(res.data)
         if (res.status === 200) {
+            console.log(res.status)
             if (res.data) {
+                console.log(res.data)
                 setHasResult(res.data.length > 0);
                 setProducts(res.data);
                 const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
+                console.log(initialQuantities);
                 setQuantity(initialQuantities);
             }
         } else if (res.status === 404) {
             setHasResult(false);
         }
     }
+    const findCustomerByIdScanOrder =async (idCustomer) => {
+        const res = await orderService.findCustomerByIdScan(idCustomer);
+        setCustomer(res.customer);
+        setProducts(res.cartDto);
+    };
     useEffect(() => {
         customer && getAllCart(customer.idCustomer);
     }, [customer]);
+
+    useEffect(() => {
+        (paramCusScan && paramCusScan.idCustomer !== 0) && findCustomerByIdScanOrder(paramCusScan.idCustomer);
+    }, [paramCusScan]);
 
 
     useEffect(() => {
@@ -310,7 +326,7 @@ function Order() {
                                         >
                                             Chọn sản phẩm
                                         </button>
-                                        {customer && <Link to={`/admin/scanner-qr-order/${customer.idCustomer}`}
+                                        {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
                                                            disabled={customer === null}>Scan QR</Link> }
                                     </div>
