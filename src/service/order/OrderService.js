@@ -1,8 +1,9 @@
 import axios from "axios";
 
-export const getSaleHistory = async (limit, page, searchName,sort,orther) => {
+export const getSaleHistory = async (limit, page, searchName,sort,other) => {
     try {
-        const res = await axios.get(`http://localhost:8080/api/admin/order/saleHistory?_limit=${limit}&_page=${page}&name_like=${searchName}&sort=${sort}&orther=${orther}`);
+        const res = await axios.get(`http://localhost:8080/api/admin/business/order/saleHistory?_limit=${limit}&_page=${page}&name_like=${searchName}&sort=${sort}&other=${other}`);
+
         return res;
     }catch (e) {
         console.log(e);
@@ -25,6 +26,7 @@ export const findOrderBillNewest = async (idCustomer) => {
     try{
         const res = await axios
             .get(`http://localhost:8080/api/admin/sale/order/payment/showBillNewest/${idCustomer}`)
+
         return res.data;
     }catch (e){
         alert("Access Denied");

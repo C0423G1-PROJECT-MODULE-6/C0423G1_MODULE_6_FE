@@ -4,13 +4,17 @@ import HeaderAdmin from "../user/HeaderAdmin";
 import Footer from '../home/common/Footer'
 
 export function SaleHistory() {
-    const [saleHistorys, setSaleHistorys] = useState([]);
+    const [saleHistories, setSaleHistories] = useState([]);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [records, setRecords] = useState();
     const [totalPage, setTotalPage] = useState();
     const [searchName, setSearchName] = useState("");
     const [refresh, setRefresh] = useState(true);
+    const [sort, setSort] = useState("");
+    const [otherSort, setOtherSort] = useState("")
+
+
 
     const vnd = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -19,16 +23,16 @@ export function SaleHistory() {
 
     const getSaleHistory = async () => {
         try {
-            const array =  await orderService.getSaleHistory(limit, page, searchName);
-            setSaleHistorys(array.data.content);
+            const array =  await orderService.getSaleHistory(limit, page, searchName,sort,otherSort);
+            console.log(array)
+            setSaleHistories(array.data.content);
             setRecords(array.data.totalElements);
             setTotalPage(array.data.totalPages);
         }catch (e) {
-            setSaleHistorys([]);
+            setSaleHistories([]);
             setRecords(0);
             setTotalPage(0);
         }
-
     }
     useEffect(() => {
         getSaleHistory();
@@ -51,6 +55,7 @@ export function SaleHistory() {
     const nextPage = () => {
         setPage(page + 1);
     }
+    console.log(saleHistories);
     return(
         <>
             <HeaderAdmin/>
@@ -61,17 +66,23 @@ export function SaleHistory() {
                 <div className="row my-3">
                     <div className="col-12 d-flex justify-content-end">
                         <div className="col-auto me-2">
-                            <select className="form-select">
-                                <option selected>--Sắp xếp theo--</option>
-                                <option>Thời Gian</option>
-                                <option>Khách Hàng</option>
-                                <option>Tên Sản Phẩm</option>
-                                <option>Số lượng</option>
-                                <option>Tổng tiền</option>
+                            <select className="form-select" onChange={(event) => setSort(event.target.value)}>
+                                <option value="" selected>--Sắp xếp theo--</option>
+                                <option value="sortTime">Thời Gian</option>
+                                <option value="sortNameCustomer">Khách Hàng</option>
+                                <option value="sortNameProduct">Tên Sản Phẩm</option>
+                                <option value="sortQuantity">Số lượng</option>
+                                <option value="sortTotalMoney">Tổng tiền</option>
                             </select>
                         </div>
                         <div className="col-auto me-2">
-                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm theo tên khách hàng"
+                            <select className="form-select" onChange={event => setOtherSort(event.target.value)}>
+                                <option value="dsc">Giảm gần</option>
+                                <option value="asc">Tăng dần</option>
+                            </select>
+                        </div>
+                        <div className="col-auto me-2">
+                            <input className="form-control" type="search" aria-label="Search" placeholder="Tìm tên khách hàng"
                                    onChange={(name) => (setSearchName(name.target.value))} onKeyDown={handleKeyDown}/>
                         </div>
                         <div className="col-auto">
@@ -79,7 +90,6 @@ export function SaleHistory() {
                                     onClick={handleSearch}>Tìm kiếm</button>
                         </div>
                     </div>
-
                 </div>
                 <div style={{minHeight:"400px"}}>
                     <table className="border border-dark table table-hover">
@@ -94,8 +104,8 @@ export function SaleHistory() {
                         </tr>
                         </thead>
                         <tbody>
-                        {saleHistorys.length !==0?(
-                            saleHistorys.map((sale, index)=>{
+                        {saleHistories.length !== 0 ? (
+                            saleHistories.map((sale, index)=>{
                                 return(
                                     <tr key={sale.idOrderBill}>
                                         <td>{index+1}</td>
