@@ -122,7 +122,7 @@ function HeaderAdmin({refresh}) {
                     {(roleAdmin || roleWarehouse) && (
                         <Nav>
                             <NavDropdown title="Thủ Kho" id="nav-dropdown-dark">
-                                <Link to="/admin/warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
+                                <Link to="/admin/ware/warehouse" className="dropdown-item">Quản Lý Xuất/Nhập Kho</Link>
                             </NavDropdown>
                         </Nav>
                     )}
