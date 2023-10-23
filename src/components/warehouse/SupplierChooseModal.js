@@ -185,7 +185,7 @@ const SupplierChooseModal = ({ handleData }) => {
                             </div>
                             <div className="mx-auto p-3" style={{minHeight: "350px"}} id="TinDT">
                                 <table className=" shadow w-100 " >
-                                    <thead style={{ fontSize: 'large', backgroundColor: 'darkgrey' }}>
+                                    <thead style={{ fontSize: 'large', backgroundColor: '#282c34', color: '#f5f5f5' }}>
                                         <tr>
                                             <th style={{ width: '6%' }} className="text-center">STT</th>
                                             <th style={{ width: '15%' }}>Tên nhà cung cấp</th>
@@ -206,8 +206,8 @@ const SupplierChooseModal = ({ handleData }) => {
 
                                                     }
                                                 }} style={(selectedSupplier.idSupplier === supplier?.idSupplier) ? {
-                                                    background: '#282c34',
-                                                    color: "#f5f5f5",
+                                                    background: 'darkgrey',
+                                                    // color: "#f5f5f5",
                                                     height: 50
                                                 } : { height: 50 }}
                                                 >
