@@ -160,9 +160,11 @@ export function ShoppingHistoryList() {
                             <thead>
                             <tr>
                                 <th style={{background: "black", color: "white", width: "10%"}}>#</th>
-                                <th style={{background: "black", color: "white", width: "30%"}}>Ngày mua</th>
-                                <th style={{background: "black", color: "white", width: "40%"}}>Sản phẩm mua</th>
-                                <th style={{background: "black", color: "white", width: "20%"}}>Số tiền</th>
+                                <th style={{background: "black", color: "white", width: "20%"}}>Ngày mua</th>
+                                <th style={{background: "black", color: "white", width: "15%"}}>Giờ mua</th>
+                                <th style={{background: "black", color: "white", width: "30%"}}>Sản phẩm mua</th>
+                                <th style={{background: "black", color: "white", width: "10%"}}>Số lượng</th>
+                                <th style={{background: "black", color: "white", width: "15%"}}>Số tiền(vnđ/Chiếc)</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -172,7 +174,9 @@ export function ShoppingHistoryList() {
                                         <tr>
                                             <td>{(index + 1)+((page)*5)}</td>
                                             <td>{new Date(history.dateOfOrder).toLocaleDateString('en-GB')}</td>
+                                            <td>{history.timeOfOrder}</td>
                                             <td>{history.nameProduct}</td>
+                                            <td>{history.quantityOrder}</td>
                                             <td>{vnd.format(history.priceOrder)}</td>
 
                                         </tr>
