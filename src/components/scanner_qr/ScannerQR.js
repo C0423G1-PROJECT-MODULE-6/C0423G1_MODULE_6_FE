@@ -9,7 +9,7 @@ function ScanQr({result}) {
 
     const handleDecodedText = (decodedText) => {
         console.log(decodedText)
-        navigate('/admin/warehouse/import/'+ decodedText);
+        navigate('/admin/ware/warehouse/import/'+ decodedText);
     };
 
     useEffect(() => {

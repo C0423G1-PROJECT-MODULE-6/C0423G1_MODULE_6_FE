@@ -97,6 +97,8 @@ function App() {
                     <Route path="/admin/business/customer" element={<CustomerList/>}/>
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
+                    <Route path="/admin/business/product/list" element={<ProductList/>}/>
+
 
 
                     /ware
@@ -137,6 +139,7 @@ function App() {
                     <Route path="/admin/business/customer" element={<CustomerList/>}/>
                     <Route path="/admin/business/customer/history/:id" element={<ShoppingHistoryList/>}/>
                     <Route path="/admin/business/order/saleHistory" element={<SaleHistory/>}/>
+                    <Route path="/admin/business/product/list" element={<SaleHistory/>}/>
                 </Route>
 
                 <Route
