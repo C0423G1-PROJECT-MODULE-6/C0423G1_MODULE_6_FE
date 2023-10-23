@@ -36,7 +36,7 @@ function EditEmployee(props) {
                             ...employeeUpdate,
                             employeeImage: url
                         }).then(() => {
-                            navigate("/admin/employee")
+                            navigate("/admin/admin/employee")
                         }).then(
                             () => {
                                 Swal.fire({
@@ -63,7 +63,7 @@ function EditEmployee(props) {
                 ...employeeUpdate,
                 employeeImage: employee?.employeeImage,
             }).then(() => {
-                navigate("/admin/employee")
+                navigate("/admin/admin/employee")
             }).then(
                 () => {
                     Swal.fire({
@@ -120,7 +120,7 @@ function EditEmployee(props) {
             setEmployee(newEmployee);
         } catch (err) {
             if (err.response.status === 404) {
-                navigate("/admin/employee");
+                navigate("/admin/admin/employee");
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -476,7 +476,7 @@ function EditEmployee(props) {
                                         <div className="row">
                                             {/* button  */}
                                             <div className="col-3 p-2 mt-3">
-                                                <Link to={"/admin/employee"}>
+                                                <Link to={"/admin/admin/employee"}>
                                                     <button className="btn btn-outline-secondary float-end mx-1 mt-2 shadow">
                                                         Trở về
                                                     </button>

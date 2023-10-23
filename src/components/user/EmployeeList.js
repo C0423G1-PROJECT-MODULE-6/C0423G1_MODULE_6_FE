@@ -11,6 +11,8 @@ import "../../css/user/employee.css";
 import HeaderAdmin from "./HeaderAdmin";
 import { toast } from "react-toastify";
 import Footer from "../home/common/Footer";
+import {format, parseISO} from "date-fns";
+
 
 const EmployeeList = () => {
   const [employeeList, setEmployeeList] = useState([]);
@@ -211,7 +213,8 @@ const EmployeeList = () => {
                   >
                     <td>{index + 1}</td>
                     <td>{employee.employeeName}</td>
-                    <td>{employee.employeeBirthday}</td>
+                    {/* <td>{employee.employeeBirthday}</td> */}
+                    <td>{format(parseISO(employee.employeeBirthday), 'dd-MM-yyyy')}</td>
                     <td>{employee.employeeAddress}</td>
                     <td>{employee.employeeTypeName}</td>
                     <td>{employee.employeePhone}</td>
@@ -225,13 +228,13 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
           <div className="col float-start">
-            <Link to={"/admin/employee/create"}>
+            <Link to={"/admin/admin/employee/create"}>
               <button type="button" className="btn btn-outline-primary me-1">
                 Thêm mới
               </button>
             </Link>
 
-            <Link to={`/admin/employee/edit/${employee?.id}`}>
+            <Link to={`/admin/admin/employee/edit/${employee?.id}`}>
               <button
                 type="button"
                 className="btn btn-outline-success me-1"
