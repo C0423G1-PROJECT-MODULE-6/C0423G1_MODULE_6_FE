@@ -37,8 +37,7 @@ function Order() {
     }, []);
     const findCustomerByid = async (data) => {
         const res = await orderService.findCustomerById(data);
-        console.log(res)
-
+        console.log(res);
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
@@ -48,6 +47,7 @@ function Order() {
         } else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
+
     };
 
     const handleDataByChooseCustomer = (data) => {
