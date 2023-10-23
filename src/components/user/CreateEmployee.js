@@ -1,7 +1,7 @@
 import { differenceInYears, parse } from 'date-fns';
-import { ErrorMessage, Field, Formik,Form } from 'formik';
+import { ErrorMessage, Field, Formik, Form } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
-import {  Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { v4 } from 'uuid';
 import * as Yup from 'yup';
@@ -9,11 +9,11 @@ import { storage } from "../../firebase/Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { crateEmployee, getNewEmployee } from '../../service/user/EmployeeService';
 import { async } from '@firebase/util';
-import {getAppRoleList} from '../../service/user/AppRoleService'
+import { getAppRoleList } from '../../service/user/AppRoleService'
 
 function CreateEmployee(props) {
     const navigate = useNavigate();
-    const [roles,setRole] = useState()
+    const [roles, setRole] = useState()
     const [employee, setEmployee] = useState();
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
@@ -115,7 +115,7 @@ function CreateEmployee(props) {
         setRole(data)
     }
     useEffect(() => { displayRole() }, [])
-    
+
     if (employee === undefined) {
         return null;
     }
@@ -135,7 +135,7 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-                        roleId:roles?.id
+                        roleId: 1
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -159,7 +159,7 @@ function CreateEmployee(props) {
                             .required("Vui lòng nhập tên tài khoản.")
                             .max(30, "Vui lòng nhập dưới 30 kí tự")
                             .matches(/^[0-9a-zA-Z]+$/u, "Tên tài khoản chỉ chứa chữ và số"),
-                       
+
                         employeeStartDate: Yup.date()
                             .required("Vui lòng nhập ngày bắt đầu làm.."),
                         employeeBirthday: Yup.string()
@@ -177,10 +177,11 @@ function CreateEmployee(props) {
                                 /^\d{9}(\d{3})?$/u,
                                 "Vui lòng chỉ nhập số và độ dài là 9 hoặc 12."),
                         email: Yup.string()
-                        .required("Vui lòng nhập email.")
+                            .required("Vui lòng nhập email.")
 
                     })}
                     onSubmit={(value, { setErrors }) => {
+                        alert(JSON.stringify(value))
                         let timerInterval;
                         Swal.fire({
                             title: "Auto close alert!",
@@ -199,7 +200,7 @@ function CreateEmployee(props) {
                             },
                         }).then((result) => {
                             /* Read more about handling dismissals below */
-                            
+
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 console.log("I was closed by the timer");
                             }
@@ -221,7 +222,7 @@ function CreateEmployee(props) {
                                         src={employee.employeeImage}
                                         ref={imgPreviewRef}
                                     />
-                                    
+
                                 </div>
                                 <div className="col-8 d-flex justify-content-center align-items-center">
                                     <fieldset
@@ -344,7 +345,7 @@ function CreateEmployee(props) {
                                                     ref={inputFileRef}
                                                     onChange={handleInputChange}
                                                     name="employeeImage"
-                                                   
+
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
@@ -442,7 +443,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
-                                                    
+
                                                     <option value="Nam" >Nam</option>
                                                     <option value="Nữ" >Nữ</option>
                                                 </Field>
@@ -461,14 +462,14 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                        
+
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
-                                                
+
                                                     {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
-                                                    
+
                                                 </Field>
                                                 <div style={{ height: 16 }}>
-                                                   <ErrorMessage
+                                                    <ErrorMessage
                                                         name="roleId"
                                                         style={{ color: "red", marginLeft: "20px" }}
                                                         component={"small"}
@@ -485,7 +486,7 @@ function CreateEmployee(props) {
                                                     </button>
                                                 </Link>
                                                 <button className="btn btn-outline-primary float-end mx-1 mt-2 shadow"
-                                                type='submit'>
+                                                    type='submit'>
                                                     Lưu
                                                 </button>
                                             </div>
