@@ -11,6 +11,7 @@ import { differenceInYears, parse } from 'date-fns';
 import { getAppRoleList } from '../../service/user/AppRoleService';
 import HeaderAdmin from './HeaderAdmin';
 import Footer from '../home/common/Footer';
+import { toast } from "react-toastify";
 function EditEmployee(props) {
     const [roles, setRole] = useState([]);
     const navigate = useNavigate();
@@ -203,7 +204,7 @@ function EditEmployee(props) {
                         updateEmployees(value, setErrors)
                     }}>
                     <Form>
-                        <div className="container mt-5 pt-5 table-responsive">
+                        <div className="container my-5  pt-5 table-responsive">
                             <div className="row">
                                 <div className="col-4 d-flex justify-content-center align-items-center">
                                     <img
@@ -493,9 +494,11 @@ function EditEmployee(props) {
                                             </div>
                                         </div>
                                     </fieldset>
+                                   
                                 </div>
                             </div>
                         </div>
+                      
                     </Form>
                 </Formik>
                 <Footer></Footer>
