@@ -28,6 +28,7 @@ export function Warehouse() {
         getAll();
     }, [page])
 
+<<<<<<< HEAD
     return (
         <>
             <HeaderAdmin/>
@@ -126,6 +127,102 @@ export function Warehouse() {
                                     <p style={{textAlign: "center", color: "red"}}>Không tìm thấy</p>
                                 </td>
                             </tr>
+=======
+  return (
+    <>
+      <HeaderAdmin />
+      <div className="container mt-5 pt-5">
+        <div className="col-12 d-flex justify-content-center my-3">
+          <h1>Quản lý nhập kho</h1>
+        </div>
+        <div className="row my-3">
+          <div className="col-12 d-flex justify-content-end">
+            <div className="col-auto me-2">
+              <select className="form-select" onChange={(event) => setSort(event.target.value)}>
+                <option value="">--Sắp xếp theo--</option>
+                <option value="name">Tên</option>
+                <option value="price">Đơn giá</option>
+                <option value="quantity">Số lượng</option>
+                <option value="supplier">Nhà cung cấp</option>
+                <option value="inputDate">Ngày nhập kho</option>
+              </select>
+            </div>
+            <div className="col-auto me-2">
+              <select className="form-select" onChange={(event) => setChoose(event.target.value)}>
+                <option value="name">Tên</option>
+                <option value="price">Đơn giá</option>
+                <option value="quantity">Số lượng</option>
+                <option value="supplier">Nhà cung cấp</option>
+              </select>
+            </div>
+            <div className="col-auto me-2">
+              {choose === "price" && (
+                <select onChange={event => setValue(event.target.value)} className="form-select"
+                  name="price" id="price">
+                  <option value="">--Chọn giá--</option>
+                  <option value="smaller 5m">Dưới 5 triệu</option>
+                  <option value="5m to 10m">5 đến 10 triệu</option>
+                  <option value="better 10m">Trên 10 triệu</option>
+                </select>
+              )}
+              {choose === "quantity" && (
+                <select onChange={event => setValue(event.target.value)} className="form-select"
+                  name="quantity" id="quantity">
+                  <option value="">--Chọn số lượng--</option>
+                  <option value="smaller 50">Dưới 50</option>
+                  <option value="50 to 200">Từ 50 đến 200</option>
+                  <option value="better 200">Trên 200</option>
+                </select>)}
+              {choose === "supplier" && (
+                <input name="supplier" id="supplier" className="form-control"
+                  onChange={(event => setValue(event.target.value))} type="search"
+                  aria-label="Search" />
+              )}
+              {choose === "name" && (
+                <input name="name" id="name" className="form-control"
+                  onChange={(event => setValue(event.target.value))} type="search"
+                  aria-label="Search" />
+              )}
+            </div>
+            <div className="col-auto">
+              <button className="btn btn-outline-primary text-center" onClick={() => { setPage(0); getAll() }} type="button">Tìm kiếm</button>
+            </div>
+          </div>
+        </div>
+        <div style={{ minHeight: "455px" }} id="QuanND">
+          <table className="shadow w-100">
+            <thead style={{color: "white"}}>
+              <tr style={{ background: "black" }}>
+                <th style={{ background: "black" }}>#</th>
+                <th style={{ background: "black" }}>Ngày</th>
+                <th style={{ background: "black" }}>Tên hàng</th>
+                <th style={{ background: "black" }}>Tên nhà cung cấp</th>
+                <th style={{ background: "black" }}>Số lượng</th>
+                <th style={{ background: "black" }}>Đơn giá</th>
+                <th style={{ background: "black" }}>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                warehouse.map((w, index) => (
+                  <tr key={w.id} style={{ height: 40 }}>
+                    <td style={{ width: "4%" }}>{(index + 1) + page * 10}</td>
+                    <td style={{ width: "8%" }}>{w.inputDate}</td>
+                    <td style={{ width: "27%" }}>{w.nameProduct}</td>
+                    <td style={{ width: "33%" }}>{w.nameSupplier}</td>
+                    <td style={{ width: "8%" }}>{w.quantity}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.priceProduct)}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.totalPrice)}</td>
+                  </tr>
+                ))
+              }
+              {!totalElements && (
+                <tr>
+                  <td colSpan={8}>
+                    <p style={{ textAlign: "center", color: "red" }}>Không tìm thấy</p>
+                  </td>
+                </tr>
+>>>>>>> c7e06983c8c8aec514991f84afbedf234341e354
 
                         )}
                         </tbody>
