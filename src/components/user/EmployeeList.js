@@ -35,7 +35,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
-  console.log(employee);
+ 
   //list
   const loadEmployeeList = async () => {
     try {
