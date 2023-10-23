@@ -162,7 +162,8 @@ const CustomerChooseModal = ({handleData}) => {
                             </div>
                             <div className="mx-auto p-3 " style={{width: '95%'}} id="TinDT">
                                 <table className=" shadow w-100 ">
-                                    <thead style={{fontSize: 'large', backgroundColor: 'darkgrey'}}>
+                                    <thead style={{fontSize: 'large', backgroundColor: '#282c34', color: '#f5f5f5'
+                                    }}>
                                     <tr>
                                         <th style={{width: '6%'}} className="text-center">STT</th>
                                         <th style={{width: '20%'}}>Tên khách hàng</th>
@@ -185,8 +186,7 @@ const CustomerChooseModal = ({handleData}) => {
                                                     setSelectedCustomer({idCustomer: null, nameCustomer: ""});
                                                 }
                                             }} style={(selectedCustomer.idCustomer === customer?.idCustomer) ? {
-                                                background: '#282c34',
-                                                color: '#f5f5f5',
+                                                background: 'darkgrey',
                                                 height: 50
                                             } : {height: 50}}
                                             >

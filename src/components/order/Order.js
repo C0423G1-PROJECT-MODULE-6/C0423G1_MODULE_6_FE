@@ -6,10 +6,8 @@ import CustomerChooseModal from "../modal/CustomerChooseModal";
 import CustomerCreateModal from "../modal/CustomerCreateModal";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import {Link, useNavigate} from "react-router-dom";
-import * as Yup from "yup"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
-import * as UserService from "../../service/user/UserService";
 import {toast} from "react-toastify";
 import {useParams} from "react-router";
 
@@ -23,7 +21,6 @@ function Order() {
     const navigate = useNavigate();
     const [products, setProducts] = useState([])
     const [userId, setUserId] = useState("");
-    const [renderStatus, setRenderStatus] = useState(false)
     const paramCusScan = useParams();
 
 
@@ -34,6 +31,7 @@ function Order() {
             setUserId(id.data);
         }
     };
+
     useEffect(() => {
         getAppUserId();
     }, []);
@@ -53,8 +51,6 @@ function Order() {
     };
 
     const handleDataByChooseCustomer = (data) => {
-        console.log("oder")
-        console.log(data);
         findCustomerByid(data);
     }
     const handleDataByChooseProduct = (data) => {
@@ -84,7 +80,7 @@ function Order() {
     }
     useEffect(() => {
         customer && getAllCart(customer.idCustomer);
-    }, [customer, renderStatus]);
+    }, [customer]);
 
 
     useEffect(() => {
@@ -314,7 +310,7 @@ function Order() {
                                         >
                                             Chọn sản phẩm
                                         </button>
-                                        {customer && <Link to={`/admin/scanner-qr-order/${customer.idCustomer}`}
+                                        {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
                                                            disabled={customer === null}>Scan QR</Link> }
                                     </div>
