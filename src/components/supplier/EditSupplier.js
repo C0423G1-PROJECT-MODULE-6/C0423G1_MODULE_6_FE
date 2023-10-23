@@ -29,14 +29,20 @@ function EditSupplier() {
         setAddress(data);
     }
 
-    const editSupplier = async (supplier) => {
+    const editSupplier = async (supplier, setErrors) => {
         console.log(supplier)
-        const res = await supplierService.editSupplier(supplier);
-        if (res.status === 200) {
-            navigate("/admin/business/supplier")
-            toast("Chỉnh sửa thành công!")
-        } else {
-            toast.error("Chỉnh sửa thất bại!")
+        try {
+            const res = await supplierService.editSupplier(supplier);
+            if (res.status === 200) {
+                navigate("/admin/business/supplier")
+                toast("Chỉnh sửa thành công!")
+            } else {
+                toast.error("Chỉnh sửa thất bại!")
+            }
+        } catch (e) {
+            if (e.response?.data){
+                setErrors(e.response.data)
+            }
         }
     }
 
@@ -46,8 +52,8 @@ function EditSupplier() {
             <Formik initialValues={
                 supplier
             }
-                    onSubmit={(values) => {
-                        editSupplier(values)
+                    onSubmit={(values, {setErrors}) => {
+                        editSupplier(values, setErrors)
                     }}
                     validationSchema={Yup.object(
                         {
@@ -70,7 +76,7 @@ function EditSupplier() {
                         }
                     )}
             >
-                <div className="d-flex justify-content-center col-8 container mt-5 pt-5">
+                <div className="d-flex justify-content-center col-8 container mt-5 pt-5 mb-5">
                     <Form>
                         <fieldset
                             className="form-Field shadow mx-auto"

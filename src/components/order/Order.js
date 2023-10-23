@@ -1,15 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {ErrorMessage, Field, Form, Formik} from "formik";
+import React, { useEffect, useState } from 'react';
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as orderService from "../../service/order/OrderService"
 import BillNotPayConfirm from "./BillNotPayConfirm";
 import CustomerChooseModal from "../modal/CustomerChooseModal";
 import CustomerCreateModal from "../modal/CustomerCreateModal";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import {Link, useNavigate} from "react-router-dom";
-import * as Yup from "yup"
 import HeaderAdmin from "../user/HeaderAdmin";
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
-import * as UserService from "../../service/user/UserService";
 import {toast} from "react-toastify";
 import {useParams} from "react-router";
 
@@ -23,7 +21,6 @@ function Order() {
     const navigate = useNavigate();
     const [products, setProducts] = useState([])
     const [userId, setUserId] = useState("");
-    const [renderStatus, setRenderStatus] = useState(false)
     const paramCusScan = useParams();
 
 
@@ -34,13 +31,13 @@ function Order() {
             setUserId(id.data);
         }
     };
+
     useEffect(() => {
         getAppUserId();
     }, []);
     const findCustomerByid = async (data) => {
         const res = await orderService.findCustomerById(data);
-        console.log(res)
-
+        console.log(res);
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
@@ -50,11 +47,10 @@ function Order() {
         } else {
             console.log("Dữ liệu không hợp lệ hoặc không có type");
         }
+
     };
 
     const handleDataByChooseCustomer = (data) => {
-        console.log("oder")
-        console.log(data);
         findCustomerByid(data);
     }
     const handleDataByChooseProduct = (data) => {
@@ -84,7 +80,7 @@ function Order() {
     }
     useEffect(() => {
         customer && getAllCart(customer.idCustomer);
-    }, [customer, renderStatus]);
+    }, [customer]);
 
 
     useEffect(() => {
@@ -157,12 +153,12 @@ function Order() {
 
     return (
         <>
-            <HeaderAdmin/>
+            <HeaderAdmin />
             <Formik initialValues={initialValues}
-                    onSubmit={(value) => {
-                        console.log("Form values:", value);
-                        showOrderBill(value)
-                    }}
+                onSubmit={(value) => {
+                    console.log("Form values:", value);
+                    showOrderBill(value)
+                }}
             >
                 <Form>
                     <div className="  d-flex justify-content-center my-5 pt-5">
@@ -172,8 +168,8 @@ function Order() {
                             height: 'auto',
                             width: '80%'
                         }}>
-                            <legend><h3 style={{margin: '2%'}}>Thanh toán sản phẩm</h3></legend>
-                            <div style={{marginBottom: '5%'}}>
+                            <legend><h3 style={{ margin: '2%' }}>Thanh toán sản phẩm</h3></legend>
+                            <div style={{ marginBottom: '5%' }}>
                                 <fieldset className="form-input shadow mx-auto" style={{
                                     borderRadius: '20px',
                                     border: '1px solid black',
@@ -184,20 +180,20 @@ function Order() {
                                     <legend className="float-none w-auto px-1">Thông tin khách hàng</legend>
                                     <div className="d-flex justify-content-center">
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1"
-                                                style={{width: '30%'}} data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalCustomer">
+                                            style={{ width: '30%' }} data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalCustomer">
                                             Chọn khách hàng cũ
                                         </button>
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1"
-                                                style={{width: '30%'}} data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalCreateCustomer">
+                                            style={{ width: '30%' }} data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalCreateCustomer">
                                             Thêm mới khách hàng
                                         </button>
                                     </div>
 
                                     {customer ? (
                                         <div>
-                                            <div className="row p-2 mx-auto" style={{width: '90%'}}>
+                                            <div className="row p-2 mx-auto" style={{ width: '90%' }}>
                                                 <div className="col-4 p-2">
                                                     <label>Tên khách hàng</label>
                                                 </div>
@@ -210,7 +206,7 @@ function Order() {
                                                         disabled
                                                     />
                                                     {customer ? null : (
-                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                        <div style={{ height: "0.6rem", marginBottom: "0.6rem" }}>
                                                             <ErrorMessage
                                                                 className="text-danger"
                                                                 name="idCustomerOrder"
@@ -243,7 +239,7 @@ function Order() {
                                                         disabled
                                                     />
                                                     {customer ? null : (
-                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                        <div style={{ height: "0.6rem", marginBottom: "0.6rem" }}>
                                                             <ErrorMessage
                                                                 className="text-danger"
                                                                 name="idCustomerOrder"
@@ -264,7 +260,7 @@ function Order() {
                                                         disabled
                                                     />
                                                     {customer ? null : (
-                                                        <div style={{height: "0.6rem", marginBottom: "0.6rem"}}>
+                                                        <div style={{ height: "0.6rem", marginBottom: "0.6rem" }}>
                                                             <ErrorMessage
                                                                 className="text-danger"
                                                                 name="idCustomerOrder"
@@ -285,19 +281,19 @@ function Order() {
                                                     />
                                                 </div>
                                                 <Field name="idCustomerOrder" type="hidden"
-                                                       value={customer ? customer.idCustomer : ""}/>
-                                                <Field name="idUser" type="hidden" value={{userId}}/>
+                                                    value={customer ? customer.idCustomer : ""} />
+                                                <Field name="idUser" type="hidden" value={{ userId }} />
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="text-center">
-                                            <br/>
+                                            <br />
                                             <b>----Hãy chọn hoặc thêm mới khách hàng----</b>
                                         </div>)
                                     }
                                 </fieldset>
                             </div>
-                            <div style={{marginBottom: '5%'}}>
+                            <div style={{ marginBottom: '5%' }}>
                                 <fieldset className="form-input shadow mx-auto" style={{
                                     borderRadius: '20px',
                                     border: '1px solid black',
@@ -308,36 +304,36 @@ function Order() {
                                     <legend className="float-none w-auto px-1">Sản phẩm đã chọn</legend>
                                     <div className="d-flex justify-content-center mb-3">
                                         <button type="button" className="btn btn-outline-primary col-6 mx-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exampleModalProduct" style={{width: '30%'}}
-                                                disabled={customer === null}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exampleModalProduct" style={{ width: '30%' }}
+                                            disabled={customer === null}
                                         >
                                             Chọn sản phẩm
                                         </button>
-                                        {customer && <Link to={`/admin/scanner-qr-order/${customer.idCustomer}`}
+                                        {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
                                                            disabled={customer === null}>Scan QR</Link> }
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="table-container"
-                                                 style={{maxHeight: '400px', overflowY: 'auto'}}>
-                                                <table className="table " style={{width: '100%'}}>
+                                                style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                                <table className="table " style={{ width: '100%' }}>
                                                     <thead>
-                                                    <tr>
-                                                        <th className="col-1 text-center">#</th>
-                                                        <th className="col-3 text-center">Tên sản phẩm</th>
-                                                        <th className="col-2 text-center">Đơn giá</th>
-                                                        <th className="col-2 text-center">Số lượng</th>
-                                                        <th className="col-2 text-center">Số tiền</th>
-                                                        <th className="col-1 text-center" style={{width: "100%"}}>Thao
-                                                            tác
-                                                        </th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th className="col-1 text-center">#</th>
+                                                            <th className="col-3 text-center">Tên sản phẩm</th>
+                                                            <th className="col-2 text-center">Đơn giá</th>
+                                                            <th className="col-2 text-center">Số lượng</th>
+                                                            <th className="col-2 text-center">Số tiền</th>
+                                                            <th className="col-1 text-center" style={{ width: "100%" }}>Thao
+                                                                tác
+                                                            </th>
+                                                        </tr>
 
                                                     </thead>
                                                     <tbody>
-                                                    {customer ? (
+                                                        {customer ? (
                                                             products.map((product, index) => (
                                                                 <tr key={index}>
                                                                     <td className="col-1 text-center">{index + 1}</td>
@@ -402,12 +398,12 @@ function Order() {
                                                                 </tr>
                                                             ))
                                                         ) :
-                                                        (<tr>
-                                                            <td className="text-center" colSpan="6">
-                                                                <b>----Trống----</b>
-                                                            </td>
-                                                        </tr>)
-                                                    }
+                                                            (<tr>
+                                                                <td className="text-center" colSpan="6">
+                                                                    <b>----Trống----</b>
+                                                                </td>
+                                                            </tr>)
+                                                        }
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -415,7 +411,7 @@ function Order() {
                                     </div>
                                 </fieldset>
                             </div>
-                            <div className="row" style={{width: '70%', margin: '1% auto 0 auto'}}>
+                            <div className="row" style={{ width: '70%', margin: '1% auto 0 auto' }}>
                                 <div className="col-4 p-2">
                                     <label>Thành tiền</label>
                                 </div>
@@ -431,7 +427,7 @@ function Order() {
                                 <div className="col-4 p-2 mt-2">
                                     <label>Hình thức thanh toán</label>
                                 </div>
-                                <div className="col-8 mt-2" style={{position: 'relative', top: '9px'}}>
+                                <div className="col-8 mt-2" style={{ position: 'relative', top: '9px' }}>
                                     <div>
                                         <Field
                                             type="radio"
@@ -439,9 +435,9 @@ function Order() {
                                             name="paymentMethod"
                                             value="1"
                                             checked
-                                            style={{marginRight: '1%'}}
+                                            style={{ marginRight: '1%' }}
                                         />
-                                        <label htmlFor="theTinDung" style={{marginRight: '4%'}}>
+                                        <label htmlFor="theTinDung" style={{ marginRight: '4%' }}>
                                             Thẻ tín dụng
                                         </label>
                                     </div>
@@ -451,15 +447,15 @@ function Order() {
                                             id="tienMat"
                                             name="paymentMethod"
                                             value="2"
-                                            style={{marginRight: '1%'}}
+                                            style={{ marginRight: '1%' }}
                                         />
                                         <label htmlFor="tienMat">Tiền mặt</label>
                                     </div>
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     <button type="submit"
-                                            className="btn btn-outline-primary col-6 d-flex justify-content-center my-3"
-                                            style={{width: '30%', margin: '15px'}}>
+                                        className="btn btn-outline-primary col-6 d-flex justify-content-center my-3"
+                                        style={{ width: '30%', margin: '15px' }}>
                                         Tiến hành thanh toán
                                     </button>
                                 </div>
@@ -475,10 +471,10 @@ function Order() {
                 </Form>
             </Formik>
 
-            <CustomerChooseModal handleData={handleDataByChooseCustomer}/>
-            <CustomerCreateModal handleData={handleDataByCreateCustomer}/>
+            <CustomerChooseModal handleData={handleDataByChooseCustomer} />
+            <CustomerCreateModal handleData={handleDataByCreateCustomer} />
             <ProductChooseModal data1={0} idCustomer={customer && customer.idCustomer}
-                                handleData={handleDataByChooseProduct}/>
+                handleData={handleDataByChooseProduct} />
         </>
     );
 }

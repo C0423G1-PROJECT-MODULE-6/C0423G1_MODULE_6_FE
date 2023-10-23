@@ -4,7 +4,7 @@ import {Chart, registerables} from "chart.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {toast} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import * as SalesService from "../../service/sales_report/SalesService";
 import HeaderAdmin from "../user/HeaderAdmin";
 
@@ -23,10 +23,17 @@ function SalesReport() {
     const [salesReportProduct, setSalesReportProduct] = useState([]);
     const [product, setProduct] = useState([]);
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
+    };
+
     const getSearchSalesReport = async () => {
         setSalesReportProduct(await SalesService.getAll(startDate, endDate, searchTerm));
         setProduct(await SalesService.getAllProduct());
     };
+
     const getSearchSalesReportProduct = async () => {
         let isSearchTermFound = false;
         for (let i = 0; i < product.length; i++) {
@@ -46,7 +53,6 @@ function SalesReport() {
             toast.error("Không tìm thấy sản phẩm");
         }
     };
-
 
     const handleSearch = () => {
         getSearchSalesReportProduct();
@@ -157,6 +163,7 @@ function SalesReport() {
                             className="form-control"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={handleKeyDown}
                         />
                         <datalist id="search-options">
                             {product.map((product) => (
@@ -165,10 +172,7 @@ function SalesReport() {
                         </datalist>
                     </div>
                     <div className="col-md-2 d-flex align-items-end">
-                        <button
-                            className="btn btn-outline-primary me-2 text-center"
-                            onClick={handleSearch}
-                        >
+                        <button className="btn btn-outline-primary me-2 text-center" onClick={handleSearch}>
                             Tìm kiếm
                         </button>
                     </div>

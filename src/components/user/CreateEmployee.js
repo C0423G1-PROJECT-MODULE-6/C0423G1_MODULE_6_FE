@@ -135,7 +135,7 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-
+                        roleId:roles?.id
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -177,7 +177,7 @@ function CreateEmployee(props) {
                                 /^\d{9}(\d{3})?$/u,
                                 "Vui lòng chỉ nhập số và độ dài là 9 hoặc 12."),
                         email: Yup.string()
-                        .required("Vui lòng nhập email")
+                        .required("Vui lòng nhập email.")
 
                     })}
                     onSubmit={(value, { setErrors }) => {
@@ -199,6 +199,7 @@ function CreateEmployee(props) {
                             },
                         }).then((result) => {
                             /* Read more about handling dismissals below */
+                            
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 console.log("I was closed by the timer");
                             }
@@ -441,6 +442,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
+                                                    
                                                     <option value="Nam" >Nam</option>
                                                     <option value="Nữ" >Nữ</option>
                                                 </Field>
@@ -461,14 +463,13 @@ function CreateEmployee(props) {
                                             <div className="col-4">
                                         
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
-                                                  
-                                                    <option value="" label='--Chọn công việc--'></option>
+                                                
                                                     {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
                                                     
                                                 </Field>
                                                 <div style={{ height: 16 }}>
                                                    <ErrorMessage
-                                                        name="email"
+                                                        name="roleId"
                                                         style={{ color: "red", marginLeft: "20px" }}
                                                         component={"small"}
                                                     />

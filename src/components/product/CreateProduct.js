@@ -119,7 +119,7 @@ function CreateProduct() {
     const handleInputChange = (event) => {
         const files = event.target.files;
         const maxImageCount = 5;
-        const allowedFormats = ["image/png", "image/gif", "image/jpeg"];
+        const allowedFormats = ["image/png", "image/gif", "image/jpeg", "image/webp"];
 
         const newImages = Array.from(files).filter((file) => {
             if (imageUpload.map((img) => img.name).includes(file.name)) {
@@ -133,7 +133,7 @@ function CreateProduct() {
             }
 
             if (!allowedFormats.includes(file.type)) {
-                toast("Vui lòng chọn chỉ các tệp hình ảnh (JPEG, PNG, hoặc GIF).");
+                toast("Vui lòng chọn chỉ các tệp hình ảnh (JPEG, PNG, ,WEBP hoặc GIF).");
                 return false;
             }
 
@@ -228,11 +228,11 @@ function CreateProduct() {
                         add(values, setErrors);
                     }}>
 
-                    <div className="row p-2 mt-3 container" style={{marginLeft: 110}}>
-                        <div className="col-6 justify-content-center" style={{marginTop: "9%"}}>
+                    <div className="p-2 mt-3 container " style={{display:"flex",justifyContent:"space-between",width:"100%"}}>
+                        <div className="col-6 ">
                             <fieldset
-                                className="form-input-dao shadow"
-                                style={{width: 600, height: 480}}>
+                                className="form-input-dao shadow mt-3"
+                                style={{width: 600,minHeight:"450px"}}>
                                 <legend className="float-none w-auto px-3">
                                     <h2>Ảnh hàng hóa đã chọn</h2>
                                 </legend>
@@ -245,9 +245,10 @@ function CreateProduct() {
                                                 ref={imgPreviewRef}
                                                 className="image-gap mx-2 mb-2 float-start"
                                                 style={{
+                                                    padding:"10px",
                                                     margin: "0px 8px 8px",
-                                                    width: "150px",
-                                                    height: "100px",
+                                                    width: "auto",
+                                                    height: "160px",
                                                     borderRadius: "10px",
                                                     objectFit: "cover",
                                                     border: "1px solid black"
@@ -257,7 +258,7 @@ function CreateProduct() {
                                 </div>
                             </fieldset>
                         </div>
-                        <div className="d-flex justify-content-center col-6  float-end">
+                        <div className="d-flex justify-content-center col-6  float-end mt-3">
                             <Form>
                                 <fieldset className="form-input-dao shadow">
                                     <legend className="float-none w-auto px-3">
@@ -292,14 +293,14 @@ function CreateProduct() {
                                                     id={"2"}
                                                     style={{width: 270, height: 27.6}}
                                                 />
-                                                <div style={{height: "16px"}}>
+                                                <div>
                                                     <ErrorMessage className="p-3 mb-2 text-danger" name="priceProduct"
                                                                   component="small"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="row">
-                                            <div className="col-6 mt-2">
+                                            <div className="col-6">
                                                 <label htmlFor={"3"}>
                                                     Kích thước <span style={{color: "red"}}>*</span>
                                                 </label>
@@ -315,7 +316,7 @@ function CreateProduct() {
                                                                   component="small"/>
                                                 </div>
                                             </div>
-                                            <div className="col-6 mt-2">
+                                            <div className="col-6">
                                                 <label htmlFor={"4"}>
                                                     Dung lượng pin<span style={{color: "red"}}>*</span>
                                                 </label>
@@ -526,7 +527,7 @@ function CreateProduct() {
                                                 id="inputGroupFile01"
                                                 aria-describedby="inputGroupFileAddon03"
                                                 aria-label="Upload"
-                                                accept="image/png, image/gif, image/jpeg"
+                                                accept="image/png, image/gif, image/jpeg, image/webp"
                                                 ref={inputFileRef}
                                                 onChange={handleInputChange}
                                                 multiple=""/>
@@ -544,7 +545,7 @@ function CreateProduct() {
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
-                                                to={"/admin/product/list"}
+                                                to={"/admin/business/product/list"}
                                                 className="btn btn-outline-secondary float-end mx-2 mt-2 shadow">
                                                 Trở về
                                             </NavLink>
