@@ -14,6 +14,10 @@ export function ImportProduct() {
   const navigate = useNavigate();
   const [supplierId, setSupplier] = useState(null)
   const [productId, setProduct] = useState()
+  const vnd = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
 
   const findSupplier = async (id) => {
     const res = await findSupplierById(id);
@@ -77,7 +81,7 @@ export function ImportProduct() {
           productId: productId ? productId.id : null
         }}
         validationSchema={Yup.object({
-          quantity: Yup.number()
+          quantity: Yup.number("ok")
             .integer("Vui lòng nhập số nguyên dương")
             .required("Vui lòng không bỏ trống số lượng")
             .min(1, "Số lượng phải lớn hơn 0")
@@ -130,7 +134,7 @@ export function ImportProduct() {
                     <label>Đơn giá <span style={{ color: "red" }}>*</span></label>
                   </div>
                   <div className="col-6 mb-2">
-                    <Field className="form-control mt-2 border border-dark" value={productId?.price}
+                    <Field className="form-control mt-2 border border-dark" value={productId?.price ? vnd.format(productId?.price): null}
                       name="product" type="text" readOnly />
 
                   </div>
