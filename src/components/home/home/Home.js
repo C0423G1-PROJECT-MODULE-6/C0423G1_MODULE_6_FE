@@ -10,6 +10,7 @@ import { getBestsellers, getListByName } from '../../../service/home/HomeService
 import Header from '../common/Header';
 import Footer from '../common/Footer';
 import { RingLoader } from 'react-spinners';
+import { useParams } from 'react-router-dom';
 
 const Home = () => {
 
@@ -18,6 +19,8 @@ const Home = () => {
     const [ipads, setIpads] = useState();
     const [watches, setWatches] = useState();
     const [bestsellers, setBestsellers] = useState();
+    const param = useParams();
+
 
     useEffect(() => {
         getIphones();
@@ -27,7 +30,9 @@ const Home = () => {
         getBestsellersOnHome();
     }, [])
 
-
+    useEffect(() => {
+        document.title = 'C4 Zone - Trang chủ'
+    }, [])
 
     const getIphones = async () => {
         const data = await getListByName('iphone', 'id', 'desc');
@@ -50,26 +55,26 @@ const Home = () => {
         setBestsellers(data);
     }
 
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const handleLoad = () => {
-            setIsLoading(false);
-        };
+    // useEffect(() => {
+    //     const handleLoad = () => {
+    //         setIsLoading(false);
+    //     };
 
-        window.addEventListener('load', handleLoad);
+    //     window.addEventListener('load', handleLoad);
 
-        return () => {
-            window.removeEventListener('load', handleLoad);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('load', handleLoad);
+    //     };
+    // }, []);
     return (
         <>
-            {isLoading &&
+            {/* {isLoading &&
                 <div div className='spinner-container'>
                     <RingLoader className='spinner-item' color="#fff" />
                 </div >
-            }
+            } */}
             <div className='home-body'>
                 <Header />
                 <div className='home-container'>
@@ -154,7 +159,7 @@ const Home = () => {
                                             <a className="bestseller-card" href={'/detail/' + item.type + '/' + item.id}>
                                                 {item.quantity == 0 &&
                                                     <div className='soldout-part'>
-                                                        <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                        <img className='soldout-word' src='/images/chayhang-1.png' />
                                                     </div>
                                                 }
                                                 <div className="bestseller-image">
@@ -252,7 +257,7 @@ const Home = () => {
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             {item.quantity == 0 &&
                                                 <div className='soldout-part'>
-                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                    <img className='soldout-word' src='/images/chayhang-1.png' />
                                                 </div>
                                             }
                                             <div className="slide-image">
@@ -287,10 +292,10 @@ const Home = () => {
                             slidesPerView={4}
                             spaceBetween={-20}
                             loop={false}
-                            // autoplay={{
-                            //     delay: 3000,
-                            //     disableOnInteraction: false,
-                            // }}
+                            autoplay={{
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            }}
                             grabCursor={true}
                             navigation={{
                                 nextEl: ".macbook-swiper-button-next",
@@ -320,7 +325,7 @@ const Home = () => {
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             {item.quantity == 0 &&
                                                 <div className='soldout-part'>
-                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                    <img className='soldout-word' src='/images/chayhang-1.png' />
                                                 </div>
                                             }
                                             <div className="slide-image">
@@ -390,7 +395,7 @@ const Home = () => {
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             {item.quantity == 0 &&
                                                 <div className='soldout-part'>
-                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                    <img className='soldout-word' src='/images/chayhang-1.png' />
                                                 </div>
                                             }
                                             <div className="slide-image">
@@ -459,7 +464,7 @@ const Home = () => {
                                         <a className="product-link" href={'/detail/' + item.type + '/' + item.id}>
                                             {item.quantity == 0 &&
                                                 <div className='soldout-part'>
-                                                    <img className='soldout-word' src='/images/chayhang-2.png' />
+                                                    <img className='soldout-word' src='/images/chayhang-1.png' />
                                                 </div>
                                             }
                                             <div className="slide-image">

@@ -17,10 +17,10 @@ function ScannerOrderQR() {
         setIdProduct(parseInt(productObj.id));
         console.log(parseInt(productObj.id))
         if (userId) {
-            await customerService.createCart(param.id, parseInt(productObj.id));
+            await customerService.createCart(param.idCustomer, parseInt(productObj.id));
             console.log("------------------")
-            console.log(param.id)
-            navigate(`/admin/order/${param.id}`);
+            console.log(param.idCustomer)
+            navigate(`/admin/sale/order/${param.idCustomer}`);
         }
     };
 

@@ -95,7 +95,7 @@ function App() {
                         />
                     }
                 >
-                    <Route path="/admin/sale/order" element={<Order/>}/>
+                    <Route path="/admin/sale/order/:idCustomer" element={<Order/>}/>
                     <Route path="/admin/sale/order/showBill/:id" element={<ShowBill/>}/>
                     <Route path="/admin/sale/order/showBill/print" element={<PrintPDF/>}/>
                     <Route path="/admin/sale/scanner-qr-order/:idCustomer" element={<ScannerOrderQR/>}/>
