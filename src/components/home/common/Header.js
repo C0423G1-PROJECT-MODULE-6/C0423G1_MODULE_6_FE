@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -36,7 +36,6 @@ const Header = () => {
     const handleListenInput = (event) => {
         setNameTarget(event.target.value);
     }
-
     return (
         <>
             <header className='toper'>
