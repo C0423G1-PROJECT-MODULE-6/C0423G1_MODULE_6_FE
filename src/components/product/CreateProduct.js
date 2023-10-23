@@ -544,7 +544,7 @@ function CreateProduct() {
                                         </div>
                                         <div className="col-4 p-2 mt-3">
                                             <NavLink
-                                                to={"/admin/product/list"}
+                                                to={"/admin/business/product/list"}
                                                 className="btn btn-outline-secondary float-end mx-2 mt-2 shadow">
                                                 Trở về
                                             </NavLink>
