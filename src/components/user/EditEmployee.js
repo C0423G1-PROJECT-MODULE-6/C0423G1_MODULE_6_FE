@@ -36,7 +36,7 @@ function EditEmployee(props) {
                             ...employeeUpdate,
                             employeeImage: url
                         }).then(() => {
-                            navigate("/admin/employee")
+                            navigate("/admin/admin/employee")
                         }).then(
                             () => {
                                 Swal.fire({
@@ -63,7 +63,7 @@ function EditEmployee(props) {
                 ...employeeUpdate,
                 employeeImage: employee?.employeeImage,
             }).then(() => {
-                navigate("/admin/employee")
+                navigate("/admin/admin/employee")
             }).then(
                 () => {
                     Swal.fire({
@@ -120,16 +120,14 @@ function EditEmployee(props) {
             setEmployee(newEmployee);
         } catch (err) {
             if (err.response.status === 404) {
-                navigate("/admin/employee");
+                navigate("/admin/admin/employee");
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Không thể tìm thấy nhân viên!',
                 })
             }
-        }
-        console.log(employee);
-        
+        }     
 
     }
     if (employee === undefined) {
@@ -145,11 +143,10 @@ function EditEmployee(props) {
                     employeeAddress: employee?.employeeAddress,
                     employeePhone: employee?.employeePhone,
                     userName: employee?.userName,
-                    employeeStartDay: employee?.employeeStartDay,
+                    employeeStartDate: employee?.employeeStartDate,
                     employeeBirthday: employee?.employeeBirthday,
                     employeeIdCard: employee?.employeeIdCard,
-                    email: employee?.email,
-                   
+                    email: employee?.email,       
                     employeeGender: employee?.employeeGender,
                     roleId: employee?.roleId
                     
@@ -170,7 +167,6 @@ function EditEmployee(props) {
                                 const currentDate = new Date();
                                 const selectedDate = parse(value, 'yyyy-MM-dd', new Date());
                                 const age = differenceInYears(currentDate, selectedDate);
-
                                 return age >= 18;
                             }),
                         employeeIdCard: Yup.string().required("Vui lòng nhập CCCD hoặc CMND")
@@ -359,7 +355,7 @@ function EditEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field
-                                                    name="employeeStartDay"
+                                                    name="employeeStartDate"
                                                     className="form-control border border-dark mt-2"
                                                     type="date"
                                                 />
@@ -476,7 +472,7 @@ function EditEmployee(props) {
                                         <div className="row">
                                             {/* button  */}
                                             <div className="col-3 p-2 mt-3">
-                                                <Link to={"/admin/employee"}>
+                                                <Link to={"/admin/admin/employee"}>
                                                     <button className="btn btn-outline-secondary float-end mx-1 mt-2 shadow">
                                                         Trở về
                                                     </button>

@@ -5,6 +5,7 @@ import * as supplierService from '../../service/supplier/SupplierService'
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from "../home/common/Footer";
 
 function CreateSupplier() {
     const [address, setAddress] = useState([]);
@@ -16,13 +17,19 @@ function CreateSupplier() {
         const data = await supplierService.getAllAddress();
         setAddress(data);
     }
-    const createSupplier = async (values) => {
-        const res = await supplierService.createNewSupplier(values);
-        if (res.status === 200) {
-            toast("Tạo mới thành công!");
-            navigate("/admin/supplier")
-        } else {
-            toast.error("Tạo mới thất bại!");
+    const createSupplier = async (values, setErrors) => {
+        try {
+            const res = await supplierService.createNewSupplier(values);
+            if (res.status === 200) {
+                toast("Tạo mới thành công!");
+                navigate("/admin/business/supplier")
+            } else {
+                toast.error("Tạo mới thất bại!");
+            }
+        } catch (e) {
+            if (e.response?.data){
+                setErrors(e.response.data)
+            }
         }
     }
     return (
@@ -33,8 +40,8 @@ function CreateSupplier() {
                 addressSupplier: "",
                 phoneNumberSupplier: "",
                 emailSupplier: ""
-            }} onSubmit={(values) => {
-                createSupplier(values)
+            }} onSubmit={(values, {setErrors}) => {
+                createSupplier(values, setErrors)
             }}
                     validationSchema={Yup.object(
                         {
@@ -59,7 +66,7 @@ function CreateSupplier() {
                         }
                     )}
             >
-                <div className="d-flex justify-content-center col-8 container mt-5 pt-5">
+                <div className="d-flex justify-content-center col-8 container mt-5 pt-5 mb-5">
                     <Form>
                         <fieldset
                             className="form-Field shadow mx-auto"
@@ -187,6 +194,7 @@ function CreateSupplier() {
                     </Form>
                 </div>
             </Formik>
+            <Footer/>
         </div>
     );
 }
