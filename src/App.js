@@ -31,7 +31,9 @@ import {SaleHistory} from "./components/order/SaleHistory";
 import ScannerQR from "./components/scanner_qr/ScannerQR";
 import ScannerOrderQR from "./components/scanner_qr/ScannerOrderQR";
 import EditSupplier from "./components/supplier/EditSupplier";
-import {Warehouse} from './components/warehouse/Warehouse';
+import { Warehouse } from './components/warehouse/Warehouse';
+import UpdateProduct from "./components/product/UpdateProduct";
+
 
 
 function App() {
@@ -100,6 +102,9 @@ function App() {
                     <Route path="/admin/business/product/list" element={<ProductList/>}/>
 
 
+                    <Route path="/admin/business/product/create" element={<CreateProduct />} />
+                    <Route path="/admin/business/product/list" element={<CreateProduct />} />
+                    <Route path="/admin/business/product/update/:id" element={<UpdateProduct />} />
 
                     /ware
                     <Route path="/admin/ware/warehouse/import/:product" element={<ImportProduct/>}/>
