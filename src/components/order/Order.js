@@ -314,7 +314,7 @@ function Order() {
                                         >
                                             Chọn sản phẩm
                                         </button>
-                                        {customer && <Link to={`/admin/scanner-qr-order/${customer.idCustomer}`}
+                                        {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
                                                            disabled={customer === null}>Scan QR</Link> }
                                     </div>
