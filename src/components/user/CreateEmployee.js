@@ -135,7 +135,7 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-
+                        roleId:roles?.id
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -441,6 +441,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
+                                                    
                                                     <option value="Nam" >Nam</option>
                                                     <option value="Nữ" >Nữ</option>
                                                 </Field>
@@ -461,8 +462,7 @@ function CreateEmployee(props) {
                                             <div className="col-4">
                                         
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
-                                                  
-                                                    <option value="" label='--Chọn công việc--'></option>
+                                                
                                                     {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
                                                     
                                                 </Field>
