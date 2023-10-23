@@ -177,7 +177,7 @@ function CreateEmployee(props) {
                                 /^\d{9}(\d{3})?$/u,
                                 "Vui lòng chỉ nhập số và độ dài là 9 hoặc 12."),
                         email: Yup.string()
-                        .required("Vui lòng nhập email")
+                        .required("Vui lòng nhập email.")
 
                     })}
                     onSubmit={(value, { setErrors }) => {
@@ -199,6 +199,7 @@ function CreateEmployee(props) {
                             },
                         }).then((result) => {
                             /* Read more about handling dismissals below */
+                            
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 console.log("I was closed by the timer");
                             }
@@ -468,7 +469,7 @@ function CreateEmployee(props) {
                                                 </Field>
                                                 <div style={{ height: 16 }}>
                                                    <ErrorMessage
-                                                        name="email"
+                                                        name="roleId"
                                                         style={{ color: "red", marginLeft: "20px" }}
                                                         component={"small"}
                                                     />
