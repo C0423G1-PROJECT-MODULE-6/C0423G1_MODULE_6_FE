@@ -80,6 +80,8 @@ function App() {
                     }
                 >
                     <Route path="/admin/admin/employee" element={<EmployeeList/>}/>
+                    <Route path="/admin/admin/employee/edit" element={<EditEmployee/>}/>
+                    <Route path="/admin/admin/employee/create" element={<CreateEmployee/>}/>
                 </Route>
 
 
