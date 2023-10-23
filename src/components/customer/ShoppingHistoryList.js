@@ -137,12 +137,10 @@ export function ShoppingHistoryList() {
                     <div className="col-12 d-flex justify-content-center">
                         <h2 className="mb-3">Chi tiết lịch sử mua hàng</h2>
                     </div>
-                    <div className="col-12 d-flex justify-content-end my-3">
-                        <div className="col-auto d-flex justify-content-start" style={{marginRight: "69%"}}>
-                            <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
-                        </div>
+                    <div className="col-12 d-flex justify-content-end mt-3">
+
                         <div className="col-auto mx-2">
-                            <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
+                            <input className="form-control" type="search" placeholder="Tìm theo tên sản phẩm" aria-label="Search"
                                    onKeyDown={handleKeyDown}
                                    onChange={(name) => {
                                        setSearchName(name.target.value)
@@ -155,6 +153,9 @@ export function ShoppingHistoryList() {
                         </div>
                     </div>
                     <div style={{minHeight: "220px"}}>
+                        <div className="col-auto d-flex justify-content-start mb-1" >
+                            <p className="m-0"> Số lượng: <span style={{color: "#0d6efd"}}>{records}</span></p>
+                        </div>
                         <table className="border border-dark table table-hover table-layout">
                             <thead>
                             <tr>
@@ -169,7 +170,7 @@ export function ShoppingHistoryList() {
                                 historys.map((history, index) => {
                                     return (
                                         <tr>
-                                            <td>{index + 1}</td>
+                                            <td>{(index + 1)+((page)*5)}</td>
                                             <td>{new Date(history.dateOfOrder).toLocaleDateString('en-GB')}</td>
                                             <td>{history.nameProduct}</td>
                                             <td>{vnd.format(history.priceOrder)}</td>
