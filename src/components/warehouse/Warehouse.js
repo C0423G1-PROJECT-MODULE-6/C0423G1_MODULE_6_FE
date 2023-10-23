@@ -91,7 +91,7 @@ export function Warehouse() {
         </div>
         <div style={{ minHeight: "455px" }} id="QuanND">
           <table className="shadow w-100">
-            <thead>
+            <thead style={{color: "white"}}>
               <tr style={{ background: "black" }}>
                 <th style={{ background: "black" }}>#</th>
                 <th style={{ background: "black" }}>Ngày</th>
