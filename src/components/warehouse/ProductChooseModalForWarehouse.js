@@ -1,12 +1,12 @@
 import React, {useEffect, useState, useRef} from 'react';
-import "./modal_table.css";
-import * as productService from "../../service/product/ProductService"
+import "../modal/modal_table.css";
 import * as cartService from "../../service/cart/CartService";
 import * as customerService from '../../service/customer/CustomerService';
 import Swal from "sweetalert2";
 import {toast} from "react-toastify";
+import { getAllType1, getPageProductModal1 } from '../../service/warehouse/WarehouseService';
 
-const ProductChooseModal = ({data1,idCustomer,handleData}) => {
+const ProductChooseModalForWarehouse = ({data1,idCustomer,handleData}) => {
 
     const modalRef = useRef(null); // Tạo một ref để truy cập modal
     const [productList, setProductList] = useState([]);
@@ -68,8 +68,8 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
     const loadProductList = async (choose, page, searchValue) => {
         let result;
              // result = await cartService.getPageProductModalWareHouse(choose, page, searchValue);
-             result = await productService.getPageProductModal(choose, page, searchValue);
-        const listType = await productService.getAllType();
+             result = await getPageProductModal1(choose, page, searchValue);
+        const listType = await getAllType1();
         setTypeProduct(listType);
         if (result?.status === 200) {
             setProductList(result?.data.content);
@@ -140,12 +140,12 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
             setChoose("price")
             setPage(0);
         }
-        // if (change === 4) {
-        //     const quantity = document.getElementById("valueQuantity").value;
-        //     setSearchName(quantity);
-        //     setChoose("quantity")
-        //     setPage(0);
-        // }
+        if (change === 4) {
+            const quantity = document.getElementById("valueQuantity").value;
+            setSearchName(quantity);
+            setChoose("quantity")
+            setPage(0);
+        }
     }
 
 
@@ -185,13 +185,13 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                         <option value={2}>Loại</option>
                                         <option value={3}>Giá</option>
                                     </select>
-                                    {/*{change === 4 &&*/}
-                                    {/*<select className="form-select shadow border-dark" name="groupValue"*/}
-                                    {/*        id="valueQuantity" style={{width: "175px"}} onChange={handleQuantity} defaultValue={"smaller 10"}>*/}
-                                    {/*    <option value={"smaller 10"}> Từ 0 đến 10</option>*/}
-                                    {/*    <option value={"10 to 50"}>Từ 10 đến 50</option>*/}
-                                    {/*    <option value={"better 50"}>Lớn hơn 50</option>*/}
-                                    {/*</select>}*/}
+                                    {change === 4 &&
+                                    <select className="form-select shadow border-dark" name="groupValue"
+                                            id="valueQuantity" style={{width: "175px"}} onChange={handleQuantity} defaultValue={"smaller 10"}>
+                                        <option value={"smaller 10"}> Từ 0 đến 10</option>
+                                        <option value={"10 to 50"}>Từ 10 đến 50</option>
+                                        <option value={"better 50"}>Lớn hơn 50</option>
+                                    </select>}
                                     {change === 1 &&
                                     <input
                                         type="text"
@@ -241,7 +241,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                             <div className="mx-auto p-3 " style={{width: "93%"}} id="TinDT">
                                 {data1 !== 1 ? <table className=" shadow w-100">
 
-                                        <tr style={{fontSize: "larger", backgroundColor: '#282c34', color: '#f5f5f5',}}>
+                                        <tr style={{fontSize: "larger", backgroundColor: "darkgrey"}}>
                                             <th style={{width: "5%", paddingLeft: "2%"}}>#</th>
                                             <th style={{width: "40%", paddingLeft: "2%"}}>Tên sản phẩm</th>
                                             <th style={{width: "20%", paddingLeft: "3%"}}>Giá tiền</th>
@@ -251,7 +251,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                         {productList && productList.length !== 0 ?
                                             <tbody>
                                             {productList.map((product, index) => (
-                                                (product.quantity > -1) ? <tr key={index} id={index} onClick={() => {
+                                                (product.quantity > 0) ? <tr key={index} id={index} onClick={() => {
                                                     if (!(arraySelect.includes(product?.id))) {
                                                         setArraySelect((pre) => [...pre, product?.id])
                                                         loadProductList(choose, page, searchName);
@@ -260,8 +260,8 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                                     }
                                                 }}
                                                                              style={arraySelect.indexOf(product?.id) !== -1 ? {
-                                                                                 background: 'darkgrey',
-                                                                                 // color: '#f5f5f5',
+                                                                                 background: '#282c34',
+                                                                                 color: '#f5f5f5',
                                                                                  height: 40
                                                                              } : {height: 40}}
                                                 >
@@ -307,7 +307,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                     :
                                     // ---------Modal data 1---------
                                     <table className=" shadow w-100">
-                                        <tr style={{fontSize: "larger", backgroundColor: '#282c34', color: '#f5f5f5'}}>
+                                        <tr style={{fontSize: "larger", backgroundColor: "darkgrey"}}>
                                             <th style={{width: "5%", paddingLeft: "1%"}}>STT</th>
                                             <th style={{width: "40%", paddingLeft: "2%"}}>Tên</th>
                                             <th style={{width: "20%", paddingLeft: "3%"}}>Giá</th>
@@ -323,13 +323,14 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
                                                             id: product?.id,
                                                             name: product?.name
                                                         });
-                                                        // console.log(selectedProduct.id);
+                                                        console.log(selectedProduct.id);
                                                     } else {
                                                         setSelectedProduct({id: null, name: ""});
-                                                        // console.log(selectedProduct.id)
+                                                        console.log(selectedProduct.id)
                                                     }
                                                 }} style={(selectedProduct.id === product?.id) ? {
-                                                    background: 'darkgrey',
+                                                    background: '#282c34',
+                                                    color: '#f5f5f5',
                                                     height: 40
                                                 } : {height: 40}}>
                                                     <td style={{
@@ -415,4 +416,4 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
     );
 };
 
-export default ProductChooseModal;
+export default ProductChooseModalForWarehouse;
