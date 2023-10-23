@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getAllType, getListProduct, removeProduct} from "../../service/product/ProductService";
 import {toast, ToastContainer} from "react-toastify";
 import HeaderAdmin from "../user/HeaderAdmin";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, Route, useNavigate} from "react-router-dom";
 import './table_quan.css'
+import Footer from "../home/common/Footer";
 
 export default function ProductList() {
     const [listType, setListType] = useState([]);
@@ -11,60 +12,49 @@ export default function ProductList() {
     const [value, setValue] = useState("");
     const [choose, setChoose] = useState("name");
     const [sort, setSort] = useState("");
-    const [otherSort, setOtherSort] = useState("asc");
+    const [otherSort, setOtherSort] = useState("dsc");
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const pattern = /[!@#$%^&*(),.?":{}|<>[\]/\\]/;
-    const [productSelect, setProductSelect] = useState(
-        {
-            id:null,
-            name:""
-        }
-    );
+    const [selectedProducts, setSelectedProducts] = useState([]);
     const [modal, setModal] = useState(false);
     const vnd = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND'
     })
-    const handleSearch=()=>{
-        if (pattern.test(value)){
+    const handleSearch = () => {
+        if (pattern.test(value)) {
             toast("Không được nhập kí tự đặc biệt")
-        }
-        else {
+        } else {
             setPage(0);
-            setProductSelect({});
+            setSelectedProducts([]);
             list()
         }
 
     }
     const showModal = () => {
-        if (productSelect.id == null) {
+        if (selectedProducts.length === 0) {
             toast("Vui lòng chọn sản phẩm");
         } else {
             setModal(true)
         }
     }
     const handleUpdate = () => {
-      if (productSelect.id==null){
-          toast("vui lòng chọn sản phẩm")
-      }else {
-          navigate(`/admin/product/update/${productSelect.id}`)
-      }
+        if (selectedProducts.length === 0) {
+            toast("vui lòng chọn sản phẩm")
+        } else {
+            navigate(`/admin/product/update/${selectedProducts[0].id}`)
+        }
     }
     const confirmDelete = async () => {
-        if (productSelect.id != null) {
-            const res = await removeProduct(productSelect.id);
-            if (res.status === 200) {
-                toast("Xóa thành công");
-                setModal(false);
-                setProductSelect({id:null,
-                name:""});
-            } else {
-                toast("Xóa thất bại")
-            }
-        }
+        selectedProducts.map(async p => {
+            await removeProduct(p.id)
+        })
+        toast("Xóa thành công");
+        setModal(false);
+        setSelectedProducts([]);
         list();
     }
     const list = async () => {
@@ -77,7 +67,7 @@ export default function ProductList() {
     }
     useEffect(() => {
         list()
-    }, [page,modal])
+    }, [page, modal])
     return (
         <>
             <HeaderAdmin/>
@@ -98,8 +88,8 @@ export default function ProductList() {
                         </div>
                         <div className="col-auto me-2">
                             <select className="form-select" onChange={event => setOtherSort(event.target.value)}>
-                                <option value="asc">Tăng dần</option>
                                 <option value="dsc">Giảm gần</option>
+                                <option value="asc">Tăng dần</option>
                             </select>
                         </div>
                         <div className="col-auto me-2">
@@ -144,7 +134,7 @@ export default function ProductList() {
                                 <input name="name" id="name" className="form-control"
                                        onChange={(event => setValue(event.target.value))} type="search"
                                        onKeyDown={(event => {
-                                           if (event.key==='Enter'){
+                                           if (event.key === 'Enter') {
                                                handleSearch()
                                            }
                                        })}
@@ -154,13 +144,13 @@ export default function ProductList() {
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
                                     onClick={() => {
-                                       handleSearch()
+                                        handleSearch()
                                     }}>Tìm kiếm
                             </button>
                         </div>
                     </div>
                 </div>
-                <div style={{minHeight: "300px"}} id="QuanND">
+                <div style={{minHeight: "455px"}} id="QuanND">
                     <table className="shadow w-100">
                         <thead>
                         <tr style={{background: "darkgrey"}}>
@@ -177,18 +167,25 @@ export default function ProductList() {
                         <tbody>
                         {listProduct && listProduct.map((p, status) =>
                             (<tr key={p.id} onClick={() => {
-                                if (productSelect.id===null||productSelect.id!==p.id){
-                                    setProductSelect({
-                                        id:p?.id,
-                                        name: p?.name
-                                    })
-                                }else {
-                                    setProductSelect({id:null,name: ""});
-                                    setModal(false);
+                                const isSelected = selectedProducts.find(product => product.id === p.id);
+
+                                if (isSelected) {
+                                    const updatedProducts = selectedProducts.filter(product => product.id !== p.id);
+                                    setSelectedProducts(updatedProducts);
+                                } else {
+                                    const updatedProducts = [...selectedProducts, {
+                                        id: p.id,
+                                        name: p.name
+                                    }];
+                                    setSelectedProducts(updatedProducts);
                                 }
                             }}
-                                 style={(productSelect.id===p?.id)?{background:'darkgrey',height:50}:{height: 50}}>
-                                <td style={{width: "5%"}}>{status + 1}</td>
+                                 style={{
+                                     height: "40px",
+                                     background: selectedProducts.some(product => product.id === p.id) ? "darkgrey" : "white"
+                                 }}
+                            >
+                                <td style={{width: "5%"}}>{(status + 1)+page*10}</td>
                                 <td style={{width: "30%"}}>{p.name}</td>
                                 <td style={{width: "12%"}}>{vnd.format(p.price)}</td>
                                 <td style={{width: "15%"}}>{p.cpu}</td>
@@ -214,25 +211,38 @@ export default function ProductList() {
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
                         <a className="me-1">
-                            <Link to={"/admin/product/create"} type="button" className="btn btn-outline-primary">Thêm mới</Link>
+                            <Link to={"/admin/product/create"} type="button" className="btn btn-outline-primary">Thêm
+                                mới</Link>
                         </a>
                         {
                             totalElements > 0 && (
                                 <>
-                                    <a className="me-1">
-                                        <button onClick={()=>handleUpdate()} type="button" className="btn btn-outline-success">Cập nhật</button>
-                                    </a>
-                                    <button type="button" className="btn btn-outline-danger"
+                                    {selectedProducts.length <= 1 && (
+                                        <a className="me-1">
+                                            <button onClick={() => handleUpdate()} type="button"
+                                                    className="btn btn-outline-success">Cập nhật
+                                            </button>
+                                        </a>
+                                    )}
+
+                                    <button type="button" className="btn btn-outline-danger me-1"
                                             data-bs-toggle={modal ? "modal" : ''}
                                             data-bs-target="#deleteModal" onClick={() => showModal()}>Xóa
                                     </button>
+                                    {selectedProducts.length >= 2 && (
+                                        <a className="me-1">
+                                            <button onClick={() => setSelectedProducts([])} type="button"
+                                                    className="btn btn-outline-secondary">Hủy Chọn
+                                            </button>
+                                        </a>
+                                    )}
                                 </>
                             )
                         }
 
                     </div>
                     {totalPages > 1 && (
-                        <div className="col-auto float-end">
+                        <div className="col-auto float-end mb-3">
                             <ul className="pagination mb-0">
                                 <li className="page-item">
                                     <a className={`page-link ${page === 0 ? "disabled" : ""}`}
@@ -253,33 +263,39 @@ export default function ProductList() {
                                 </li>
                                 <li className="page-item">
                                     <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
-                                       onClick={() => setPage(totalPages-1)}>Cuối</a>
+                                       onClick={() => setPage(totalPages - 1)}>Cuối</a>
                                 </li>
-
                             </ul>
-                        </div>)}
-
+                        </div>
+                    )}
                 </div>
             </div>
-            {modal&& (
+            {modal && (
                 <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel"
                      aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="deleteModalLabel">Thông báo!!!</h5>
+                                <h5 className="modal-title" id="deleteModalLabel">Thông báo!</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"/>
                             </div>
                             <div className="modal-body">
-                                <p>Bạn có muốn xóa sản phẩm {productSelect.name} không ??</p>
+                                <p>Bạn có muốn xóa các sản phẩm :{selectedProducts.map((product, s) => (
+                                        <>
+                                            <br/>
+                                            {s + 1}: {product.name}
+                                        </>
+                                    )
+                                )} không ?</p>
                             </div>
                             <div className="modal-footer">
                                 <button type="submit" className="btn btn-outline-primary"
                                         data-bs-dismiss="modal"
                                         onClick={() => confirmDelete()}>Xác nhận
                                 </button>
-                                <button type="button" onClick={()=>setModal(false)} className="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy
+                                <button type="button" onClick={() => setModal(false)}
+                                        className="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy
                                 </button>
                             </div>
                         </div>
@@ -287,6 +303,7 @@ export default function ProductList() {
                 </div>
             )}
             <ToastContainer/>
+            <Footer/>
         </>
     )
 }

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { getAllWarehouse } from "../../service/warehouse/WarehouseService"
 import { Link } from "react-router-dom"
 import HeaderAdmin from "../user/HeaderAdmin"
+import "../product/table_quan.css"
+import Footer from "../home/common/Footer"
 
 export function Warehouse() {
   const [warehouse, setWarehouse] = useState([])
@@ -87,45 +89,47 @@ export function Warehouse() {
             </div>
           </div>
         </div>
-        <table className="border border-dark table table-hover">
-          <thead style={{ background: 'darkgrey' }}>
-            <tr>
-              <th>#</th>
-              <th>Ngày</th>
-              <th>Tên hàng</th>
-              <th>Tên nhà cung cấp</th>
-              <th>Số lượng nhập</th>
-              <th>Đơn giá</th>
-              <th>Thành tiền</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              warehouse.map((w, index) => (
-                <tr key={w.id}>
-                  <td>{index + 1}</td>
-                  <td>{w.inputDate}</td>
-                  <td>{w.nameProduct}</td>
-                  <td>{w.nameSupplier}</td>
-                  <td>{w.quantity}</td>
-                  <td>{vnd.format(w.priceProduct)}</td>
-                  <td>{vnd.format(w.totalPrice)}</td>
-                </tr>
-              ))
-            }
-            {!totalElements && (
-              <tr>
-                <td colSpan={8}>
-                  <p style={{ textAlign: "center", color: "red" }}>Không tìm thấy</p>
-                </td>
+        <div style={{ minHeight: "455px" }} id="QuanND">
+          <table className="shadow w-100">
+            <thead>
+              <tr style={{ background: "darkgrey" }}>
+                <th style={{ background: "darkgrey" }}>#</th>
+                <th style={{ background: "darkgrey" }}>Ngày</th>
+                <th style={{ background: "darkgrey" }}>Tên hàng</th>
+                <th style={{ background: "darkgrey" }}>Tên nhà cung cấp</th>
+                <th style={{ background: "darkgrey" }}>Số lượng</th>
+                <th style={{ background: "darkgrey" }}>Đơn giá</th>
+                <th style={{ background: "darkgrey" }}>Thành tiền</th>
               </tr>
+            </thead>
+            <tbody>
+              {
+                warehouse.map((w, index) => (
+                  <tr key={w.id} style={{ height: 40 }}>
+                    <td style={{ width: "4%" }}>{(index + 1) + page * 10}</td>
+                    <td style={{ width: "8%" }}>{w.inputDate}</td>
+                    <td style={{ width: "27%" }}>{w.nameProduct}</td>
+                    <td style={{ width: "33%" }}>{w.nameSupplier}</td>
+                    <td style={{ width: "8%" }}>{w.quantity}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.priceProduct)}</td>
+                    <td style={{ width: "10%" }}>{vnd.format(w.totalPrice)}</td>
+                  </tr>
+                ))
+              }
+              {!totalElements && (
+                <tr>
+                  <td colSpan={8}>
+                    <p style={{ textAlign: "center", color: "red" }}>Không tìm thấy</p>
+                  </td>
+                </tr>
 
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
         <div className="row d-flex justify-content-around my-3">
           <div className="col float-start">
-            <Link className="me-1  " to="/admin/warehouse/import/0" style={{ textDecoration: 'none' }}>
+            <Link className="me-1  " to="/admin/ware/warehouse/import/0" style={{ textDecoration: 'none' }}>
               <button type="button" className="btn btn-outline-primary">Nhập sản phẩm</button>
             </Link>
           </div>
@@ -133,19 +137,32 @@ export function Warehouse() {
             <div className="col-auto float-end">
               <ul className="pagination mb-0">
                 <li className="page-item">
-                  <a className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => setPage(page - 1)} tabIndex="-1"
+                  <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                    onClick={() => setPage(0)} tabIndex="-1"
+                    aria-disabled="true">Đầu</a>
+                </li>
+                <li className="page-item">
+                  <a className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                    onClick={() => setPage(page - 1)} tabIndex="-1"
                     aria-disabled="true">Trước</a>
                 </li>
                 <li className="page-item" aria-current="page">
                   <a className="page-link" href="#">{page + 1}/{totalPages}</a>
                 </li>
                 <li className="page-item">
-                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`} onClick={() => setPage(page + 1)}>Sau</a>
+                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
+                    onClick={() => setPage(page + 1)}>Sau</a>
                 </li>
+                <li className="page-item">
+                  <a className={`page-link ${page >= totalPages - 1 ? "disabled" : ""}`}
+                    onClick={() => setPage(totalPages - 1)}>Cuối</a>
+                </li>
+
               </ul>
             </div>)}
         </div>
       </div>
+      <Footer />
     </>
   )
 }

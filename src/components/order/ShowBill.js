@@ -2,57 +2,49 @@ import React, { useEffect, useState } from 'react';
 import * as orderService from "../../service/order/OrderService";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
-import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
-import * as UserService from "../../service/user/UserService";
+import {useParams} from "react-router";
 
 function ShowBill() {
     const [orderBill, setOrderBill] = useState(null);
-    const [carts, setCarts] = useState([]);
+    const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [print, setPrint] = useState(false);
     const navigate = useNavigate();
-    const [userId, setUserId] = useState("");
-    const [userAppName, setUserAppName] = useState("");
+    const [customer, setCustomer] = useState(null);
+    const param = useParams();
 
-    const getAppUserId = async () => {
-        const isLoggedIn = infoAppUserByJwtToken();
-        if (isLoggedIn) {
-            const id = await getIdByUserName(isLoggedIn.sub);
-            setUserId(id.data);
-            const nameUser = await UserService.findById(id.data);
-            setUserAppName(nameUser.data.employeeName)
-        }
-    };
+    console.log(param.id)
 
-    const findOrderBillNewest = async () => {
-        const res = await orderService.findOrderBillNewest();
+    const findOrderBillNewest = async (idCus) => {
+        const res = await orderService.findOrderBillNewest(idCus);
         setOrderBill(res);
+        setCustomer(res.customer);
     };
 
-    const getAllCart = async () => {
-        const res = await orderService.getAllCart(userId);
-        setCarts(res.data);
+    const getAllCart = async (idCustomer) => {
+        const res = await orderService.getAllCart(idCustomer);
+        setProducts(res.data);
     };
 
 
     useEffect(() => {
-        getAppUserId();
-        findOrderBillNewest();
+        findOrderBillNewest(param.id);
         setPrint(0);
     }, []);
-    useEffect(() => {
-        userId && getAllCart();
-    }, [userId]);
 
     useEffect(() => {
-        if (carts.length > 0) {
+        customer && getAllCart(customer.idCustomer);
+    }, [customer]);
+
+    useEffect(() => {
+        if (products.length > 0) {
             let total = 0;
-            carts.forEach((cart, index) => {
-                total += cart.priceProduct * cart.quantityOrder + cart.priceProduct * 0.1;
+            products.forEach((product, index) => {
+                total += product.priceProduct * product.quantityOrder + product.priceProduct * 0.1;
             });
             setTotalPrice(total);
         }
-    }, [carts]);
+    }, [products]);
 
     const handlePrintChange = (e) => {
         const printStatus = e.target.checked ? 1 : 0;
@@ -117,14 +109,14 @@ function ShowBill() {
                             </tr>
                             </thead>
                             <tbody>
-                            {carts.map((cart, index) => (
+                            {products.map((product, index) => (
                                 <tr key={index}>
                                     <th scope="row" className="text-center">{index + 1}</th>
-                                    <td className="text-center">{cart ? cart.nameProduct : "N/A"}</td>
-                                    <td className="text-center">{cart ? cart.priceProduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
-                                    <td className="text-center">{cart ? cart.quantityOrder : "N/A"}</td>
+                                    <td className="text-center">{product ? product.nameProduct : "N/A"}</td>
+                                    <td className="text-center">{product ? product.priceProduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
+                                    <td className="text-center">{product ? product.quantityOrder : "N/A"}</td>
                                     <td className="text-center text-danger">
-                                        {cart ? (cart.priceProduct * cart.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
+                                        {product ? (product.priceProduct * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
                                     </td>
                                 </tr>
                             ))}

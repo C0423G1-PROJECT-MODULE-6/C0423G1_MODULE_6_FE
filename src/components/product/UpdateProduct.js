@@ -71,7 +71,7 @@ function UpdateProduct() {
         try {
             const result = await productService.getProductId(id)
             if (result == null) {
-                navigate("/admin/product/list")
+                navigate("/admin/business/product/list")
                 toast("Không tìm thấy sản phẩm.")
             }
             setProduct(result);

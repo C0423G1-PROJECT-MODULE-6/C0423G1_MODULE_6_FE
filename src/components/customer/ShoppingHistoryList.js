@@ -3,6 +3,8 @@ import {useParams} from "react-router";
 import * as customerService from "../../service/customer/CustomerService"
 import {Link} from "react-router-dom";
 import HeaderAdmin from "../user/HeaderAdmin";
+import {toast} from "react-toastify";
+import Footer from "../home/common/Footer";
 
 export function ShoppingHistoryList() {
     const param = useParams();
@@ -14,6 +16,7 @@ export function ShoppingHistoryList() {
     const [historys, setHistorys] = useState([]);
     const [customer, setCustomer] = useState(null);
     const [refresh, setRefresh] = useState(true);
+    const pattern = /[!@#$%^&*()_+=|{}<>?]/;
     const vnd = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND'
@@ -44,8 +47,12 @@ export function ShoppingHistoryList() {
     }, [page, refresh]);
 
     const handleSearch = () => {
-        setPage(0);
-        setRefresh(!refresh)
+        if (pattern.test(searchName)) {
+            toast("Không nhập ký tự đặc biệt");
+        } else {
+            setPage(0);
+            setRefresh(!refresh)
+        }
     }
 
     const handleKeyDown = (event) => {
@@ -137,8 +144,9 @@ export function ShoppingHistoryList() {
                         <div className="col-auto mx-2">
                             <input className="form-control" type="search" placeholder="Tìm theo tên" aria-label="Search"
                                    onKeyDown={handleKeyDown}
-                                   onChange={(name) => {setSearchName(name.target.value)
-                            }}/>
+                                   onChange={(name) => {
+                                       setSearchName(name.target.value)
+                                   }}/>
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
@@ -177,11 +185,16 @@ export function ShoppingHistoryList() {
                     </div>
                 </div>
 
-                <div className="container mt-3">
+                <div className="container mt-3 mb-5">
                     <div className="row">
                         <div className="col-auto ms-auto">
                             <nav style={{display: "flex"}} aria-label="Page navigation">
                                 <ul className="pagination mb-0 me-2">
+                                    <li className="page-item">
+                                        <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                                           onClick={() => setPage(0)} tabIndex="-1" href="#"
+                                           aria-disabled="true">Đầu</a>
+                                    </li>
                                     <li className="page-item ">
                                         <a onClick={() => previousPage()}
                                            className={`page-link ${page <= 0 ? "disabled" : ""}`} href="#" tabIndex="-1"
@@ -195,8 +208,12 @@ export function ShoppingHistoryList() {
                                            className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`}
                                            href="#">Sau</a>
                                     </li>
+                                    <li className="page-item">
+                                        <a className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} href="#"
+                                           onClick={() => setPage(totalPage - 1)}>Cuối</a>
+                                    </li>
                                 </ul>
-                                <Link to="/admin/customer">
+                                <Link to="/admin/business/customer">
                                     <button className="btn btn-outline-primary text-center" type="button">Trở về
                                     </button>
                                 </Link>
@@ -205,7 +222,7 @@ export function ShoppingHistoryList() {
                     </div>
                 </div>
             </div>
-
+            <Footer/>
         </>
     )
 }

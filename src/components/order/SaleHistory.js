@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from "react";
 import * as orderService from "../../service/order/OrderService"
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from '../home/common/Footer'
 
 export function SaleHistory() {
-    const [saleHistorys, setSaleHistorys] = useState([]);
-    const [limit, setLimit] = useState(5);
+    const [saleHistories, setSaleHistories] = useState([]);
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(0);
     const [records, setRecords] = useState();
     const [totalPage, setTotalPage] = useState();
     const [searchName, setSearchName] = useState("");
     const [refresh, setRefresh] = useState(true);
+    const [sort, setSort] = useState("");
+    const [otherSort, setOtherSort] = useState("")
+
+
 
     const vnd = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
@@ -18,16 +23,16 @@ export function SaleHistory() {
 
     const getSaleHistory = async () => {
         try {
-            const array =  await orderService.getSaleHistory(limit, page, searchName);
-            setSaleHistorys(array.data.content);
+            const array =  await orderService.getSaleHistory(limit, page, searchName,sort,otherSort);
+            console.log(array)
+            setSaleHistories(array.data.content);
             setRecords(array.data.totalElements);
             setTotalPage(array.data.totalPages);
         }catch (e) {
-            setSaleHistorys([]);
+            setSaleHistories([]);
             setRecords(0);
             setTotalPage(0);
         }
-
     }
     useEffect(() => {
         getSaleHistory();
@@ -37,6 +42,11 @@ export function SaleHistory() {
         setPage(0);
         setRefresh(!refresh)
     }
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    }
 
     const previousPage = () => {
         setPage(page - 1);
@@ -45,6 +55,7 @@ export function SaleHistory() {
     const nextPage = () => {
         setPage(page + 1);
     }
+    console.log(saleHistories);
     return(
         <>
             <HeaderAdmin/>
@@ -55,66 +66,78 @@ export function SaleHistory() {
                 <div className="row my-3">
                     <div className="col-12 d-flex justify-content-end">
                         <div className="col-auto me-2">
-                            <select className="form-select">
-                                <option selected>--Sắp xếp theo--</option>
-                                <option>Thời Gian</option>
-                                <option>Khách Hàng</option>
-                                <option>Tên Sản Phẩm</option>
-                                <option>Số lượng</option>
-                                <option>Tổng tiền</option>
+                            <select className="form-select" onChange={(event) => setSort(event.target.value)}>
+                                <option value="" selected>--Sắp xếp theo--</option>
+                                <option value="sortTime">Thời Gian</option>
+                                <option value="sortNameCustomer">Khách Hàng</option>
+                                <option value="sortNameProduct">Tên Sản Phẩm</option>
+                                <option value="sortQuantity">Số lượng</option>
+                                <option value="sortTotalMoney">Tổng tiền</option>
+                            </select>
+                        </div>
+                        <div className="col-auto me-2">
+                            <select className="form-select" onChange={event => setOtherSort(event.target.value)}>
+                                <option value="dsc">Giảm gần</option>
+                                <option value="asc">Tăng dần</option>
                             </select>
                         </div>
                         <div className="col-auto me-2">
                             <input className="form-control" type="search" aria-label="Search" placeholder="Tìm tên khách hàng"
-                                   onChange={(name) => (setSearchName(name.target.value))}/>
+                                   onChange={(name) => (setSearchName(name.target.value))} onKeyDown={handleKeyDown}/>
                         </div>
                         <div className="col-auto">
                             <button className="btn btn-outline-primary text-center" type="button"
                                     onClick={handleSearch}>Tìm kiếm</button>
                         </div>
                     </div>
-
                 </div>
-                <table className="border border-dark table table-hover">
-                    <thead>
-                    <tr>
-                        <th style={{background: "darkgrey", width:"10%"}}>#</th>
-                        <th style={{background: "darkgrey", width:"15%"}}>Ngày</th>
-                        <th style={{background: "darkgrey", width:"15%"}}>Thời Gian</th>
-                        <th style={{background: "darkgrey", width:"20%"}}>Họ và tên khách hàng</th>
-                        <th style={{background: "darkgrey", width:"23%"}}>Thông tin mua hàng</th>
-                        <th style={{background: "darkgrey", width:"17%"}}>Tổng tiền</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {saleHistorys.length !==0?(
-                        saleHistorys.map((sale, index)=>{
-                            return(
-                                <tr key={sale.idOrderBill}>
-                                    <td>{index+1}</td>
-                                    <td>{new Date(sale.dateOfOrder).toLocaleDateString('en-GB')}</td>
-                                    <td>{sale.timeOfOrder}</td>
-                                    <td>{sale.nameCustomer}</td>
-                                    <td>{sale.infoBuy}</td>
-                                    <td>{vnd.format(sale.totalMoney)}</td>
-                                </tr>
-                            )
-                        })):(
+                <div style={{minHeight:"400px"}}>
+                    <table className="border border-dark table table-hover">
+                        <thead>
                         <tr>
-
-                            <td colSpan={6} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
-
+                            <th style={{background: "darkgrey", width:"5%"}}>#</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Ngày</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Thời Gian</th>
+                            <th style={{background: "darkgrey", width:"15%"}}>Họ và tên khách hàng</th>
+                            <th style={{background: "darkgrey", width:"45%"}}>Thông tin mua hàng</th>
+                            <th style={{background: "darkgrey", width:"10%"}}>Tổng tiền</th>
                         </tr>
-                    )
-                    }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {saleHistories.length !== 0 ? (
+                            saleHistories.map((sale, index)=>{
+                                return(
+                                    <tr key={sale.idOrderBill}>
+                                        <td>{index+1}</td>
+                                        <td>{new Date(sale.dateOfOrder).toLocaleDateString('en-GB')}</td>
+                                        <td>{sale.timeOfOrder}</td>
+                                        <td>{sale.nameCustomer}</td>
+                                        <td>{sale.infoBuy}</td>
+                                        <td>{vnd.format(sale.totalMoney)}</td>
+                                    </tr>
+                                )
+                            })):(
+                            <tr>
 
-                <div className="container mt-3">
+                                <td colSpan={6} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
+
+                            </tr>
+                        )
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="container my-3">
                     <div className="row">
                         <div className="col-auto ms-auto">
                             <nav className="bottom" aria-label="Page navigation">
                                 <ul className="pagination mb-0 ">
+                                    <li className="page-item">
+                                        <a className={`page-link ${page === 0 ? "disabled" : ""}`}
+                                           onClick={() => setPage(0)} tabIndex="-1" href="#"
+                                           aria-disabled="true">Đầu</a>
+                                    </li>
                                     <li className="page-item ">
                                         <a onClick={() => previousPage()}
                                            className={`page-link ${page <= 0 ? "disabled" : ""}`} href="#" tabIndex="-1"
@@ -128,12 +151,17 @@ export function SaleHistory() {
                                            className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`}
                                            href="#">Sau</a>
                                     </li>
+                                    <li className="page-item">
+                                        <a className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} href="#"
+                                           onClick={() => setPage(totalPage-1)}>Cuối</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </>
     );
 }

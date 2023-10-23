@@ -10,3 +10,7 @@
 .active td{
 color: white!important;
 }
+.colorthead tr{
+  background-color:grey !important;
+  --bs-table-bg:none;
+}
