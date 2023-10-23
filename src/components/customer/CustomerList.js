@@ -102,7 +102,7 @@ export function CustomerList() {
                         </button>
                     </div>
                 </div>
-                <div style={{minHeight: "400px"}}>
+                <div style={{minHeight: "520px"}}>
                     <table className="border border-dark table table-hover table-layout">
                         <thead>
                         <tr>
