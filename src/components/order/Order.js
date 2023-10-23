@@ -90,7 +90,7 @@ function Order() {
     useEffect(() => {
         let total = 0;
         products.forEach((product, index) => {
-            total += product.priceProduct * quantity[index] + product.priceProduct * 0.1;
+            total += (product.priceProduct + product.priceProduct * 0.2) * quantity[index] + product.priceProduct * 0.1;
         });
         setTotalPrice(total);
     }, [products, quantity]);
@@ -343,7 +343,7 @@ function Order() {
                                                                     <td className="col-1 text-center">{index + 1}</td>
                                                                     <td className="col-3 text-center">{product.nameProduct}</td>
                                                                     <td className="col-2 text-center">
-                                                                        {product.priceProduct
+                                                                        {(product.priceProduct + product.priceProduct * 0.2)
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
@@ -384,7 +384,7 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        {(product.priceProduct * quantity[index])
+                                                                        {((product.priceProduct + product.priceProduct * 0.1)  * quantity[index])
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
@@ -425,7 +425,7 @@ function Order() {
                                         type="text"
                                         value={totalPrice.toFixed(0)
                                             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " ₫"}
-                                        readOnly
+                                        disabled
                                     />
                                 </div>
                                 <div className="col-4 p-2 mt-2">
