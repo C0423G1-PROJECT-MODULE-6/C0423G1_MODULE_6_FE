@@ -57,10 +57,10 @@ function ShowBill() {
             const res =await orderService.acceptToPay(print,orderBill);
             console.log(res)
             if (res && res.type === "print"){
-                navigate("/admin/order");
+                navigate("/admin/sale/order");
                 toast("Bạn đã thanh toán thành công");
             }else if (res && res.type === "noPrint"){
-                navigate("/admin/order")
+                navigate("/admin/sale/order")
                 toast("Bạn đã thanh toán thành công");
             }
         }else {
