@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 import "../../css/product/CreateProduct.css"
 import HeaderAdmin from "../user/HeaderAdmin";
 import CKEditorComponent from "./CKEditorComponent";
+import Footer from "../home/common/Footer";
 
 function CreateProduct() {
     const navigate = useNavigate();
@@ -565,6 +566,7 @@ function CreateProduct() {
 
                 </Formik>
             </div>
+            <Footer/>
         </>
     )
 
