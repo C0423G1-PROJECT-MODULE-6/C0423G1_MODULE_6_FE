@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import ProductChooseModal from "../modal/ProductChooseModal";
 import SupplierChooseModal from "./SupplierChooseModal";
 import HeaderAdmin from "../user/HeaderAdmin";
+import ProductChooseModalForWarehouse from "./ProductChooseModalForWarehouse";
 
 export function ImportProduct() {
   const param = useParams()
@@ -215,7 +216,7 @@ export function ImportProduct() {
         </Form>
       </Formik>
       <ToastContainer/>
-      <ProductChooseModal data1={1} handleData={handleDataByChooseProduct} />
+      <ProductChooseModalForWarehouse data1={1} handleData={handleDataByChooseProduct} />
       <SupplierChooseModal handleData={handleDataByChooseSupplier} />
     </>
   )
