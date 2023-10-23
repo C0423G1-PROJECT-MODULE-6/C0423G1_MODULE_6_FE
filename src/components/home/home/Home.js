@@ -161,8 +161,8 @@ const Home = () => {
                                                     <img src={item.image} alt="" />
                                                 </div>
                                                 <h3 className="bestseller-name">{item.type != 'Watch' ? item.name + " " + item.capacity : item.name}</h3>
-                                                <h2 className="bestseller-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                                <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                                <h2 className="bestseller-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                                <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                             </a>
                                         </SwiperSlide>
                                     )
@@ -259,8 +259,8 @@ const Home = () => {
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
-                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                         </a>
                                     </SwiperSlide>
                                 )
@@ -327,8 +327,8 @@ const Home = () => {
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
-                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                         </a>
                                     </SwiperSlide>
                                 )
@@ -397,8 +397,8 @@ const Home = () => {
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name + " " + item.capacity}</h3>
-                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                         </a>
                                     </SwiperSlide>
                                 )
@@ -466,8 +466,8 @@ const Home = () => {
                                                 <img className='product-avatar' src={item.image} alt="" />
                                             </div>
                                             <h3 className="product-name">{item.name}</h3>
-                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price)}đ</h2>
-                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.05)}đ</h4>
+                                            <h2 className="product-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.2)}đ</h2>
+                                            <h4 className="line-through-price">{new Intl.NumberFormat("de-DE").format(item.price * 1.25)}đ</h4>
                                         </a>
                                     </SwiperSlide>
                                 )

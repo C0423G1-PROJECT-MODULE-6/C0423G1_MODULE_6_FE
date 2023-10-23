@@ -4,17 +4,17 @@ import {
   deleteEmployee,
   getEmployeeList,
 } from "../../service/user/EmployeeService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAppRoleList } from "../../service/user/AppRoleService";
 import ModalDelete from "./EmployeeDeleteModal";
 import "../../css/user/employee.css";
 import HeaderAdmin from "./HeaderAdmin";
 import { toast } from "react-toastify";
 import Footer from "../home/common/Footer";
-import {format, parseISO} from "date-fns";
-
+import { format, parseISO } from "date-fns";
 
 const EmployeeList = () => {
+  const navigate = useNavigate();
   const [employeeList, setEmployeeList] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
@@ -22,12 +22,12 @@ const EmployeeList = () => {
   const [listJob, setListJob] = useState([]);
   const [searchJob, setSearchJob] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [employee, setEmployee] = useState(null);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [modal, setModal] = useState({
     show: false,
-    info: {},
+    info: [],
   });
+  const [totalElement, setTotalElement] = useState(0);
 
   //loadListJob
   const loadListJob = async () => {
@@ -37,7 +37,7 @@ const EmployeeList = () => {
   useEffect(() => {
     loadListJob();
   }, []);
- 
+
   //list
   const loadEmployeeList = async () => {
     try {
@@ -47,13 +47,16 @@ const EmployeeList = () => {
         searchName,
         searchPhone
       );
-      if (result.content.length === 0) {
+      if (result.data.content.length === 0) {
         setPage(page - 1);
       }
-      setTotalPage(result.totalPages);
-      setEmployeeList(result.content);
+      setTotalPage(result.data.totalPages);
+      setEmployeeList(result.data.content);
+      setTotalElement(result.data.totalElements);
     } catch {
       setEmployeeList([]);
+      setTotalPage(0);
+      setTotalElement(0);
     }
   };
   useEffect(() => {
@@ -73,42 +76,33 @@ const EmployeeList = () => {
   };
 
   //delete
-  const handleRowClick = (employee) => {
-    if (employee.id === selectedRow) {
-      setSelectedRow(null);
-      setEmployee(null);
+  const showModalDelete = () => {
+    if (selectedEmployees.length !== 0) {
+      setModal({
+        show: true,
+        info: selectedEmployees,
+      });
     } else {
-      setSelectedRow(employee.id);
-      setEmployee(employee);
+      toast("Vui lòng chọn nhân viên để xóa");
     }
-  };
-
-  const showModalDelete = (employee) => {
-    setModal({
-      show: true,
-      info: employee,
-    });
   };
   const hideModalDelete = () => {
     setModal({
       show: false,
-      info: {},
+      info: [],
     });
   };
-  const deleteConfirm = async (id) => {
-    if (id === 1) {
-      toast.error("Không được xóa admin");
-      hideModalDelete();
-      return;
+  const deleteConfirm = async () => {
+    for (const e of selectedEmployees) {
+      await deleteEmployee(e.id);
     }
-    if (selectedRow !== null) {
-      await deleteEmployee(id);
-      hideModalDelete();
-      loadEmployeeList();
-      setSelectedRow(null);
-      setEmployee(null);
-      toast("xóa thành công");
+    toast("Xóa thành công");
+    if (employeeList.length === selectedEmployees.length && totalPage !== 1) {
+      setPage(page - 1);
     }
+    setSelectedEmployees([]);
+    hideModalDelete();
+    loadEmployeeList();
   };
 
   //search
@@ -122,6 +116,17 @@ const EmployeeList = () => {
     setPage(0);
   };
 
+  const handleUpdate = () => {
+    if (selectedEmployees.length === 0) {
+      toast("Vui lòng chọn nhận viên để chỉnh sửa");
+    } else {
+      navigate(`/admin/admin/employee/edit/${selectedEmployees[0].id}` );
+      
+    }
+
+  };
+
+  console.log(selectedEmployees);
   return (
     <>
       <HeaderAdmin></HeaderAdmin>
@@ -158,7 +163,7 @@ const EmployeeList = () => {
                 className="form-control"
                 type="number"
                 aria-label="Search"
-                placeholder="Tìm theo số điện thoại"
+                placeholder="Tìm số điện thoại"
                 id="searchPhone"
               />
             </div>
@@ -173,24 +178,27 @@ const EmployeeList = () => {
             </div>
           </div>
         </div>
-        <div style={{ minHeight: "220px" }}>
+        <div style={{ minHeight: "365px" }}>
           <table className="border border-dark table table-hover">
             <thead>
               <tr>
-                <th style={{ backgroundColor: "darkgray", width: "5%" }}>#</th>
-                <th style={{ backgroundColor: "darkgray", width: "25%" }}>
+                <th style={{ backgroundColor: "black",color:"white", width: "5%" }}>#</th>
+                <th style={{ backgroundColor: "black",color:"white", width: "20%" }}>
                   Họ và tên
                 </th>
-                <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                <th style={{ backgroundColor: "black",color:"white", width: "10%" }}>
+                  Ảnh
+                </th>
+                <th style={{ backgroundColor: "black",color:"white", width: "10%" }}>
                   Ngày sinh
                 </th>
-                <th style={{ backgroundColor: "darkgray", width: "35%" }}>
+                <th style={{ backgroundColor: "black",color:"white", width: "30%" }}>
                   Địa chỉ
                 </th>
-                <th style={{ backgroundColor: "darkgray", width: "15%" }}>
+                <th style={{ backgroundColor: "black",color:"white", width: "15%" }}>
                   Công việc
                 </th>
-                <th style={{ backgroundColor: "darkgray", width: "10%" }}>
+                <th style={{ backgroundColor: "black",color:"white", width: "10%" }}>
                   Số điện thoại
                 </th>
               </tr>
@@ -206,15 +214,50 @@ const EmployeeList = () => {
                 employeeList.map((employee, index) => (
                   <tr
                     key={employee.id}
-                    onClick={() => handleRowClick(employee)}
+                    onClick={() => {
+                      const isSelected = selectedEmployees.find(
+                        (e) => e.id === employee.id
+                      );
+
+                      if (isSelected) {
+                        const updatedEmployee = selectedEmployees.filter(
+                          (e) => e.id !== employee.id
+                        );
+                        setSelectedEmployees(updatedEmployee);
+                      } else {
+                        const updatedEmployee = [
+                          ...selectedEmployees,
+                          employee,
+                        ];
+                        setSelectedEmployees(updatedEmployee);
+                      }
+                    }}
                     className={
-                      selectedRow === employee.id ? "selectedphuoc" : ""
+                      selectedEmployees.some((e) => e.id === employee.id)
+                        ? "selectedphuoc"
+                        : ""
                     }
                   >
                     <td>{index + 1}</td>
                     <td>{employee.employeeName}</td>
-                    {/* <td>{employee.employeeBirthday}</td> */}
-                    <td>{format(parseISO(employee.employeeBirthday), 'dd-MM-yyyy')}</td>
+                    <td>
+                      <img
+                        src={employee.employeeImage}
+                        alt={"không có ảnh"}
+                        height="47.5"
+                        width="40"
+                        style={{
+                          borderRadius: "100px",
+                          marginRight: "3px",
+                        }}
+                      />
+                    </td>
+                    <td>
+                      {format(
+                        parseISO(employee.employeeBirthday),
+                        "dd-MM-yyyy"
+                      )}
+                    </td>
                     <td>{employee.employeeAddress}</td>
                     <td>{employee.employeeTypeName}</td>
                     <td>{employee.employeePhone}</td>
@@ -227,81 +270,97 @@ const EmployeeList = () => {
         {/* java script để chọn row */}
         {/* java script để chọn row */}
         <div className="d-flex col-12 mt-3">
-          <div className="col float-start">
-            <Link to={"/admin/admin/employee/create"}>
-              <button type="button" className="btn btn-outline-primary me-1">
-                Thêm mới
-              </button>
-            </Link>
-
-            <Link to={`/admin/admin/employee/edit/${employee?.id}`}>
-              <button
-                type="button"
-                className="btn btn-outline-success me-1"
-                disabled={employee === null}
-              >
-                Cập nhật
-              </button>
-            </Link>
-            <button
-              type="button"
-              className="btn btn-outline-danger me-1"
-              onClick={() => (employee !== null) & showModalDelete(employee)}
-              disabled={employee === null}
-            >
-              Xóa
+          <Link to={"/admin/admin/employee/create"}>
+            <button type="button" className="btn btn-outline-primary me-1">
+              Thêm mới
             </button>
-          </div>
-          <div className="col-auto float-end">
-            <nav aria-label="Page navigation">
-              <ul className="pagination">
-                <li className="page-item">
-                  <button
-                    onClick={() => setPage(0)}
-                    className={`page-link ${page <= 0 ? "disabled" : ""}`}
-                  >
-                    Đầu 
-                  </button>
-                </li>
-                <li className="page-item">
-                  <button
-                    onClick={() => previousPage()}
-                    className={`page-link ${page <= 0 ? "disabled" : ""}`}
-                  >
-                    Trước
-                  </button>
-                </li>
-                <li className="page-item" aria-current="page">
-                  <a className="page-link" href="#">
-                    {page + 1}/{totalPage}
-                  </a>
-                </li>
-                <li className="page-item">
-                  <button
-                    onClick={() => nextPage()}
-                    className={`page-link ${
-                      page >= totalPage - 1 ? "disabled" : ""
-                    }`}
-                  >
-                    Sau
-                  </button>
-                </li>
-                <li className="page-item">
-                  <button
-                    onClick={() => setPage(totalPage-1)}
-                    className={`page-link ${
-                      page >= totalPage - 1 ? "disabled" : ""
-                    }`}
-                  >
-                    Cuối
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          </Link>
+          {totalElement > 0 && (
+            <>
+           
+              <div className="col float-start">
+                {selectedEmployees.length <= 1 && 
+                <button
+                  type="button"
+                  className="btn btn-outline-success me-1"
+                  onClick={() => handleUpdate()}
+                >
+                  Cập nhật
+                </button>
+          }
+                
+                <button
+                  type="button"
+                  className="btn btn-outline-danger me-1"
+                  onClick={() => showModalDelete()}
+                >
+                  Xóa
+                </button>
+
+                {selectedEmployees.length >= 2 && (
+                                    <a className="me-1">
+                                        <button onClick={() => setSelectedEmployees([])} type="button"
+                                            className="btn btn-outline-secondary">Hủy Chọn
+                                        </button>
+                                    </a>
+                                )}
+              </div>
+            </>
+          )}
+
+          {totalPage > 1 && (
+            <>
+              <div className="col-auto float-end">
+                <nav aria-label="Page navigation">
+                  <ul className="pagination">
+                    <li className="page-item">
+                      <button
+                        onClick={() => setPage(0)}
+                        className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                      >
+                        Đầu
+                      </button>
+                    </li>
+                    <li className="page-item">
+                      <button
+                        onClick={() => previousPage()}
+                        className={`page-link ${page <= 0 ? "disabled" : ""}`}
+                      >
+                        Trước
+                      </button>
+                    </li>
+                    <li className="page-item" aria-current="page">
+                      <a className="page-link" href="#">
+                        {page + 1}/{totalPage}
+                      </a>
+                    </li>
+                    <li className="page-item">
+                      <button
+                        onClick={() => nextPage()}
+                        className={`page-link ${
+                          page >= totalPage - 1 ? "disabled" : ""
+                        }`}
+                      >
+                        Sau
+                      </button>
+                    </li>
+                    <li className="page-item">
+                      <button
+                        onClick={() => setPage(totalPage - 1)}
+                        className={`page-link ${
+                          page >= totalPage - 1 ? "disabled" : ""
+                        }`}
+                      >
+                        Cuối
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </>
+          )}
         </div>
       </div>
-      <h1>anhcao</h1>
       <Footer></Footer>
       {/* Modal */}
       <ModalDelete

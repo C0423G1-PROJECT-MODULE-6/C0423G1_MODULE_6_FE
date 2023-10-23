@@ -9,6 +9,8 @@ import { getEmployee, updateEmployee } from '../../service/user/EmployeeService'
 import * as Yup from 'yup';
 import { differenceInYears, parse } from 'date-fns';
 import { getAppRoleList } from '../../service/user/AppRoleService';
+import HeaderAdmin from './HeaderAdmin';
+import Footer from '../home/common/Footer';
 function EditEmployee(props) {
     const [roles, setRole] = useState([]);
     const navigate = useNavigate();
@@ -127,9 +129,7 @@ function EditEmployee(props) {
                     text: 'Không thể tìm thấy nhân viên!',
                 })
             }
-        }
-        console.log(employee);
-        
+        }     
 
     }
     if (employee === undefined) {
@@ -138,6 +138,7 @@ function EditEmployee(props) {
     return (
         <div>
             <>
+                <HeaderAdmin></HeaderAdmin>
                 <Formik initialValues={{
                     id:employee?.id,
                     employeeCode: employee?.employeeCode,
@@ -145,11 +146,10 @@ function EditEmployee(props) {
                     employeeAddress: employee?.employeeAddress,
                     employeePhone: employee?.employeePhone,
                     userName: employee?.userName,
-                    employeeStartDay: employee?.employeeStartDay,
+                    employeeStartDate: employee?.employeeStartDate,
                     employeeBirthday: employee?.employeeBirthday,
                     employeeIdCard: employee?.employeeIdCard,
-                    email: employee?.email,
-                   
+                    email: employee?.email,       
                     employeeGender: employee?.employeeGender,
                     roleId: employee?.roleId
                     
@@ -170,7 +170,6 @@ function EditEmployee(props) {
                                 const currentDate = new Date();
                                 const selectedDate = parse(value, 'yyyy-MM-dd', new Date());
                                 const age = differenceInYears(currentDate, selectedDate);
-
                                 return age >= 18;
                             }),
                         employeeIdCard: Yup.string().required("Vui lòng nhập CCCD hoặc CMND")
@@ -359,7 +358,7 @@ function EditEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field
-                                                    name="employeeStartDay"
+                                                    name="employeeStartDate"
                                                     className="form-control border border-dark mt-2"
                                                     type="date"
                                                 />
@@ -499,6 +498,7 @@ function EditEmployee(props) {
                         </div>
                     </Form>
                 </Formik>
+                <Footer></Footer>
             </>
 
         </div>
