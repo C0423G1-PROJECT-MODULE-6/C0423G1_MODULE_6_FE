@@ -463,7 +463,7 @@ function CreateEmployee(props) {
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
                                                   
                                                     <option value="" label='--Chọn công việc--'></option>
-                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.name} />))}
+                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
                                                     
                                                 </Field>
                                                 <div style={{ height: 16 }}>
