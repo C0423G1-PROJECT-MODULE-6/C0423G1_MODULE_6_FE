@@ -151,7 +151,8 @@ export function ImportProduct() {
                       alt=""
                       src={productId?.image}
                       style={{
-                        width: "170px",
+                        padding:"10px",
+                        width: "200x",
                         height: "200px",
                         borderRadius: "10px",
                         objectFit: "cover",
@@ -162,7 +163,8 @@ export function ImportProduct() {
                         alt=""
                         src="https://i.pinimg.com/564x/e8/03/d1/e803d189c1a961c2b404641ea477128c.jpg"
                         style={{
-                          width: "170px",
+                          padding:"10px",
+                          width: "200px",
                           height: "200px",
                           borderRadius: "10px",
                           objectFit: "cover",
