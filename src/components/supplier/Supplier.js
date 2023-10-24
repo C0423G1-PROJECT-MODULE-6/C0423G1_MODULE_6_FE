@@ -262,7 +262,7 @@ function Supplier() {
                                             <td >{supplier.idSupplier}</td>
                                             <td >{supplier.nameSupplier}</td>
                                             <td >{addressList[supplier.addressSupplier]}</td>
-                                            <td >{supplier.phoneNumberSupplier}</td>
+                                            <td >{supplier.phoneNumberSupplier.replace(/(\d{3})(\d{4})(\d{3})/, "$1.$2.$3")}</td>
                                             <td >{supplier.emailSupplier}</td>
                                         </tr>
                                     </>
