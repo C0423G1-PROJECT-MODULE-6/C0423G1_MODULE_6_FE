@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {useParams} from "react-router";
 import Footer from "../home/common/Footer";
-import Header from "../home/common/Header";
+import Header from "../user/HeaderAdmin";
 
 function ShowBill() {
     const [orderBill, setOrderBill] = useState(null);
@@ -42,9 +42,11 @@ function ShowBill() {
         if (products.length > 0) {
             let total = 0;
             products.forEach((product, index) => {
-                total += product.priceProduct * 1.2 * product.quantityOrder + product.priceProduct * 0.1;
+                total += product.priceProduct * 1.2 * product.quantityOrder;
             });
-            setTotalPrice(total);
+            let vat = total * 0.1;
+            let totalPriceVAT = vat + total;
+            setTotalPrice(totalPriceVAT);
         }
     }, [products]);
 
@@ -53,9 +55,7 @@ function ShowBill() {
         console.log(printStatus)
         setPrint(printStatus);
     };
-    const printPDF = () => {
-        window.print();
-    };
+
 
     const handleSubmit =async () => {
         if (products){
@@ -65,7 +65,7 @@ function ShowBill() {
                 navigate("/admin/sale/order/showBill/print");
                 toast("Bạn đã thanh toán thành công");
             }else if (res && res.type === "noPrint"){
-                navigate("/admin/sale/order")
+                navigate("/admin/sale/order/0")
                 toast("Bạn đã thanh toán thành công");
             }
         }else {
@@ -76,7 +76,7 @@ function ShowBill() {
     return (
         <>
             <Header></Header>
-            <div className="container my-5">
+            <div className="container mt-5 pt-5 mb-5">
                 {orderBill && orderBill.customer ? (
                     <div className="card">
                         <div className="card-header">
@@ -124,7 +124,7 @@ function ShowBill() {
                                     <tr key={index}>
                                         <th scope="row" className="text-center">{index + 1}</th>
                                         <td className="text-center">{product ? product.nameProduct : "N/A"}</td>
-                                        <td className="text-center">{product ? (product.priceProduct *1.2).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
+                                        <td className="text-center">{product ? (product.priceProduct * 1.2).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}</td>
                                         <td className="text-center">{product ? product.quantityOrder : "N/A"}</td>
                                         <td className="text-center text-danger">
                                             {product ? (product.priceProduct * 1.2 * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) : "N/A"}
