@@ -77,3 +77,14 @@ export const getQuantityToday = async () => {
         return [];
     }
 };
+
+export const getTypeReport = async () => {
+    try {
+        const res = await axios.get(`http://localhost:8080/api/admin/business/sales-report/typereport`);
+        console.log(res.data)
+        return res.data;
+    } catch (e) {
+        // alert("Không có dữ liệu");
+        return [];
+    }
+};
