@@ -19,7 +19,7 @@ const List = () => {
     const [series, setSeries] = useState([])
     const [sortName, setSortName] = useState('id');
     const [sortType, setSortType] = useState('desc');
-    const [searchName, setSearchName] = useState('');
+    const [searchName, setSearchName] = useState(param.type);
     const [isActive, setIsActive] = useState('all');
     const [isLoading, setIsLoading] = useState(true);
 
