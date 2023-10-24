@@ -21,7 +21,7 @@ const CustomerCreateModal = ({handleData}) => {
             resetModal.click();
             submitModal.click();
             handleData(result.data.idCustomer);
-            toast.success("Thêm mới khách hàng thành công.");
+            toast.success("Thêm mới khách hàng "+result.data.nameCustomer +"thành công.");
         } catch (err) {
             if (err.response?.data) {
                 setErrors(err.response.data);
