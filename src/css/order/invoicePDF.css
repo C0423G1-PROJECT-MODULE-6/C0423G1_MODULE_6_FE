@@ -32,7 +32,7 @@ p small {
 }
 .buyer-first span {
     display: inline-block;
-    width: 300px;
+    min-width: 300px;
 }
 span.bank-acc {
     display: inline;
@@ -43,10 +43,11 @@ span.bank-acc {
     text-align: center;
 }
 .description-info table,
-tr,
-th,
-td {
-    border: 1px solid black;
+.description-info tr,
+.description-info td,
+.description-info th
+{
+    border: 1px solid black !important;
     border-collapse: collapse;
 }
 .description-info {
@@ -64,7 +65,10 @@ td {
     width: 100%;
 }
 .company-info td {
-    border: none;
+    border: none!important;
+}
+.company-info tr {
+    border:none !important;
 }
 .buyer-info {
     padding: 30px 50px;
@@ -82,7 +86,7 @@ td {
 .signature-info {
     display: flex;
     justify-content: space-around;
-    padding: 30px 0 200px;
+    padding: 30px 0 50px;
 }
 .money-to-word {
     border-top: 2px solid black;

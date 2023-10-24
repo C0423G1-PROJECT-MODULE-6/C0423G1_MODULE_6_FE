@@ -112,9 +112,9 @@ export default function ProductList() {
                                 <select onChange={event => setValue(event.target.value)} className="form-select"
                                         name="price" id="price">
                                     <option value="">Chọn giá</option>
-                                    <option value="smaller 7m">Dưới 7 triệu</option>
-                                    <option value="7m to 12m">7 đến 12 triệu</option>
-                                    <option value="better 12m">Trên 12 triệu</option>
+                                    <option value="smaller 10m">Dưới 10 triệu</option>
+                                    <option value="10m to 20m">10 đến 20 triệu</option>
+                                    <option value="better 20m">Trên 20 triệu</option>
                                 </select>
                             )}
                             {choose === "quantity" && (
@@ -122,8 +122,8 @@ export default function ProductList() {
                                         name="quantity" id="quantity">
                                     <option value="">Chọn số lượng</option>
                                     <option value="smaller 50">Dưới 50</option>
-                                    <option value="50 to 250">Từ 50 đến 250</option>
-                                    <option value="better 250">Trên 250</option>
+                                    <option value="50 to 200">Từ 50 đến 200</option>
+                                    <option value="better 200">Trên 200</option>
                                 </select>)}
                             {choose === "type" && (
                                 <select onChange={event => setValue(event.target.value)} className="form-select"

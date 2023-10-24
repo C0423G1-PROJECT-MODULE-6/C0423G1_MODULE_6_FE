@@ -40,14 +40,14 @@ function HomeAdmin() {
         datasets: [
             {
                 type: "bar",
-                label: "Số đơn bán",
+                label: "Số Sản Phẩm ",
                 backgroundColor: "rgba(211,11,59,0.2)",
                 data: dataQuantity,
                 yAxisID: "y1",
             },
             {
                 type: "line",
-                label: "Doanh thu (VND)",
+                label: "Lợi Nhuận (VND)",
                 borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 2,
                 fill: false,
@@ -81,7 +81,7 @@ function HomeAdmin() {
                 position: "right",
                 scaleLabel: {
                     display: true,
-                    labelString: "Doanh thu (VND)",
+                    labelString: "Lợi Nhuận (VND)",
                 },
             },
         },
@@ -130,9 +130,9 @@ function HomeAdmin() {
             <div className="container my-5 pt-4">
                 <div className="row mt-5">
                     <div className="col-md-4">
-                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#3ea4ed'}}>
+                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#02b9a8'}}>
                             <div className="card-header">
-                                Số đơn bán trong ngày
+                                Số sản phẩm bán trong ngày
                             </div>
                             <div className="card-body">
                                 <blockquote className="blockquote mb-0">
@@ -142,7 +142,7 @@ function HomeAdmin() {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card" style={{...cardBodyStyle, backgroundColor: '#f3d652'}}>
+                        <div className="card" style={{...cardBodyStyle, backgroundColor: 'rgba(0,11,231,0.91)'}}>
                             <div className="card-header">
                                 Doanh thu trong ngày
                             </div>
@@ -160,7 +160,7 @@ function HomeAdmin() {
                             </div>
                             <div className="card-body">
                                 <blockquote className="blockquote mb-0">
-                                    {dailyMonth} VND
+                                    {dailyMonth.toLocaleString()} VND
                                 </blockquote>
                             </div>
                         </div>
@@ -169,10 +169,14 @@ function HomeAdmin() {
                 <div className="row mt-5">
                     <div className="col-md-8">
                         <Bar data={barChartData} options={options}/>
+                        <p className="mt-4" style={{textAlign: "center"}}>Lợi Nhuận Theo Ngày Trong Tháng</p>
                     </div>
                     <div className="col-md-4">
                         <Doughnut data={donutChartData}/>
+                        <p className="mt-4" style={{textAlign: "center"}}>Doanh Thu Theo Loại Sản Phẩm</p>
+
                     </div>
+
                 </div>
             </div>
             <Footer/>
