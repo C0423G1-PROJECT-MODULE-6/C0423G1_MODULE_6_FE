@@ -66,9 +66,9 @@ export function Warehouse() {
                 <select onChange={event => setValue(event.target.value)} className="form-select"
                   name="price" id="price">
                   <option value="">--Chọn giá--</option>
-                  <option value="smaller 5m">Dưới 5 triệu</option>
-                  <option value="5m to 10m">5 đến 10 triệu</option>
-                  <option value="better 10m">Trên 10 triệu</option>
+                  <option value="smaller 10m">Dưới 10 triệu</option>
+                  <option value="10m to 20m">10 đến 20 triệu</option>
+                  <option value="better 20m">Trên 20 triệu</option>
                 </select>
               )}
               {choose === "quantity" && (
@@ -102,8 +102,8 @@ export function Warehouse() {
                 <th style={{ background: "black" }}>#</th>
                 <th style={{ background: "black" }}>Ngày</th>
                 <th style={{ background: "black" }}>Tên hàng</th>
-                <th style={{ background: "black" }}>Màu sắc</th>
-                <th style={{ background: "black" }}>Lưu trữ</th>
+                <th style={{ background: "black" }}>Màu</th>
+                <th style={{ background: "black" }}>Dung lượng</th>
                 <th style={{ background: "black" }}>Tên nhà cung cấp</th>
                 <th style={{ background: "black" }}>Số lượng</th>
                 <th style={{ background: "black" }}>Đơn giá</th>
@@ -116,10 +116,10 @@ export function Warehouse() {
                   <tr key={w.id} style={{ height: 40 }}>
                     <td style={{ width: "4%" }}>{(index + 1) + page * 10}</td>
                     <td style={{ width: "8%" }}>{w.inputDate}</td>
-                    <td style={{ width: "18%" }}>{truncateText(w.nameProduct,30)}</td>
+                    <td style={{ width: "21%" }}>{truncateText(w.nameProduct,30)}</td>
                     <td style={{ width: "8%" }}>{w.color}</td>
                     <td style={{ width: "8%" }}>{w.capacity}</td>
-                    <td style={{ width: "25%" }}>{truncateText(w.nameSupplier,40)}</td>
+                    <td style={{ width: "22%" }}>{truncateText(w.nameSupplier,35)}</td>
                     <td style={{ width: "7%" }}>{w.quantity}</td>
                     <td style={{ width: "9%" }}>{vnd.format(w.priceProduct)}</td>
                     <td style={{ width: "10%" }}>{vnd.format(w.totalPrice)}</td>
