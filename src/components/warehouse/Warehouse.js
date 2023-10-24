@@ -102,7 +102,7 @@ export function Warehouse() {
                 <th style={{ background: "black" }}>#</th>
                 <th style={{ background: "black" }}>Ngày</th>
                 <th style={{ background: "black" }}>Tên hàng</th>
-                <th style={{ background: "black" }}>Màu sắc</th>
+                <th style={{ background: "black" }}>Màu</th>
                 <th style={{ background: "black" }}>Dung lượng</th>
                 <th style={{ background: "black" }}>Tên nhà cung cấp</th>
                 <th style={{ background: "black" }}>Số lượng</th>

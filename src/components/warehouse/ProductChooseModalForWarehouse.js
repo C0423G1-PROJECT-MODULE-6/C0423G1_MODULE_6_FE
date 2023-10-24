@@ -311,10 +311,11 @@ const ProductChooseModalForWarehouse = ({ data1, idCustomer, handleData }) => {
                                     <table className=" shadow w-100">
                                         <tr style={{ fontSize: "larger", backgroundColor: "#282c34", color: "#f5f5f5" }}>
                                             <th style={{ width: "5%", paddingLeft: "1%" }}>STT</th>
-                                            <th style={{ width: "40%", paddingLeft: "2%" }}>Tên</th>
-                                            <th style={{ width: "20%", paddingLeft: "3%" }}>Giá</th>
-                                            <th style={{ width: "15%" }}>Màu sắc</th>
+                                            <th style={{ width: "35%", paddingLeft: "2%" }}>Tên</th>
+                                            <th style={{ width: "15%", paddingLeft: "3%" }}>Giá</th>
+                                            <th style={{ width: "15%" }}>Màu</th>
                                             <th style={{ width: "15%", paddingLeft: "3%" }}>Dung lượng</th>
+                                            <th style={{ width: "10%", paddingLeft: "3%" }}>Số lượng</th>
                                         </tr>
                                         {productList && productList.length !== 0 ?
                                             <tbody>
@@ -341,12 +342,12 @@ const ProductChooseModalForWarehouse = ({ data1, idCustomer, handleData }) => {
                                                             color: product?.quantity < 1 ? "red" : "inherit"
                                                         }}>{(index + 1) + page * 5}</td>
                                                         <td style={{
-                                                            width: "43%",
+                                                            width: "35%",
                                                             paddingLeft: "2%",
                                                             color: product?.quantity < 1 ? "red" : "inherit"
                                                         }}>{product?.name}</td>
                                                         <td style={{
-                                                            width: "20%",
+                                                            width: "15%",
                                                             paddingLeft: "3%",
                                                             color: product?.quantity < 1 ? "red" : "inherit"
                                                         }}>
@@ -358,6 +359,11 @@ const ProductChooseModalForWarehouse = ({ data1, idCustomer, handleData }) => {
                                                             paddingLeft: "4%",
                                                             color: product?.quantity < 1 ? "red" : "inherit"
                                                         }}>{product?.capacity}</td>
+                                                        <td style={{
+                                                            width: "10%",
+                                                            paddingLeft: "4%",
+                                                            color: product?.quantity < 1 ? "red" : "inherit"
+                                                        }}>{product?.quantity}</td>
                                                     </tr>))}
                                             </tbody> :
                                             <tbody>
