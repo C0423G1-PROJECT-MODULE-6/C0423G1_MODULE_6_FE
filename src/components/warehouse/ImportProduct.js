@@ -185,13 +185,13 @@ export function ImportProduct() {
                   <div className="col-4 p-2">
                     <label>Nhà cung cấp <span style={{ color: "red" }}>*</span></label>
                   </div>
-                  <div className="col-4 mb-2">
+                  <div className="col-6 mb-2">
                     <Field className="form-control mt-2 border border-dark" placeholder="Chọn nhà cung cấp"
                       value={supplierId?.nameSupplier} name="supplier" type="text" readOnly />
                     <ErrorMessage className="text-danger" name="supplierId"
                       component="span"></ErrorMessage>
                   </div>
-                  <div className="col-4">
+                  <div className="col-2">
                     <button type="button"
                       className="btn btn-outline-primary float-center mt-2 shadow"
                       data-bs-toggle="modal" data-bs-target="#exampleModalSupplier">
