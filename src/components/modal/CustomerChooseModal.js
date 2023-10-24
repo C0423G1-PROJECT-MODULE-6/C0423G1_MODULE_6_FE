@@ -10,7 +10,7 @@ import {toast} from "react-toastify";
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
-    const [change, setChange] = useState(0);
+    const [change, setChange] = useState(2);
     const [name, setName] = useState("");
     const [gender, setGender] = useState("");
     const [phone, setPhone] = useState("");
@@ -79,7 +79,8 @@ const CustomerChooseModal = ({handleData}) => {
           if (validateInput(value)){
               toast.error("Tên không được chứa các ký tự đặc biệt.");
           }else{
-                setName(value.trim());
+              // const newValue = value.replace(/\s/g, '');
+              setName(value.trim());
                 setGender(valueGender.value);
                 setPhone("");
                 setPage(0);
