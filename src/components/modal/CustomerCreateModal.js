@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
 import {isAfter, parseISO} from "date-fns";
 import XRegExp from "xregexp";
+import {toast} from "react-toastify";
 
 const CustomerCreateModal = ({handleData}) => {
     const validateBirth = (value) => {
@@ -16,8 +17,11 @@ const CustomerCreateModal = ({handleData}) => {
         try {
             const result = await addCustomer(value);
             let submitModal = await document.getElementById("closeModalCreate");
+            let resetModal = await document.getElementById("resetModal");
+            resetModal.click();
             submitModal.click();
             handleData(result.data.idCustomer);
+            toast.success("Thêm mới khách hàng thành công.");
         } catch (err) {
             if (err.response?.data) {
                 setErrors(err.response.data);
@@ -198,7 +202,7 @@ const CustomerCreateModal = ({handleData}) => {
                                                 Lưu
                                             </button>
                                             <button className="btn btn-outline-secondary shadow"
-                                                    style={{marginRight: '1rem',width: '30%'}} type="reset">
+                                                    style={{marginRight: '1rem',width: '30%'}} type="reset" id="resetModal">
                                                 Làm mới
                                             </button>
                                             <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"
