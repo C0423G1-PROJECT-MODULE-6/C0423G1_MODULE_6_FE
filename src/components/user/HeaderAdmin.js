@@ -92,20 +92,27 @@ function HeaderAdmin({refresh}) {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarNavDarkDropdown"/>
                 <Navbar.Collapse id="navbarNavDarkDropdown">
-                    {(roleAdmin) && (
-                        <Nav>
-                            <NavDropdown title="Quản Lý" id="nav-dropdown-dark">
-                            <Link to="/admin/admin/employee" className="dropdown-item">Quản Lý Nhân Viên</Link>
-                            </NavDropdown>
-                        </Nav>
-                    )}
+
+                    <Nav>
+                        <NavDropdown title="Quản Lý" id="nav-dropdown-dark">
+                            {(roleAdmin) && (
+                                <Link to="/admin/admin/employee" className="dropdown-item">Quản Lý Nhân Viên</Link>
+                            )}
+                            <Link to={`/admin/information/${userId}`} className="dropdown-item">Thông Tin Cá Nhân</Link>
+                        </NavDropdown>
+                    </Nav>
+
                     {(roleAdmin || roleBusiness) && (
                         <Nav>
                             <NavDropdown title="Kinh Doanh" id="nav-dropdown-dark">
-                                <Link to="/admin/business/order/saleHistory" className="dropdown-item">Quản Lý Lịch Sử Bán Hàng</Link>
-                                <Link to="/admin/business/salereport" className="dropdown-item">Quản Lý Báo Cáo Doanh Thu</Link>
-                                <Link to="/admin/business/product/list" className="dropdown-item">Xem Thông Tin Hàng Hoá</Link>
-                                <Link to="/admin/business/supplier" className="dropdown-item">Quản Lý Nhà Cung Cấp</Link>
+                                <Link to="/admin/business/order/saleHistory" className="dropdown-item">Quản Lý Lịch Sử
+                                    Bán Hàng</Link>
+                                <Link to="/admin/business/salereport" className="dropdown-item">Quản Lý Báo Cáo Doanh
+                                    Thu</Link>
+                                <Link to="/admin/business/product/list" className="dropdown-item">Xem Thông Tin Hàng
+                                    Hoá</Link>
+                                <Link to="/admin/business/supplier" className="dropdown-item">Quản Lý Nhà Cung
+                                    Cấp</Link>
                                 <Link to="/admin/business/customer" className="dropdown-item">Quản Lý Khách Hàng</Link>
                             </NavDropdown>
                         </Nav>
@@ -114,7 +121,7 @@ function HeaderAdmin({refresh}) {
                     {(roleAdmin || roleSale) && (
                         <Nav>
                             <NavDropdown title="Bán Hàng" id="nav-dropdown-dark">
-                                <Link to="/admin/sale/order" className="dropdown-item">Quản Lý Bán Hàng</Link>
+                                <Link to="/admin/sale/order/0" className="dropdown-item">Quản Lý Bán Hàng</Link>
                             </NavDropdown>
                         </Nav>
                     )}
@@ -130,7 +137,7 @@ function HeaderAdmin({refresh}) {
                 <div className="collapse navbar-collapse" style={{marginLeft: "auto", width: "0"}}>
                     <ul className="navbar-nav" style={{marginLeft: "auto"}}>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="HaiBH_Infomation.html" role="button"
+                            <a className="nav-link dropdown-toggle" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 {userAppName} - {roleName()}
                             </a>

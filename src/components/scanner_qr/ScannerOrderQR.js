@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Html5QrcodeScanner} from 'html5-qrcode';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {getIdByUserName, infoAppUserByJwtToken} from "../../service/user/AuthService";
 import * as customerService from "../../service/customer/CustomerService";
-import {useParams} from "react-router";
 
 function ScannerOrderQR() {
     const [showScanResult, setShowScanResult] = useState(false);
@@ -12,17 +11,7 @@ function ScannerOrderQR() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState("");
 
-    const handleDecodedText = async (decodedText) => {
-        const productObj = JSON.parse(decodedText);
-        setIdProduct(parseInt(productObj.id));
-        console.log(parseInt(productObj.id))
-        if (userId) {
-            await customerService.createCart(param.idCustomer, parseInt(productObj.id));
-            console.log("------------------")
-            console.log(param.idCustomer)
-            navigate(`/admin/sale/order/${param.idCustomer}`);
-        }
-    };
+
 
     const getUserId = async () => {
         const isLoggedIn = infoAppUserByJwtToken();
@@ -42,9 +31,22 @@ function ScannerOrderQR() {
 
         scanner.render(success, error);
 
+        const handleDecodedText = async (decodedText) => {
+            const productObj = JSON.parse(decodedText);
+            setIdProduct(parseInt(productObj.id));
+            console.log(parseInt(productObj.id))
+            if (userId) {
+                await customerService.createCart(param.idCustomer, parseInt(productObj.id));
+                console.log("------------------")
+                console.log(param.idCustomer)
+                await scanner.clear();
+                navigate(`/admin/sale/order/${param.idCustomer}`);
+            }
+        };
+
         function success(decodedText, result) {
             handleDecodedText(decodedText);
-            scanner.clear();
+
         }
 
         function error(err) {

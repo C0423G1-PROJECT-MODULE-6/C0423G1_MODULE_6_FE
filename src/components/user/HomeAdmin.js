@@ -17,25 +17,31 @@ function formatDateString(date) {
 
 function HomeAdmin() {
     const [salesReportProduct, setSalesReportProduct] = useState([]);
-    const [quantityToDay, setQuantityToDay] = useState()
-    const [dailyToDay, setDailyToDay] = useState()
-    const [dailyMonth, setDailyMonth] = useState()
+    const [quantityToDay, setQuantityToDay] = useState(0)
+    const [dailyToDay, setDailyToDay] = useState(0)
+    const [dailyMonth, setDailyMonth] = useState(0)
+    const [typeReport, setTypeReport] = useState([])
+
     const getSearchSalesReport = async () => {
         setSalesReportProduct(await SalesService.getAll());
         setDailyToDay((await (SalesService.getDailyToday())).toLocaleString())
         setQuantityToDay(await SalesService.getQuantityToday())
-        setDailyMonth(await SalesService.getDailyMonth())
+        setDailyMonth(await (SalesService.getDailyMonth()))
+        setTypeReport(await (SalesService.getTypeReport()))
     };
+
     const labels = salesReportProduct.map((salesReport) => formatDateString(new Date(salesReport.date)));
     const dataQuantity = salesReportProduct.map((salesReport) => salesReport.quantity);
     const dataDaily = salesReportProduct.map((salesReport) => salesReport.daily);
+    const nameTypeReports = typeReport.map((data) => data.typename)
+    const revenueTypeReports = typeReport.map((data) => data.revenue)
     const barChartData = {
         labels: labels,
         datasets: [
             {
                 type: "bar",
                 label: "Số đơn bán",
-                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                backgroundColor: "rgba(211,11,59,0.2)",
                 data: dataQuantity,
                 yAxisID: "y1",
             },
@@ -50,6 +56,7 @@ function HomeAdmin() {
             },
         ],
     };
+
     const options = {
         responsive: true,
         scales: {
@@ -79,12 +86,13 @@ function HomeAdmin() {
             },
         },
     };
+
     // const percentageAchieved = Math.min((dailyMonth / 100000000) * 100, 100);
-    const total = 100;
-    const macbook = 20/total * 100;
-    const iphone = 30/total * 100;
-    const watch = 10/total * 100;
-    const ipad = 38/total * 100;
+    const total = dailyMonth;
+    const macbook = revenueTypeReports[1] / total * 100;
+    const iphone = revenueTypeReports[0] / total * 100;
+    const watch = revenueTypeReports[3] / total * 100;
+    const ipad = revenueTypeReports[2] / total * 100;
 
     const donutChartData = {
         labels: [
@@ -95,7 +103,7 @@ function HomeAdmin() {
         ],
         datasets: [
             {
-                data: [macbook, iphone, watch, ipad],
+                data: [macbook,iphone,watch,ipad],
                 backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgb(255, 0, 221, 0.2)", "rgb(1, 250, 9, 0.2)"],
                 borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgb(255, 0, 221, 1)", "rgb(1, 250, 9,1)"],
                 borderWidth: 1,
@@ -111,15 +119,17 @@ function HomeAdmin() {
         minHeight: '100px',
         fontSize: '35px',
     };
+
     useEffect(() => {
         getSearchSalesReport();
     }, []);
+
     return (
         <>
             <HeaderAdmin/>
             <div className="container my-5 pt-4">
                 <div className="row mt-5">
-                    <div className="col-md-4" >
+                    <div className="col-md-4">
                         <div className="card" style={{...cardBodyStyle, backgroundColor: '#3ea4ed'}}>
                             <div className="card-header">
                                 Số đơn bán trong ngày
@@ -146,11 +156,11 @@ function HomeAdmin() {
                     <div className="col-md-4">
                         <div className="card" style={{...cardBodyStyle, backgroundColor: '#ff7a81'}}>
                             <div className="card-header">
-                                Chỉ tiêu tháng
+                                Doanh thu tháng
                             </div>
                             <div className="card-body">
                                 <blockquote className="blockquote mb-0">
-                                    100,000,000 VND
+                                    {dailyMonth} VND
                                 </blockquote>
                             </div>
                         </div>
