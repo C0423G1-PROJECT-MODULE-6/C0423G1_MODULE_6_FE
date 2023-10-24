@@ -48,13 +48,13 @@ export default function ProductList() {
             navigate(`/admin/business/product/update/${selectedProducts[0].id}`)
         }
     }
-    const confirmDelete =async () => {
+    const confirmDelete = async () => {
         selectedProducts.map(async p => {
             await removeProduct(p.id)
         })
-        if (((totalElements-selectedProducts.length)<=((totalPages-1)*10))&&page>=1){
-            setTotalPages(totalPages-1)
-            setPage(page-1)
+        if (((totalElements - selectedProducts.length) <= ((totalPages - 1) * 10)) && page >= 1) {
+            setTotalPages(totalPages - 1)
+            setPage(page - 1)
         }
         toast("Xóa thành công");
         setModal(false);
@@ -71,7 +71,7 @@ export default function ProductList() {
     }
     useEffect(() => {
         list()
-    }, [page, modal,totalPages,totalElements])
+    }, [page, modal, totalPages, totalElements])
     return (
         <>
             <HeaderAdmin/>
@@ -104,7 +104,7 @@ export default function ProductList() {
                                 <option value="name">Tìm theo tên</option>
                                 <option value="price">Tìm theo giá</option>
                                 <option value="quantity">Theo số lượng</option>
-                                <option value="type">Theo Loại</option>
+                                <option value="type">Theo loại</option>
                             </select>
                         </div>
                         <div className="col-auto me-2" style={{width: "15%"}}>
@@ -112,18 +112,18 @@ export default function ProductList() {
                                 <select onChange={event => setValue(event.target.value)} className="form-select"
                                         name="price" id="price">
                                     <option value="">Chọn giá</option>
-                                    <option value="smaller 5m">Dưới 5 triệu</option>
-                                    <option value="5m to 10m">5 đến 10 triệu</option>
-                                    <option value="better 10m">Trên 10 triệu</option>
+                                    <option value="smaller 7m">Dưới 7 triệu</option>
+                                    <option value="7m to 12m">7 đến 12 triệu</option>
+                                    <option value="better 12m">Trên 12 triệu</option>
                                 </select>
                             )}
                             {choose === "quantity" && (
                                 <select onChange={event => setValue(event.target.value)} className="form-select"
                                         name="quantity" id="quantity">
                                     <option value="">Chọn số lượng</option>
-                                    <option value="smaller 10">Dưới 10</option>
-                                    <option value="10 to 50">Từ 10 đến 50</option>
-                                    <option value="better 50">Trên 50</option>
+                                    <option value="smaller 50">Dưới 50</option>
+                                    <option value="50 to 250">Từ 50 đến 250</option>
+                                    <option value="better 250">Trên 250</option>
                                 </select>)}
                             {choose === "type" && (
                                 <select onChange={event => setValue(event.target.value)} className="form-select"
@@ -154,17 +154,17 @@ export default function ProductList() {
                         </div>
                     </div>
                 </div>
-                <div style={{minHeight: "455px"}} >
+                <div style={{minHeight: "455px"}}>
                     <table className="shadow w-100" id="QuanND">
                         <thead>
-                        <tr style={{background: "black",color:"white"}}>
+                        <tr style={{background: "black", color: "white"}}>
                             <th>#</th>
                             <th>Tên</th>
                             <th>Giá</th>
                             <th>CPU</th>
                             <th>Loại</th>
                             <th>Màu</th>
-                            <th>Lưu Trữ</th>
+                            <th>Dung lượng</th>
                             <th>Số lượng</th>
                         </tr>
                         </thead>
@@ -179,7 +179,8 @@ export default function ProductList() {
                                 } else {
                                     const updatedProducts = [...selectedProducts, {
                                         id: p.id,
-                                        name: p.name
+                                        name: p.name,
+                                        color:p.color
                                     }];
                                     setSelectedProducts(updatedProducts);
                                 }
@@ -190,7 +191,7 @@ export default function ProductList() {
                                      color: selectedProducts.some(product => product.id === p.id) ? "white" : "black",
                                  }}
                             >
-                                <td style={{width: "5%"}}>{(status + 1)+page*10}</td>
+                                <td style={{width: "5%"}}>{(status + 1) + page * 10}</td>
                                 <td style={{width: "30%"}}>{p.name}</td>
                                 <td style={{width: "12%"}}>{vnd.format(p.price)}</td>
                                 <td style={{width: "15%"}}>{p.cpu}</td>
@@ -215,7 +216,8 @@ export default function ProductList() {
                 <div className="row d-flex justify-content-around my-3">
                     <div className="col float-start">
                         <a className="me-1">
-                            <Link to={"/admin/business/product/create"} type="button" className="btn btn-outline-primary">Thêm
+                            <Link to={"/admin/business/product/create"} type="button"
+                                  className="btn btn-outline-primary">Thêm
                                 mới</Link>
                         </a>
                         {
@@ -288,7 +290,7 @@ export default function ProductList() {
                                 <p>Bạn có muốn xóa các sản phẩm sau :{selectedProducts.map((product, s) => (
                                         <>
                                             <br/>
-                                            <b> {s + 1} </b> : {product.name}
+                                            <b>{s + 1} : {product.name} màu : {product.color}</b>
                                         </>
                                     )
                                 )}</p>
