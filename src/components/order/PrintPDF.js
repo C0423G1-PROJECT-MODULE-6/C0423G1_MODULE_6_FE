@@ -17,6 +17,8 @@ function PrintPDF() {
     const [totalMoney, setTotalMoney] = useState(0);
     const [vatAmount, setVatAmount] = useState(0);
     const [totalAmountWithVat, setTotalAmountWithVat] = useState(0);
+    const initialInvoiceNumber = useRef(1);
+    const [invoiceNumber, setInvoiceNumber] = useState(initialInvoiceNumber.current);
 
     const getInfoPDF = async () => {
         const res = await orderService.getInfoPDF();
@@ -33,26 +35,27 @@ function PrintPDF() {
         setMonth(month);
         setYear(year);
     };
-
+    useEffect(() => {
+        calculateMoney();
+    }, [products]);
     const calculateMoney = () => {
         let total = 0;
-        products.forEach((product) => {
-            total += product.priceOrder * 1.2 * product.quantityOrder;
-        });
-        setTotalMoney(total);
 
-        // Calculate VAT amount (10% of totalMoney)
-        const vat = total * 0.1;
-        setVatAmount(vat);
+            products.forEach((product) => {
+                total += product.priceOrder * product.quantityOrder;
+            });
+            setTotalMoney(total);
 
-        // Calculate total amount with VAT
-        const totalWithVat = total + vat;
-        setTotalAmountWithVat(totalWithVat);
+            const vat = total * 0.1;
+            setVatAmount(vat);
+
+            const totalWithVat = total + vat;
+            setTotalAmountWithVat(totalWithVat);
+
     };
 
     useEffect(() => {
         getInfoPDF();
-        calculateMoney();
     }, []);
 
     const handleConvertToPDF = () => {
@@ -63,31 +66,30 @@ function PrintPDF() {
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'px',
-                format: [1440, 2426],
+                format: [2000, 2426],
             });
             pdf.addImage(imgData, 'PNG', 0, 0);
             pdf.save('document.pdf');
+            setInvoiceNumber(invoiceNumber + 1);
         });
     };
 
     return (
         <div>
-            <button onClick={handleConvertToPDF}>Chuyển đổi thành PDF</button>
-            <Link className="btn btn-primary" to="/admin/sale/order/0">Quay về</Link>
+            <Link className="btn btn-primary m-2" to="/admin/sale/order/0">Quay về</Link>
+            <button className='btn btn-warning m-2' onClick={handleConvertToPDF}>Chuyển đổi thành PDF</button>
 
             <div ref={contentRef}>
                 <div className="inv-container">
                     <header className="inv-header">
                         <div className="inv-logo">
-                            <img className="logo-on-top" src="../../../public/images/favicon.png" alt="" />
+                            <img className="logo-on-top" src="/images/favicon.png" alt="" />
                         </div>
                         <div className="inv-title">
                             <h1 className="inv-main-title">HOÁ ĐƠN GIÁ TRỊ GIA TĂNG</h1>
                             <p style={{ color: "red" }}>Bản thể hiện hoá đơn điện tử</p>
                             <p>
-                                Ngày<small> {day} </small> Tháng
-                                <small>{month}</small> Năm
-                                <small>{year}</small>
+                                Ngày  {day} Tháng {month} Năm {year}
                             </p>
                         </div>
                         <div className="inv-right-part">
@@ -98,7 +100,7 @@ function PrintPDF() {
                                 Ký hiệu: <b>AA/23</b>
                             </p>
                             <p>
-                                Số: <b style={{ color: "red" }}>00000001</b>
+                                Số: <b style={{ color: "red" }}>0000000{invoiceNumber}</b>
                             </p>
                         </div>
                     </header>
@@ -111,7 +113,7 @@ function PrintPDF() {
                                 </td>
                                 <td>
                                     <p>
-                                        : <b style={{ color: "red" }}>
+                                        : <b style={{ color: "red", fontSize:"18px" }}>
                                              CÔNG TY TRÁCH NHIỆM HỮU HẠN C04 ZONE
                                          </b>
                                     </p>
@@ -123,7 +125,7 @@ function PrintPDF() {
                                 </td>
                                 <td>
                                     <p>
-                                        :<b style={{ color: "red" }}> 5702145439</b>
+                                        :<b style={{ color: "red" ,fontSize:"18px"}}> 5702145439</b>
                                     </p>
                                 </td>
                             </tr>
@@ -159,97 +161,79 @@ function PrintPDF() {
                     </div>
                     <div className="buyer-info">
                         <p className="buyer-first">
-                            <span>Họ và tên người mua hàng</span>:
-                            <small>
-                                {customer ? customer.nameCustomer : ("..............................................................................................................................................................................................................................................")
+                            <span>Họ và tên người mua hàng </span>:
+                            <span style={{marginLeft:'5px'}}>
+                                 {customer ? customer.nameCustomer : ("..............................................................................................................................................................................................................................................")
                                 }
-                            </small>
+                            </span>
                         </p>
                         <p className="buyer-first">
                             <span>Tên đơn vị</span>:
-                            {/*<small>*/}
-                            {/*    ..............................................................................................................................................................................................................................................*/}
-                            {/*</small>*/}
-                            <p>CÔNG TY CỔ PHầN CÔNG NGHỆ LỘC PHÁT</p>
+                            <span style={{marginLeft:'5px'}}>CÔNG TY CỔ PHầN CÔNG NGHỆ LỘC PHÁT</span>
                         </p>
                         <p className="buyer-first">
                             <span>Mã số thuế</span>:
-                            {/*<small>*/}
-                            {/*    ..............................................................................................................................................................................................................................................*/}
-                            {/*</small>*/}
-                            <p>2902177030</p>
+                            <span style={{marginLeft:'5px'}}>2902177030</span>
                         </p>
                         <p className="buyer-first">
                             <span>Địa chỉ</span>:
-                            {/*<small>*/}
-                            {/*    ..............................................................................................................................................................................................................................................*/}
-                            {/*</small>*/}
-                            <p>
-                                {customer && customer.addressCustomer}
-                            </p>
+                            <span style={{marginLeft:'5px'}}>
+                                 {customer && customer.addressCustomer}
+                            </span>
                         </p>
                     </div>
-                    <div className="description-info">
+                    <div className="description-info" >
                         <table>
                             <tr>
                                 <th>
                                     <p>STT</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(1)</p>
                                 </th>
                                 <th>
                                     <p>Tên hàng hoá, dịch vụ</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(2)</p>
+
                                 </th>
                                 <th>
                                     <p>Đơn vị tính</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(3)</p>
+
                                 </th>
                                 <th>
                                     <p>Số lượng</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(4)</p>
+
                                 </th>
                                 <th>
                                     <p>Đơn giá</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(5)</p>
+
                                 </th>
                                 <th>
                                     <p>Thành tiền</p>
+                                    <p style={{lineHeight:'0',fontSize:'14px', fontWeight:'normal'}}>(6 = 4 x 5)</p>
+
                                 </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>1</p>
-                                </td>
-                                <td>
-                                    <p>2</p>
-                                </td>
-                                <td>
-                                    <p>3</p>
-                                </td>
-                                <td>
-                                    <p>4</p>
-                                </td>
-                                <td>
-                                    <p>5</p>
-                                </td>
-                                <td>
-                                    <p>6 = 4 x 5</p>
-                                </td>
                             </tr>
                             {products.map((product,index) => (
                                 <tr key={index}>
                                     <td>
-                                        {index + 1}
+                                        <p>{index + 1}</p>
                                     </td>
                                     <td>
-                                        {product.nameProduct}
+                                        <p>{product.nameProduct}</p>
                                     </td>
                                     <td>
                                         <p>Chiếc</p>
                                     </td>
                                     <td>
-                                        {product.quantityOrder}
+                                        <p>{product.quantityOrder}</p>
                                     </td>
                                     <td>
-                                        {product.priceOrder * 1.2}
+                                        <p>{(product.priceOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                     </td>
                                     <td>
-                                        {product.priceOrder * 1.2 * product.quantityOrder}
+                                       <p> {(product.priceOrder * product.quantityOrder).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                     </td>
                                 </tr>
                             ))}
@@ -326,30 +310,24 @@ function PrintPDF() {
                         <div className="money-stuff">
                             <p>
                                 Cộng tiền hàng:
-                                {orderBill ? totalMoney :
+                                {orderBill ? ' ' + totalMoney.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) :
                                     (
-                                        <small>
-                                            .....................................................................................
-                                        </small>
+                                       <span>   Loading...</span>
                                     )}
 
                             </p>
                             <p>
                                 Tiền thuế giá trị gia tăng (10%):
-                                {orderBill ? vatAmount :
+                                {orderBill ? ' ' + vatAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) :
                                     (
-                                        <small>
-                                            .....................................................................................
-                                        </small>
+                                        <span>   Loading...</span>
                                     )}
                             </p>
                             <p>
                                 Tổng cộng tiền thanh toán:
-                                {orderBill ? totalAmountWithVat :
+                                {orderBill ? ' ' + totalAmountWithVat.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) :
                                     (
-                                        <small>
-                                            .....................................................................................
-                                        </small>
+                                        <span>   Loading...</span>
                                     )}
                             </p>
                         </div>
@@ -358,14 +336,14 @@ function PrintPDF() {
                     <div className="signature-info">
                         <div className="buyer-sig">
                             <p>
-                                <b>Người mua hàng</b>
+                                <span style={{fontWeight:'bold'}}>Người mua hàng</span>
                             </p>
                         </div>
                         <div className="seller-sig">
                             <p>
-                                <b>Người bán hàng</b>
+                                <span style={{fontWeight:'bold'}}>Người bán hàng</span>
                             </p>
-                            <p>Đã được ký điện tử</p>
+                            <p style={{marginTop: "150px"}}>Đã được ký điện tử</p>
                         </div>
                     </div>
                 </div>

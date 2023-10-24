@@ -96,9 +96,11 @@ function Order() {
     useEffect(() => {
         let total = 0;
         products.forEach((product, index) => {
-            total += (product.priceProduct + product.priceProduct * 0.2) * quantity[index] + product.priceProduct * 0.1;
+            total += product.priceProduct * 1.2 * quantity[index];
         });
-        setTotalPrice(total);
+        let vat = total * 0.1;
+        let totalPriceVAT = vat + total;
+        setTotalPrice(totalPriceVAT);
     }, [products, quantity]);
 
 
@@ -320,7 +322,7 @@ function Order() {
                                         </button>
                                         {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
-                                                           disabled={customer === null}>Scan QR</Link> }
+                                                           >Scan QR</Link> }
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
@@ -341,7 +343,7 @@ function Order() {
 
                                                     </thead>
                                                     <tbody>
-                                                        {customer ? (
+                                                        {hasResult ? (
                                                             products.map((product, index) => (
                                                                 <tr key={index}>
                                                                     <td className="col-1 text-center">{index + 1}</td>
@@ -388,7 +390,7 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        {((product.priceProduct *1.2)  * quantity[index])
+                                                                        {((product.priceProduct * 1.2)  * quantity[index])
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
@@ -421,7 +423,7 @@ function Order() {
                             </div>
                             <div className="row" style={{ width: '70%', margin: '1% auto 0 auto' }}>
                                 <div className="col-4 p-2">
-                                    <label>Thành tiền</label>
+                                    <label>Thành tiền (đã bao gồm thuế)</label>
                                 </div>
                                 <div className="col-8">
                                     <Field
