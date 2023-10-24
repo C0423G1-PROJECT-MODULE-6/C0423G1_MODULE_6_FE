@@ -1,5 +1,11 @@
 import axios from "axios";
 
+export const getInfoPDF =async () => {
+    const res = await axios.get(`http://localhost:8080/api/admin/sale/order/printPDF`);
+    return res.data;
+};
+
+
 export const findCustomerByIdScan =async (idCustomer) => {
     try{
         const res = await axios.get(`http://localhost:8080/api/admin/sale/order/customerScan/${idCustomer}`);

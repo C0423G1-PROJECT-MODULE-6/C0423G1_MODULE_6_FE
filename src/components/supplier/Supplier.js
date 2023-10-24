@@ -351,7 +351,7 @@ function MyModal({ action, data, deleteFunc }) {
                 <h5 className="modal-title" id="deleteModalLabel">Thông báo!</h5>
             </Modal.Header>
             <Modal.Body>
-            <p>Bạn có muốn xóa các sản phẩm sai : {data.map((s,index) => (
+            <p>Bạn có muốn xóa các sản phẩm sau : {data.map((s,index) => (
                                         <>
                                             <br/>
                                             <b>

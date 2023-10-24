@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import * as orderService from "../../service/order/OrderService"
 import HeaderAdmin from "../user/HeaderAdmin";
 import Footer from '../home/common/Footer'
-
 export function SaleHistory() {
     const [saleHistories, setSaleHistories] = useState([]);
     const [limit, setLimit] = useState(10);
@@ -13,14 +12,10 @@ export function SaleHistory() {
     const [refresh, setRefresh] = useState(true);
     const [sort, setSort] = useState("");
     const [otherSort, setOtherSort] = useState("dsc")
-
-
-
     const vnd = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND'
     })
-
     const getSaleHistory = async () => {
         try {
             const array =  await orderService.getSaleHistory(limit, page, searchName,sort,otherSort);
@@ -37,7 +32,6 @@ export function SaleHistory() {
     useEffect(() => {
         getSaleHistory();
     }, [page, refresh]);
-
     const handleSearch = () => {
         setPage(0);
         setRefresh(!refresh)
@@ -47,11 +41,9 @@ export function SaleHistory() {
             handleSearch();
         }
     }
-
     const previousPage = () => {
         setPage(page - 1);
     }
-
     const nextPage = () => {
         setPage(page + 1);
     }
@@ -70,7 +62,6 @@ export function SaleHistory() {
                                 <option value="" selected>--Sắp xếp theo--</option>
                                 <option value="sortTime">Thời Gian</option>
                                 <option value="sortNameCustomer">Khách Hàng</option>
-                                <option value="sortNameProduct">Tên Sản Phẩm</option>
                                 <option value="sortQuantity">Số lượng</option>
                                 <option value="sortTotalMoney">Tổng tiền</option>
                             </select>
@@ -95,12 +86,12 @@ export function SaleHistory() {
                     <table className="border border-dark table table-hover">
                         <thead>
                         <tr>
-                            <th style={{background: "darkgrey", width:"5%"}}>#</th>
-                            <th style={{background: "darkgrey", width:"10%"}}>Ngày</th>
-                            <th style={{background: "darkgrey", width:"10%"}}>Thời Gian</th>
-                            <th style={{background: "darkgrey", width:"15%"}}>Họ và tên khách hàng</th>
-                            <th style={{background: "darkgrey", width:"45%"}}>Thông tin mua hàng</th>
-                            <th style={{background: "darkgrey", width:"10%"}}>Tổng tiền</th>
+                            <th style={{background: "black", color:"white", width:"5%"}}>#</th>
+                            <th style={{background: "black", color:"white", width:"10%"}}>Ngày</th>
+                            <th style={{background: "black", color:"white",width:"10%"}}>Thời Gian</th>
+                            <th style={{background: "black", color:"white", width:"15%"}}>Họ và tên khách hàng</th>
+                            <th style={{background: "black", color:"white",width:"45%"}}>Thông tin mua hàng</th>
+                            <th style={{background: "black", color:"white",width:"10%"}}>Tổng tiền</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -108,7 +99,7 @@ export function SaleHistory() {
                             saleHistories.map((sale, index)=>{
                                 return(
                                     <tr key={sale.idOrderBill}>
-                                        <td>{index+1}</td>
+                                        <td>{(index+1)+ page *10}</td>
                                         <td>{new Date(sale.dateOfOrder).toLocaleDateString('en-GB')}</td>
                                         <td>{sale.timeOfOrder}</td>
                                         <td>{sale.nameCustomer}</td>
@@ -118,16 +109,13 @@ export function SaleHistory() {
                                 )
                             })):(
                             <tr>
-
                                 <td colSpan={6} style={{textAlign: "center", color:"red"}}>Không tìm thấy!</td>
-
                             </tr>
                         )
                         }
                         </tbody>
                     </table>
                 </div>
-
                 <div className="container my-3">
                     <div className="row">
                         <div className="col-auto ms-auto">

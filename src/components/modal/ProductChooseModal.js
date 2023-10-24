@@ -91,6 +91,10 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
           handleSearch();
       }
     }
+    const validateInput = (inputValue) => {
+        const regex = /[+\-*/^&(){}":/.,?^%$#@!~]/;
+        return regex.test(inputValue);
+    }
     const handleQuantity = () => {
         const quantity = document.getElementById("valueQuantity").value;
         setSearchName(quantity);
@@ -124,11 +128,20 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
         // const choose = +document.getElementById("chooseSearch").value;
         if (change === 1) {
             const name = document.getElementById("searchName").value;
-            setSearchName(name);
-            setChoose("name")
-            setPage(0);
+            if (validateInput(name)){
+
+                toast.error("Tên không được chứa các ký tự đặc biệt.");
+
+            }else {
+                // const newName = name.replace(/\s/g, '');
+                setSearchName(name.trim());
+                setChoose("name")
+                setPage(0);
+            }
+
         }
         if (change === 2) {
+
             const type = document.getElementById("valueType").value;
             setSearchName(type);
             setChoose("type")
@@ -140,12 +153,7 @@ const ProductChooseModal = ({data1,idCustomer,handleData}) => {
             setChoose("price")
             setPage(0);
         }
-        // if (change === 4) {
-        //     const quantity = document.getElementById("valueQuantity").value;
-        //     setSearchName(quantity);
-        //     setChoose("quantity")
-        //     setPage(0);
-        // }
+
     }
 
 

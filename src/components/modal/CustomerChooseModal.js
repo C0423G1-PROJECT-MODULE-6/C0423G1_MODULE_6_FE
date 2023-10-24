@@ -5,11 +5,12 @@ import "./modal_table.css";
 import {Field, Form, Formik, ErrorMessage} from "formik";
 import {getAllCustomerModal} from "../../service/customer/CustomerService";
 import {format, parseISO} from "date-fns";
+import {toast} from "react-toastify";
 
 const CustomerChooseModal = ({handleData}) => {
     const navigate = useNavigate();
     const [customerList, setCustomerList] = useState([]);
-    const [change, setChange] = useState(0);
+    const [change, setChange] = useState(2);
     const [name, setName] = useState("");
     const [gender, setGender] = useState("");
     const [phone, setPhone] = useState("");
@@ -48,6 +49,10 @@ const CustomerChooseModal = ({handleData}) => {
             setPage((pre) => pre - 1)
         }
     }
+    const validateInput = (inputValue) => {
+        const regex = /[+\-*/^&(){}":/.,?^%$#@!~]/;
+        return regex.test(inputValue);
+    }
     const handleSearch = () => {
         const choose = +document.getElementById("chooseSearchCustomer").value;
         const value = document.getElementById("search").value;
@@ -56,34 +61,50 @@ const CustomerChooseModal = ({handleData}) => {
         //
         // }
         if (choose === 0) {
-            setName(value.trim());
-            setPhone("");
-            setGender("");
-            setPage(0);
-            setSelectedCustomer({
-                idCustomer: null,
-                nameCustomer: ""
-            })
+            if (validateInput(value)){
+                toast.error("Tên không được chứa các ký tự đặc biệt.");
+            }else {
+                setName(value.trim());
+                setPhone("");
+                setGender("");
+                setPage(0);
+                setSelectedCustomer({
+                    idCustomer: null,
+                    nameCustomer: ""
+                });
+            }
+
         }
         if (choose === 1) {
-            setName(value.trim());
-            setGender(valueGender.value);
-            setPhone("");
-            setPage(0);
-            setSelectedCustomer({
-                idCustomer: null,
-                nameCustomer: ""
-            })
+          if (validateInput(value)){
+              toast.error("Tên không được chứa các ký tự đặc biệt.");
+          }else{
+              // const newValue = value.replace(/\s/g, '');
+              setName(value.trim());
+                setGender(valueGender.value);
+                setPhone("");
+                setPage(0);
+                setSelectedCustomer({
+                    idCustomer: null,
+                    nameCustomer: ""
+                })
+            }
         }
         if (choose === 2) {
-            setName("");
-            setGender("");
-            setPhone(value);
-            setPage(0);
-            setSelectedCustomer({
-                idCustomer: null,
-                nameCustomer: ""
-            })
+            if (validateInput(value)){
+                toast.error("Vui lòng không nhập ký tự đặc biệt.");
+            }else {
+                setName("");
+                setGender("");
+                const newValue = value.replace(/\s/g, '');
+                setPhone(newValue);
+                setPage(0);
+                setSelectedCustomer({
+                    idCustomer: null,
+                    nameCustomer: ""
+                });
+            }
+
         }
 
     }
@@ -127,7 +148,7 @@ const CustomerChooseModal = ({handleData}) => {
                                     <h1 className="col-form-label">Tìm kiếm theo</h1>
                                 </div>
                                 <div className="col-auto">
-                                    <select name='optionSearch' defaultValue={0} id="chooseSearchCustomer"
+                                    <select name='optionSearch' defaultValue={2} id="chooseSearchCustomer"
                                             className="form-select shadow border-dark"
                                             onChange={handleOptionSearchChange}>
                                         <option value={0}>Tên khách hàng</option>

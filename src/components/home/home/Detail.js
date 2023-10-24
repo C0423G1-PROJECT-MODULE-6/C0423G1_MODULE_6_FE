@@ -57,6 +57,9 @@ const Detail = () => {
     //     getProductBySelection();
     // }, [colorIsActive, capaIsActive])
 
+    useEffect(() => {
+        document.title = 'C4 Zone - ' + product.name;
+    }, [product])
 
     useEffect(() => {
         if (product.name && capaIsActive && colorIsActive) {

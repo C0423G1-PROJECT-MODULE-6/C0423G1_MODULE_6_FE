@@ -77,6 +77,12 @@ const SupplierChooseModal = ({ handleData }) => {
         95: "Tỉnh Bạc Liêu",
         96: "Tỉnh Cà Mau"
     }
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+        }
+        return text;
+      };
     
     const [selectedSupplier, setSelectedSupplier] = useState({
         idSupplier: null,
@@ -185,13 +191,13 @@ const SupplierChooseModal = ({ handleData }) => {
                             </div>
                             <div className="mx-auto p-3" style={{minHeight: "350px"}} id="TinDT">
                                 <table className=" shadow w-100 " >
-                                    <thead style={{ fontSize: 'large', backgroundColor: 'darkgrey' }}>
+                                    <thead style={{ fontSize: 'large', backgroundColor: '#282c34', color: '#f5f5f5' }}>
                                         <tr>
                                             <th style={{ width: '6%' }} className="text-center">STT</th>
-                                            <th style={{ width: '15%' }}>Tên nhà cung cấp</th>
-                                            <th style={{ width: '25%' }}>Địa chỉ</th>
+                                            <th style={{ width: '34%' }}>Tên nhà cung cấp</th>
+                                            <th style={{ width: '20%' }}>Địa chỉ</th>
                                             <th style={{ width: '10%' }}>SĐT</th>
-                                            <th style={{ width: '31%' }}>Email</th>
+                                            <th style={{ width: '30%' }}>Email</th>
                                         </tr>
                                     </thead>
                                     {supplierList && supplierList.length !== 0 ?
@@ -206,15 +212,15 @@ const SupplierChooseModal = ({ handleData }) => {
 
                                                     }
                                                 }} style={(selectedSupplier.idSupplier === supplier?.idSupplier) ? {
-                                                    background: '#282c34',
-                                                    color: "#f5f5f5",
+                                                    background: 'darkgrey',
+                                                    // color: "#f5f5f5",
                                                     height: 50
                                                 } : { height: 50 }}
                                                 >
                                                     <td style={{width: "5%"}} className="text-center">
                                                         {(index + 1) + page * 5}
                                                     </td>
-                                                    <td style={{width: "40%"}}>{supplier?.nameSupplier}</td>
+                                                    <td style={{width: "40%"}}>{truncateText(supplier?.nameSupplier,50)}</td>
                                                     <td style={{width: "20%"}}>{addressList[supplier?.addressSupplier]}</td>
                                                     <td style={{width: "15%"}}>{supplier?.phoneNumberSupplier}</td>
                                                     <td style={{width: "20%"}}>{supplier?.emailSupplier}</td>
@@ -254,22 +260,22 @@ const SupplierChooseModal = ({ handleData }) => {
                                 </div>
                             </div>
                             <div className="col-6 mt-3">
-                                <div className="float-end" style={{ marginRight: '8%' }}>
+                                <div className="float-end">
                                     <nav aria-label="Page navigation example">
                                         <ul className="pagination">
                                             <li className="page-item">
-                                                <button className={`page-link`}
-                                                style={{ display: page <= 0 ? "none" : "inline-block" }}
-                                                 onClick={() => previousPage()}>Trước
+                                                <button className={`page-link ${page <= 0 ? "disabled" : ""}`} onClick={() => previousPage()}
+                                                >Trước
                                                 </button>
-                                                
                                             </li>
-                                            <li className="page-item"><button className="page-link "
-                                            >{page + 1} / {totalPage}</button></li>
                                             <li className="page-item">
-                                                <button className="page-link " onClick={() => nextPage()}
-                                                style={{ visibility: page >= totalPage - 1 ? "hidden" : "visible" }}>Sau
+                                                <div className="page-link "
+                                                >{page + 1} / {totalPage}</div>
+                                            </li>
+                                            <li className="page-item">
+                                                <button className={`page-link ${page >= totalPage - 1 ? "disabled" : ""}`} onClick={() => nextPage()} >Sau
                                                 </button>
+
                                             </li>
                                         </ul>
                                     </nav>

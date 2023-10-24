@@ -41,7 +41,6 @@ function Order() {
 
     const findCustomerById = async (data) => {
         const res = await orderService.findCustomerById(data);
-        console.log(res);
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
@@ -69,16 +68,11 @@ function Order() {
 
     const getAllCart = async (idCustomer) => {
         const res = await orderService.getAllCart(idCustomer);
-        console.log(res)
-        console.log(res.data)
         if (res.status === 200) {
-            console.log(res.status)
             if (res.data) {
-                console.log(res.data)
                 setHasResult(res.data.length > 0);
                 setProducts(res.data);
                 const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
-                console.log(initialQuantities);
                 setQuantity(initialQuantities);
             }
         } else if (res.status === 404) {
@@ -102,9 +96,11 @@ function Order() {
     useEffect(() => {
         let total = 0;
         products.forEach((product, index) => {
-            total += (product.priceProduct + product.priceProduct * 0.2) * quantity[index] + product.priceProduct * 0.1;
+            total += product.priceProduct * 1.2 * quantity[index];
         });
-        setTotalPrice(total);
+        let vat = total * 0.1;
+        let totalPriceVAT = vat + total;
+        setTotalPrice(totalPriceVAT);
     }, [products, quantity]);
 
 
@@ -113,7 +109,6 @@ function Order() {
         orderBillNotPay && setOrderBillNotPay(null);
     }
 
-    console.log("customer " + JSON.stringify(customer))
 
     const decreaseValue = (index) => {
         if (quantity[index] > 1) {
@@ -172,7 +167,6 @@ function Order() {
             <HeaderAdmin />
             <Formik initialValues={initialValues}
                 onSubmit={(value) => {
-                    console.log("Form values:", value);
                     showOrderBill(value)
                 }}
             >
@@ -328,7 +322,7 @@ function Order() {
                                         </button>
                                         {customer && <Link to={`/admin/sale/scanner-qr-order/${customer.idCustomer}`}
                                                            className="btn btn-outline-primary col-6 mx-1" style={{width: '30%'}}
-                                                           disabled={customer === null}>Scan QR</Link> }
+                                                           >Scan QR</Link> }
                                     </div>
                                     <div className="row">
                                         <div className="col-12">
@@ -349,7 +343,7 @@ function Order() {
 
                                                     </thead>
                                                     <tbody>
-                                                        {customer ? (
+                                                        {hasResult ? (
                                                             products.map((product, index) => (
                                                                 <tr key={index}>
                                                                     <td className="col-1 text-center">{index + 1}</td>
@@ -396,7 +390,7 @@ function Order() {
                                                                         </div>
                                                                     </td>
                                                                     <td className="col-2 text-center text-danger">
-                                                                        {((product.priceProduct *1.2)  * quantity[index])
+                                                                        {((product.priceProduct * 1.2)  * quantity[index])
                                                                             .toLocaleString('vi-VN', {
                                                                                 style: 'currency',
                                                                                 currency: 'VND'
@@ -429,7 +423,7 @@ function Order() {
                             </div>
                             <div className="row" style={{ width: '70%', margin: '1% auto 0 auto' }}>
                                 <div className="col-4 p-2">
-                                    <label>Thành tiền</label>
+                                    <label>Thành tiền (đã bao gồm thuế)</label>
                                 </div>
                                 <div className="col-8">
                                     <Field

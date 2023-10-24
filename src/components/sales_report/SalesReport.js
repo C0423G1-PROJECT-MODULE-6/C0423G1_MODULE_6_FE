@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as SalesService from "../../service/sales_report/SalesService";
 import HeaderAdmin from "../user/HeaderAdmin";
+import Footer from "../home/common/Footer";
 
 Chart.register(...registerables);
 
@@ -131,7 +132,7 @@ function SalesReport() {
     return (
         <>
             <HeaderAdmin/>
-            <div className="container pt-5">
+            <div className="container pt-5 pb-5">
                 <h1 className="text-center mt-5">Báo Cáo Doanh Thu</h1>
                 <div className="row mt-5">
                     <div className="col-md-4"></div>
@@ -183,6 +184,7 @@ function SalesReport() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }

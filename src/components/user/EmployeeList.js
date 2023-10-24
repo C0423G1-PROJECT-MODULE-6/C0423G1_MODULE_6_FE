@@ -93,6 +93,12 @@ const EmployeeList = () => {
     });
   };
   const deleteConfirm = async () => {
+    for( const e of selectedEmployees){
+      if(e.employeeTypeName === "Admin"){
+        toast.error("Không thể xóa admin")
+        return null;
+      }
+    }
     for (const e of selectedEmployees) {
       await deleteEmployee(e.id);
     }

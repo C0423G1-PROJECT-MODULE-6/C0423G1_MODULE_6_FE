@@ -3,6 +3,8 @@ import {Field, Form, Formik, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {addCustomer} from "../../service/customer/CustomerService";
 import {isAfter, parseISO} from "date-fns";
+import XRegExp from "xregexp";
+import {toast} from "react-toastify";
 
 const CustomerCreateModal = ({handleData}) => {
     const validateBirth = (value) => {
@@ -15,8 +17,11 @@ const CustomerCreateModal = ({handleData}) => {
         try {
             const result = await addCustomer(value);
             let submitModal = await document.getElementById("closeModalCreate");
+            let resetModal = await document.getElementById("resetModal");
+            resetModal.click();
             submitModal.click();
             handleData(result.data.idCustomer);
+            toast.success("Thêm mới khách hàng "+result.data.nameCustomer +"thành công.");
         } catch (err) {
             if (err.response?.data) {
                 setErrors(err.response.data);
@@ -38,7 +43,7 @@ const CustomerCreateModal = ({handleData}) => {
             validationSchema={Yup.object({
                 nameCustomer: Yup.string()
                     .max(100, "Tên khách hàng tối đa 100 ký tự!")
-                    .min(3, "Tên khách hàng tối thiểu 3 ký tự .").required("Không bỏ trống trường này.").matches(/^[a-zA-ZÀ-Úà-úĂăĐđĨĩƠơƯưẠ-ỹ0-9 .,+]*$/,"Nhập sai định dạng tên."),
+                    .min(3, "Tên khách hàng tối thiểu 3 ký tự .").required("Không bỏ trống trường này.").matches(XRegExp('^\\p{Lu}\\p{Ll}*([\\s]\\p{Lu}\\p{Ll}*)*$'),"Nhập sai định dạng tên."),
                 dateOfBirthCustomer: Yup.string().required(
                     "Không bỏ trống trường này ."
                 ).test("birthday",
@@ -197,7 +202,7 @@ const CustomerCreateModal = ({handleData}) => {
                                                 Lưu
                                             </button>
                                             <button className="btn btn-outline-secondary shadow"
-                                                    style={{marginRight: '1rem',width: '30%'}} type="reset">
+                                                    style={{marginRight: '1rem',width: '30%'}} type="reset" id="resetModal">
                                                 Làm mới
                                             </button>
                                             <button className="btn btn-outline-secondary shadow" data-bs-dismiss="modal"

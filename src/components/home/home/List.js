@@ -8,11 +8,9 @@ import 'swiper/css/pagination';
 // import required modules
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { getListByName, getSeriesByProductType } from '../../../service/home/HomeService';
-
-
 import Header from '../common/Header';
 import Footer from '../common/Footer';
-import { RingLoader } from 'react-spinners';
+
 
 const List = () => {
 
@@ -25,7 +23,9 @@ const List = () => {
     const [isActive, setIsActive] = useState('all');
     const [isLoading, setIsLoading] = useState(true);
 
-
+    useEffect(() => {
+        document.title = 'C4 Zone - Danh sách sản phẩm'
+    }, [])
     useEffect(() => {
         setSearchName(param.type);
         setIsActive('all');
@@ -76,9 +76,6 @@ const List = () => {
             setSortName('id');
             setSortType('desc');
         }
-    }
-    const handleUE = () => {
-        setTimeout()
     }
 
 

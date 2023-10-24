@@ -54,7 +54,7 @@ const Footer = () => {
                     </div>
                     <div className="footer-bottom">
                         <p>
-                            © 2018. Công ty cổ phần Thế Giới Di Động. GPDKKD: 0303217354 do sở
+                            © 2018. Công ty cổ phần C4 CodeGym. GPDKKD: 0303217354 do sở
                             KH & ĐT TP.HCM cấp ngày 02/01/2007.
                         </p>
                     </div>
