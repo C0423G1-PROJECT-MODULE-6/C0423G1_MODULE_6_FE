@@ -85,16 +85,14 @@ function CreateEmployee(props) {
     };
     const handleInputChange = (event) => {
         const file = event.target.files[0];
-       
-            if (file) {
-              file.fileName   =""     
-                console.log('Tên tệp đã chọn:', file.name);
-                console.log('Kích thước tệp:', file.size);
-            } else {
-                console.log('Chưa chọn tệp nào.');
-            }  
-   
-        
+
+        if (file) {
+            file.fileName = ""
+            console.log('Tên tệp đã chọn:', file.name);
+            console.log('Kích thước tệp:', file.size);
+        } else {
+            console.log('Chưa chọn tệp nào.');
+        }
         if (file.size > 3000000) {
             Swal.fire({
                 icon: "error",
@@ -155,7 +153,7 @@ function CreateEmployee(props) {
                         email: "",
                         employeeGender: "Nam",
                         roleId: 2,
-                        
+
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -181,7 +179,15 @@ function CreateEmployee(props) {
                             .matches(/^[0-9a-zA-Z]+$/u, "Tên tài khoản chỉ chứa chữ và số"),
 
                         employeeStartDate: Yup.date()
-                            .required("Vui lòng nhập ngày bắt đầu làm.."),
+                            .required("Vui lòng nhập ngày bắt đầu làm..")
+                            .min(new Date(), 'Ngày làm lớn hơn ngày hiện tại')
+                            .max(Yup.ref('maxDate'), 'Ngày làm việc trong vòng 7 ngày.')
+                            .required('Vui lòng nhập ngày làm việc.'),
+                        maxDate: Yup.date().default(function () {
+                            return new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000); // 7 ngày sau ngày hiện tại
+                        })
+                        ,
+
                         employeeBirthday: Yup.string()
                             .required("Vui lòng nhập ngày sinh.")
                             .test("age", "Nhân viên chưa đủ 18 tuổi.", function (value) {
@@ -367,7 +373,7 @@ function CreateEmployee(props) {
                                                     ref={inputFileRef}
                                                     onChange={handleInputChange}
                                                     name="file"
-                                                   
+
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
