@@ -426,6 +426,9 @@ h3.title {
   position: absolute;
 }
 .soldout-word {
+  padding: 5px 10px;
+  border: 1px solid white;
+  border-radius: 5px;
   z-index: 22;
   width: 160px !important;
   object-fit: cover;
@@ -746,6 +749,7 @@ h3.title {
   overflow: hidden;
 }
 .card-image img {
+  padding: 10px 0;
   width: 300px;
   height: auto;
   object-fit: cover;

@@ -1,7 +1,7 @@
 import { differenceInYears, parse } from 'date-fns';
-import { ErrorMessage, Field, Formik,Form } from 'formik';
+import { ErrorMessage, Field, Formik, Form } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
-import {  Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { v4 } from 'uuid';
 import * as Yup from 'yup';
@@ -9,11 +9,15 @@ import { storage } from "../../firebase/Firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { crateEmployee, getNewEmployee } from '../../service/user/EmployeeService';
 import { async } from '@firebase/util';
-import {getAppRoleList} from '../../service/user/AppRoleService'
+import { getAppRoleList } from '../../service/user/AppRoleService'
+import Header from '../home/common/Header';
+import HeaderAdmin from './HeaderAdmin';
+import Footer from '../home/common/Footer';
+import { toast } from "react-toastify";
 
 function CreateEmployee(props) {
     const navigate = useNavigate();
-    const [roles,setRole] = useState()
+    const [roles, setRole] = useState()
     const [employee, setEmployee] = useState();
     const imgPreviewRef = useRef(null);
     const inputFileRef = useRef(null);
@@ -33,15 +37,16 @@ function CreateEmployee(props) {
                                 navigate("/admin/admin/employee");
                             })
                             .then(() => {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Tạo mới thành công !",
-                                    showConfirmButton: false,
-                                    timer: 2000,
-                                    customClass: {
-                                        icon: "icon-post",
-                                    },
-                                });
+                                // Swal.fire({
+                                //     icon: "success",
+                                //     title: "Tạo mới thành công !",
+                                //     showConfirmButton: false,
+                                //     timer: 2000,
+                                //     customClass: {
+                                //         icon: "icon-post",
+                                //     },
+                                // });
+                                toast("Thêm mới thành công")
                             });
                     } catch (err) {
                         if (err.response.data) {
@@ -59,15 +64,16 @@ function CreateEmployee(props) {
                     navigate("/admin/admin/employee");
                 })
                     .then(() => {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Tạo mới thành công !",
-                            showConfirmButton: false,
-                            timer: 2000,
-                            customClass: {
-                                icon: "icon-post",
-                            },
-                        });
+                        // Swal.fire({
+                        //     icon: "success",
+                        //     title: "Tạo mới thành công !",
+                        //     showConfirmButton: false,
+                        //     timer: 2000,
+                        //     customClass: {
+                        //         icon: "icon-post",
+                        //     },
+                        // });
+                        toast("Thêm mới thành công")
                     });
             } catch (err) {
                 if (err.response.data) {
@@ -115,13 +121,15 @@ function CreateEmployee(props) {
         setRole(data)
     }
     useEffect(() => { displayRole() }, [])
-    
+
     if (employee === undefined) {
         return null;
     }
     return (
         <div>
+
             <>
+            <HeaderAdmin></HeaderAdmin>
                 <Formik
                     initialValues={{
                         employeeCode: employee?.employeeCode,
@@ -135,12 +143,12 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-                        roleId:roles?.id
+                        roleId: 1
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
                             .required("Vui lòng nhập tên nhân viên.")
-                            .max(100, "Vui lòng nhập dưới 100 kí tự.")
+                            .max(50, "Vui lòng nhập dưới 50 kí tự.")
                             .matches(
                                 /^[\p{L}\s]+$/u,
                                 "Tên nhân viên chỉ được chứa chữ cái và khoảng trắng."),
@@ -159,7 +167,7 @@ function CreateEmployee(props) {
                             .required("Vui lòng nhập tên tài khoản.")
                             .max(30, "Vui lòng nhập dưới 30 kí tự")
                             .matches(/^[0-9a-zA-Z]+$/u, "Tên tài khoản chỉ chứa chữ và số"),
-                       
+
                         employeeStartDate: Yup.date()
                             .required("Vui lòng nhập ngày bắt đầu làm.."),
                         employeeBirthday: Yup.string()
@@ -177,36 +185,39 @@ function CreateEmployee(props) {
                                 /^\d{9}(\d{3})?$/u,
                                 "Vui lòng chỉ nhập số và độ dài là 9 hoặc 12."),
                         email: Yup.string()
-                        .required("Vui lòng nhập email")
+                            .required("Vui lòng nhập email.")
 
                     })}
                     onSubmit={(value, { setErrors }) => {
-                        let timerInterval;
-                        Swal.fire({
-                            title: "Auto close alert!",
-                            html: "I will close in <b></b> milliseconds.",
-                            timer: 5000,
-                            timerProgressBar: true,
-                            didOpen: () => {
-                                Swal.showLoading();
-                                const b = Swal.getHtmlContainer().querySelector("b");
-                                timerInterval = setInterval(() => {
-                                    b.textContent = Swal.getTimerLeft();
-                                }, 100);
-                            },
-                            willClose: () => {
-                                clearInterval(timerInterval);
-                            },
-                        }).then((result) => {
-                            /* Read more about handling dismissals below */
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                console.log("I was closed by the timer");
-                            }
-                        });
+                      
+                        // let timerInterval;
+                        // Swal.fire({
+                        //     title: "Auto close alert!",
+                        //     html: "I will close in <b></b> milliseconds.",
+                        //     timer: 5000,
+                        //     timerProgressBar: true,
+                        //     didOpen: () => {
+                        //         Swal.showLoading();
+                        //         const b = Swal.getHtmlContainer().querySelector("b");
+                        //         timerInterval = setInterval(() => {
+                        //             b.textContent = Swal.getTimerLeft();
+                        //         }, 100);
+                        //     },
+                        //     willClose: () => {
+                        //         clearInterval(timerInterval);
+                        //     },
+                        // }).then((result) => {
+                        //     /* Read more about handling dismissals below */
+
+                        //     if (result.dismiss === Swal.DismissReason.timer) {
+                        //         console.log("I was closed by the timer");
+                        //     }
+                        // });
+                        // toast("Thêm mới thành công")
                         saveEmployee(value, setErrors);
                     }}>
                     <Form>
-                        <div className="container mt-5 pt-5 table-responsive">
+                        <div className="container my-5 pt-5 table-responsive">
                             <div className="row">
                                 <div className="col-4 d-flex justify-content-center align-items-center">
                                     <img
@@ -220,7 +231,7 @@ function CreateEmployee(props) {
                                         src={employee.employeeImage}
                                         ref={imgPreviewRef}
                                     />
-                                    
+
                                 </div>
                                 <div className="col-8 d-flex justify-content-center align-items-center">
                                     <fieldset
@@ -240,10 +251,11 @@ function CreateEmployee(props) {
                                         <div className="row">
                                             {/* employeeCode  */}
                                             <div className="col-2 p-2">
-                                                <label style={{ fontWeight: "bold" }}>Mã nhân viên</label>
+                                                <label htmlFor='employeeCode' style={{ fontWeight: "bold" }}>Mã nhân viên</label>
                                             </div>
                                             <div className="col-4">
                                                 <Field
+                                                    id="employeeCode"
                                                     readOnly
                                                     className="form-control border border-dark mt-2"
                                                     name="employeeCode"
@@ -251,12 +263,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* employeeName  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='employeeName'>
                                                     Tên nhân viên <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id='employeeName'
                                                     name="employeeName"
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -271,12 +283,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* Address  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='Address'>
                                                     Địa chỉ <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id= "Address"
                                                     name='employeeAddress'
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -291,12 +303,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* phone  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='phone'>
                                                     Số điện thoại <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id= 'phone'
                                                     name='employeePhone'
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -311,12 +323,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* Account  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='Account'>
                                                     Tên tài khoản <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id='Account'
                                                     name='userName'
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -343,7 +355,7 @@ function CreateEmployee(props) {
                                                     ref={inputFileRef}
                                                     onChange={handleInputChange}
                                                     name="employeeImage"
-                                                   
+
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
@@ -395,12 +407,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* idCart  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='idCart'>
                                                     CCCD <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id='idCart'
                                                     name="employeeIdCard"
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -415,12 +427,12 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* email  */}
                                             <div className="col-2 p-2">
-                                                <label>
+                                                <label htmlFor='email'>
                                                     Email <sup style={{ color: "red" }}>*</sup>
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field
+                                                <Field id= 'email'
                                                     name="email"
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -441,7 +453,7 @@ function CreateEmployee(props) {
                                             </div>
                                             <div className="col-4">
                                                 <Field as="select" name="employeeGender" className="form-select border border-dark mt-2">
-                                                    
+
                                                     <option value="Nam" >Nam</option>
                                                     <option value="Nữ" >Nữ</option>
                                                 </Field>
@@ -460,15 +472,15 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                        
+
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
-                                                
+
                                                     {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
-                                                    
+
                                                 </Field>
                                                 <div style={{ height: 16 }}>
-                                                   <ErrorMessage
-                                                        name="email"
+                                                    <ErrorMessage
+                                                        name="roleId"
                                                         style={{ color: "red", marginLeft: "20px" }}
                                                         component={"small"}
                                                     />
@@ -484,7 +496,7 @@ function CreateEmployee(props) {
                                                     </button>
                                                 </Link>
                                                 <button className="btn btn-outline-primary float-end mx-1 mt-2 shadow"
-                                                type='submit'>
+                                                    type='submit'>
                                                     Lưu
                                                 </button>
                                             </div>
@@ -501,6 +513,7 @@ function CreateEmployee(props) {
                         </div>
                     </Form>
                 </Formik>
+                <Footer></Footer>
             </>
 
         </div>
