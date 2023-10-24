@@ -14,6 +14,7 @@ import Header from '../home/common/Header';
 import HeaderAdmin from './HeaderAdmin';
 import Footer from '../home/common/Footer';
 import { toast } from "react-toastify";
+import { Placeholder } from 'react-bootstrap';
 
 function CreateEmployee(props) {
     const navigate = useNavigate();
@@ -84,6 +85,16 @@ function CreateEmployee(props) {
     };
     const handleInputChange = (event) => {
         const file = event.target.files[0];
+       
+            if (file) {
+              file.fileName   =""     
+                console.log('Tên tệp đã chọn:', file.name);
+                console.log('Kích thước tệp:', file.size);
+            } else {
+                console.log('Chưa chọn tệp nào.');
+            }  
+   
+        
         if (file.size > 3000000) {
             Swal.fire({
                 icon: "error",
@@ -129,7 +140,7 @@ function CreateEmployee(props) {
         <div>
 
             <>
-            <HeaderAdmin></HeaderAdmin>
+                <HeaderAdmin></HeaderAdmin>
                 <Formik
                     initialValues={{
                         employeeCode: employee?.employeeCode,
@@ -143,7 +154,8 @@ function CreateEmployee(props) {
                         employeeIdCard: "",
                         email: "",
                         employeeGender: "Nam",
-                        roleId: 1
+                        roleId: 2,
+                        
                     }}
                     validationSchema={Yup.object({
                         employeeName: Yup.string()
@@ -189,7 +201,7 @@ function CreateEmployee(props) {
 
                     })}
                     onSubmit={(value, { setErrors }) => {
-                      
+
                         // let timerInterval;
                         // Swal.fire({
                         //     title: "Auto close alert!",
@@ -288,7 +300,7 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field id= "Address"
+                                                <Field id="Address"
                                                     name='employeeAddress'
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -308,7 +320,7 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field id= 'phone'
+                                                <Field id='phone'
                                                     name='employeePhone'
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -343,7 +355,7 @@ function CreateEmployee(props) {
                                             </div>
                                             {/* image  */}
                                             <div className="col-2 p-2">
-                                                <label>Ảnh nhân viên</label>
+                                                <label htmlFor='employeeImage'>Ảnh nhân viên</label>
                                             </div>
                                             <div className="col-4">
                                                 <Field
@@ -354,8 +366,8 @@ function CreateEmployee(props) {
                                                     accept="image/png, image/gif, image/jpeg"
                                                     ref={inputFileRef}
                                                     onChange={handleInputChange}
-                                                    name="employeeImage"
-
+                                                    name="file"
+                                                   
                                                 />
                                                 <div style={{ height: 16 }}>
                                                     <ErrorMessage
@@ -432,7 +444,7 @@ function CreateEmployee(props) {
                                                 </label>
                                             </div>
                                             <div className="col-4">
-                                                <Field id= 'email'
+                                                <Field id='email'
                                                     name="email"
                                                     className="form-control border border-dark mt-2"
                                                     type="text"
@@ -475,7 +487,13 @@ function CreateEmployee(props) {
 
                                                 <Field as="select" name="roleId" className="form-select border border-dark mt-2">
 
-                                                    {roles.map(role => (<option key={role.id} value={role.id} label={role.type} />))}
+                                                    {roles.map(role => {
+                                                        if (role.id == 1) {
+                                                            return null;
+                                                        } else {
+                                                            return <option key={role.id} value={role.id} label={role.type} />
+                                                        }
+                                                    })}
 
                                                 </Field>
                                                 <div style={{ height: 16 }}>
