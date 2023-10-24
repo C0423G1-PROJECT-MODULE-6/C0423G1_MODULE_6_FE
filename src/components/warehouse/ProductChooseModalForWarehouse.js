@@ -314,7 +314,7 @@ const ProductChooseModalForWarehouse = ({ data1, idCustomer, handleData }) => {
                                             <th style={{ width: "40%", paddingLeft: "2%" }}>Tên</th>
                                             <th style={{ width: "20%", paddingLeft: "3%" }}>Giá</th>
                                             <th style={{ width: "15%" }}>Màu sắc</th>
-                                            <th style={{ width: "15%", paddingLeft: "3%" }}>Lưu trữ</th>
+                                            <th style={{ width: "15%", paddingLeft: "3%" }}>Dung lượng</th>
                                         </tr>
                                         {productList && productList.length !== 0 ?
                                             <tbody>
