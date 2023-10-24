@@ -41,7 +41,6 @@ function Order() {
 
     const findCustomerById = async (data) => {
         const res = await orderService.findCustomerById(data);
-        console.log(res);
         if (res && res.type === "customer") {
             setCustomer(res.objectResponse);
         } else if (res && res.type === "orderBill") {
@@ -69,16 +68,11 @@ function Order() {
 
     const getAllCart = async (idCustomer) => {
         const res = await orderService.getAllCart(idCustomer);
-        console.log(res)
-        console.log(res.data)
         if (res.status === 200) {
-            console.log(res.status)
             if (res.data) {
-                console.log(res.data)
                 setHasResult(res.data.length > 0);
                 setProducts(res.data);
                 const initialQuantities = res.data.map(quantity => quantity.quantityOrder);
-                console.log(initialQuantities);
                 setQuantity(initialQuantities);
             }
         } else if (res.status === 404) {
@@ -113,7 +107,6 @@ function Order() {
         orderBillNotPay && setOrderBillNotPay(null);
     }
 
-    console.log("customer " + JSON.stringify(customer))
 
     const decreaseValue = (index) => {
         if (quantity[index] > 1) {
@@ -172,7 +165,6 @@ function Order() {
             <HeaderAdmin />
             <Formik initialValues={initialValues}
                 onSubmit={(value) => {
-                    console.log("Form values:", value);
                     showOrderBill(value)
                 }}
             >

@@ -1,0 +1,101 @@
+.inv-container {
+    background-image: url("../../../public/images/trongdongbg.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 700px 700px;
+}
+.inv-container p,
+span {
+    font-size: 18px;
+}
+.red-color {
+    color: red;
+}
+.inv-container {
+    margin: 70px 100px;
+    border: 8px solid black;
+    border-style: double;
+}
+.inv-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+p small {
+    font-size: 13px;
+    display: inline-block;
+}
+.inv-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.buyer-first span {
+    display: inline-block;
+    width: 300px;
+}
+span.bank-acc {
+    display: inline;
+}
+.description-info table {
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+}
+.description-info table,
+tr,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.description-info {
+    margin: 0 5px;
+}
+.description-info tr {
+    height: 60px;
+}
+.company-info {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 30px 50px;
+}
+.company-info table {
+    width: 100%;
+}
+.company-info td {
+    border: none;
+}
+.buyer-info {
+    padding: 30px 50px;
+}
+.buyer-info p {
+    line-height: 2;
+}
+.total-money-part {
+    padding: 30px 0;
+    margin: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.signature-info {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px 0 200px;
+}
+.money-to-word {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding: 30px 50px;
+}
+.inv-main-title {
+    color: red;
+}
+.inv-title p,
+h1 {
+    line-height: 0.6;
+}
+.money-stuff p {
+    line-height: 2;
+}
