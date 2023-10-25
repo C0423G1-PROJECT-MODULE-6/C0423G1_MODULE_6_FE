@@ -203,7 +203,7 @@ function LoginForm() {
                                     <div className="mt-4 pt-3" style={{display: isOTPVisible ? 'none' : 'block'}}>
                                         <div style={{width: '40%', marginLeft: 'auto', marginRight: 'auto'}}>
                                             <button type="submit" style={{width: '100%'}}
-                                                    className="btn btn-dark" onClick={handleClick}>Login
+                                                    className="btn btn-dark" onClick={handleClick}>Đăng Nhập
                                             </button>
                                         </div>
                                     </div>
