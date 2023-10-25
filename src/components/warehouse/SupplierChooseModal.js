@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import "../modal/modal_table.css";
 import { getAllSupplierModal } from '../../service/warehouse/WarehouseService';
+import { toast } from 'react-toastify';
+import { getAllAddress } from '../../service/supplier/SupplierService';
 
 const SupplierChooseModal = ({ handleData }) => {
     const [supplierList, setSupplierList] = useState([]);
@@ -11,7 +13,9 @@ const SupplierChooseModal = ({ handleData }) => {
     const [page, setPage] = useState(0);
     const [totalPage, setTotalPage] = useState();
     const [typeSearch, setTypeSearch] = useState("");
-    const [valueInput,setValueInput] = useState("");
+    const [valueInput, setValueInput] = useState("");
+    const [listAddress, setListAddress] = useState([]);
+    const [inputAddress, setInputAddress] = useState("");
     const addressList = {
         1: "Thành phố Hà Nội",
         2: "Tỉnh Hà Giang",
@@ -79,17 +83,16 @@ const SupplierChooseModal = ({ handleData }) => {
     }
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
+            return text.substring(0, maxLength) + '...';
         }
         return text;
-      };
-    
+    };
+
     const [selectedSupplier, setSelectedSupplier] = useState({
         idSupplier: null,
         nameSupplier: ""
     });
-    
-    // const [optionSearch, setOptionSearch] = useState();
+
     const loadSupplierList = async (page, searchName, addressSearch, emailSearch) => {
         const result = await getAllSupplierModal(page, searchName, addressSearch, emailSearch);
         if (result?.status === 200) {
@@ -99,23 +102,35 @@ const SupplierChooseModal = ({ handleData }) => {
             setSupplierList([]);
         }
     }
+    const validateInput = (inputValue) => {
+        const regex = /[+\-*/^&(){}":/.,?^%$#!~]/;
+        return regex.test(inputValue);
+    }
+    const handleGetListAddress = async () => {
+        const res = await getAllAddress();
+        setListAddress(res);
+    }
     const handleSetTypeSearch = () => {
-        switch (typeSearch) {
-            case "supplier":
-                setSearchName(valueInput);
-                setAddressSearch("");
-                setEmailSearch("");
-                break;
-            case "address":
-                setAddressSearch(valueInput);
-                setSearchName("");
-                setEmailSearch("");
-                break;
-            case "email":
-                setEmailSearch(valueInput);
-                setAddressSearch("");
-                setSearchName("");
-                break;
+        if (validateInput(valueInput)) {
+            toast.error("Vui lòng không nhập các ký tự đặc biệt.");
+        } else {
+            switch (typeSearch) {
+                case "supplier":
+                    setSearchName(valueInput);
+                    setAddressSearch("");
+                    setEmailSearch("");
+                    break;
+                case "address":
+                    setAddressSearch(inputAddress);
+                    setSearchName("");
+                    setEmailSearch("");
+                    break;
+                case "email":
+                    setEmailSearch(valueInput);
+                    setAddressSearch("");
+                    setSearchName("");
+                    break;
+            }
         }
     }
     const handleReset = () => {
@@ -125,7 +140,6 @@ const SupplierChooseModal = ({ handleData }) => {
         setEmailSearch("");
     }
     const handleSubmit = () => {
-        // console.log(selectedCustomer);
         let submitModal = document.getElementById("closeModal");
         submitModal.setAttribute("data-bs-dismiss", "modal");
         submitModal.click()
@@ -143,12 +157,9 @@ const SupplierChooseModal = ({ handleData }) => {
             setPage((pre) => pre + 1)
         }
     }
-
-    const handleEditEvent = () => {
-        if (selectedSupplier.id == null) {
-            alert("Vui long chon nhà cung cấp")
-        }
-    }
+    useEffect(() => {
+        handleGetListAddress()
+    }, [typeSearch])
     useEffect(() => {
         loadSupplierList(page, searchName, addressSearch, emailSearch);
     }, [page, searchName, addressSearch, emailSearch]);
@@ -173,23 +184,31 @@ const SupplierChooseModal = ({ handleData }) => {
                                 <div className="col-auto">
                                     <select name='optionSearch' onChange={(even) => setTypeSearch(even.target.value)}
                                         className="form-select shadow border-dark">
-                                            <option value="">---Tìm kiếm theo---</option>
+                                        <option value="">---Tìm kiếm theo---</option>
                                         <option value="supplier">Tên nhà cung cấp</option>
                                         <option value="address">Địa chỉ</option>
                                         <option value="email">Email</option>
                                     </select>
                                 </div>
+                                {typeSearch === "address" ?
+                                    <div className="col-auto me-2">
+                                        <select style={{ width: "180px" }} className="form-control" onClick={(event) => setInputAddress(event.target.value)}>
+                                            <option value={""}>---Chọn địa chỉ---</option>
+                                            {listAddress.map((address) => (
+                                                <option key={address.code} value={address.code}>{address.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    :
+                                    <div style={{ width: "180px" }} className="col-auto me-2">
+                                        <input className="form-control" type="search" aria-label="Search" onChange={(event) => setValueInput(event.target.value)} />
+                                    </div>
+                                }
                                 <div className="col-auto">
-                                    <input type="text" name="inputSearch" id="inputPassword6"
-                                        className="shadow form-control border-dark"
-                                        onChange={(even) => setValueInput(even.target.value)}
-                                        aria-describedby="passwordHelpInline" />
-                                </div>
-                                <div className="col-auto">
-                                    <button className="btn btn-outline-primary text-center shadow" onClick={()=>handleSetTypeSearch()}>Tìm kiếm</button>
+                                    <button className="btn btn-outline-primary text-center shadow" onClick={() => handleSetTypeSearch()}>Tìm kiếm</button>
                                 </div>
                             </div>
-                            <div className="mx-auto p-3" style={{minHeight: "350px"}} id="TinDT">
+                            <div className="mx-auto p-3" style={{ minHeight: "350px" }} id="TinDT">
                                 <table className=" shadow w-100 " >
                                     <thead style={{ fontSize: 'large', backgroundColor: '#282c34', color: '#f5f5f5' }}>
                                         <tr>
@@ -217,18 +236,18 @@ const SupplierChooseModal = ({ handleData }) => {
                                                     height: 50
                                                 } : { height: 50 }}
                                                 >
-                                                    <td style={{width: "5%"}} className="text-center">
+                                                    <td style={{ width: "5%" }} className="text-center">
                                                         {(index + 1) + page * 5}
                                                     </td>
-                                                    <td style={{width: "40%"}}>{truncateText(supplier?.nameSupplier,50)}</td>
-                                                    <td style={{width: "20%"}}>{addressList[supplier?.addressSupplier]}</td>
-                                                    <td style={{width: "15%"}}>{supplier?.phoneNumberSupplier}</td>
-                                                    <td style={{width: "20%"}}>{supplier?.emailSupplier}</td>
+                                                    <td style={{ width: "40%" }}>{truncateText(supplier?.nameSupplier, 50)}</td>
+                                                    <td style={{ width: "20%" }}>{addressList[supplier?.addressSupplier]}</td>
+                                                    <td style={{ width: "15%" }}>{supplier?.phoneNumberSupplier}</td>
+                                                    <td style={{ width: "20%" }}>{supplier?.emailSupplier}</td>
                                                 </tr>))}
                                         </tbody> :
                                         <tbody>
                                             <tr style={{ height: '150px' }}>
-                                                <td style={{ fontSize: '30px',color:"red", textAlign: 'center' }} colSpan="6">Không tìm thấy kết quả
+                                                <td style={{ fontSize: '30px', color: "red", textAlign: 'center' }} colSpan="6">Không tìm thấy kết quả
                                                 </td>
                                             </tr>
                                         </tbody>
