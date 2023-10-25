@@ -17,8 +17,7 @@ function PrintPDF() {
     const [totalMoney, setTotalMoney] = useState(0);
     const [vatAmount, setVatAmount] = useState(0);
     const [totalAmountWithVat, setTotalAmountWithVat] = useState(0);
-    const initialInvoiceNumber = useRef(1);
-    const [invoiceNumber, setInvoiceNumber] = useState(initialInvoiceNumber.current);
+    const [invoiceNumber, setInvoiceNumber] = useState(1);
 
     const getInfoPDF = async () => {
         const res = await orderService.getInfoPDF();
@@ -35,6 +34,12 @@ function PrintPDF() {
         setMonth(month);
         setYear(year);
     };
+    useEffect(() => {
+        const savedInvoiceNumber = localStorage.getItem('invoiceNumber');
+        if (savedInvoiceNumber) {
+            setInvoiceNumber(Number(savedInvoiceNumber));
+        }
+    }, []);
     useEffect(() => {
         calculateMoney();
     }, [products]);
@@ -60,6 +65,11 @@ function PrintPDF() {
 
     const handleConvertToPDF = () => {
         const content = contentRef.current;
+        setInvoiceNumber((prevInvoiceNumber) => {
+            const newInvoiceNumber = prevInvoiceNumber + 1;
+            localStorage.setItem('invoiceNumber', newInvoiceNumber.toString());
+            return newInvoiceNumber;
+        });
 
         html2canvas(content).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
@@ -70,7 +80,6 @@ function PrintPDF() {
             });
             pdf.addImage(imgData, 'PNG', 0, 0);
             pdf.save('document.pdf');
-            setInvoiceNumber(invoiceNumber + 1);
         });
     };
 
