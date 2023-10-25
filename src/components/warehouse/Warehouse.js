@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import HeaderAdmin from "../user/HeaderAdmin"
 import "../product/table_quan.css"
 import Footer from "../home/common/Footer"
+import { toast } from "react-toastify"
 
 export function Warehouse() {
   const [warehouse, setWarehouse] = useState([])
@@ -13,6 +14,7 @@ export function Warehouse() {
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
   const [totalElements, setTotalElements] = useState(0)
+  const pattern = /[!@#$%^&*(),.?":{}|<>[\]/\\]/;
   const vnd = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND'
@@ -23,6 +25,7 @@ export function Warehouse() {
     }
     return text;
   };
+
   const getAll = async () => {
     const res = await getAllWarehouse(sort, choose, value, page)
     console.log("Res:", res);
@@ -30,6 +33,15 @@ export function Warehouse() {
     setTotalPages(res.totalPages)
     setTotalElements(res.totalElements)
   }
+  const handleSearch = () => {
+    if (pattern.test(value)) {
+        toast.error("Không được nhập kí tự đặc biệt")
+    } else {
+        setPage(0);
+        getAll();
+    }
+
+}
   useEffect(() => {
     getAll();
   }, [page])
@@ -91,7 +103,7 @@ export function Warehouse() {
               )}
             </div>
             <div className="col-auto">
-              <button className="btn btn-outline-primary text-center" onClick={() => { setPage(0); getAll() }} type="button">Tìm kiếm</button>
+              <button className="btn btn-outline-primary text-center" onClick={() => {handleSearch() }} type="button">Tìm kiếm</button>
             </div>
           </div>
         </div>
